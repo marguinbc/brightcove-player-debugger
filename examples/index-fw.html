@@ -1,0 +1,174 @@
+
+
+<html>
+<head>
+  <title>BC Player ->  Freewheel Plugin</title>
+  <style type="text/css">
+    .video-js {
+      float: left;
+      margin :15px;
+    }
+    .vjs-playlist {
+      width: 250px;
+      float: left;
+    }
+    #options {
+      clear:left;
+      margin:15px;
+    }
+    .bcp_button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+  </style>
+  <link href="<path to freewheel css./freewheel/videojs-freewheel.min.css>" rel="stylesheet">
+  <script type="text/javascript">
+    window.fw_config = function() {
+      var ret_html5 = {};
+      ret_html5['networkId'] = 96749; 
+      ret_html5['serverUrl'] = "http://cue.v.fwmrm.net/ad/g/1";
+      ret_html5['profile'] = 'global-js';
+      ret_html5['videoAssetCustomId'] = 'DemoVideoGroup.01';
+      ret_html5['siteSectionCustomId'] = 'DemoSiteGroup.01';
+      ret_html5['videoAssetDuration'] = 500;
+      ret_html5['capabilities'] = ['+emcr', '+unka', '+sync'];
+      ret_html5['keyValues'] = [{'module': 'DemoPlayer', 'feature': 'simpleAds'}, {'feature': 'trackingURLs'}];
+      ret_html5['temporalSlots'] = [
+      {'id': 'Preroll_1', 'timePosition': 0, 'adUnit': 'preroll'},
+      {'id': 'Overlay_1', 'timePosition': 1, 'adUnit': 'overlay'},
+      {'id': 'Midroll_1', 'timePosition': 8, 'adUnit': 'midroll'},
+      {'id': 'Postroll_1', 'timePosition': 60, 'adUnit': 'postroll'}
+      ];
+      var fw_config={
+        debug:true,
+        adTechOrder: ["html5"],
+        Html5:ret_html5
+      }
+      return fw_config;
+    }
+</script>
+</head>
+<body>
+  <div>BC Player + Freewheel Plugin</div>
+  <div id="mydiv" >
+    <video id="bcp" data-playlist-id="<your_playlist_id>"
+      data-account="<your_account_id>"
+      data-player="<your_player_id>"
+      data-embed="default"
+      class="video-js"
+      controls
+      style="width: 550px; height: 355px;">
+    </video>
+    <script src="//players.brightcove.net/<youraccountid>/<yourplayerid>_default/index.min.js"></script><ol class="vjs-playlist"></ol>
+  </div>
+  <div id="options"  class="fw-countdown">
+    <input type="checkbox" checked id="myCheck" style="display:none">
+    <button class="bcp_button" id="interruptible">Disable Interruptible Ads</button><br>
+    <input type="checkbox" checked id="slot-preroll" value="slot-preroll">Preroll<br>
+    <input type="checkbox" id="slot-midroll" value="slot-midroll">Midroll at sec: <input type="text" id="midroll-time" value="5"><br>
+    <input type="checkbox" id="slot-postroll" value="slot-postroll">Postroll<br>
+
+    <div id="slotInfo" style="margin-top:10px">Slots Info:</div>
+  </div>
+  <script src="<path to freewheel ./freewheel/videojs-freewheel.min.js>" type="text/javascript"></script>
+  <link href="../dist/brightcove-player-debugger.css" rel="stylesheet">
+  <script src="../dist/brightcove-player-debugger.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      videojs("bcp").ready(function() {
+        var 
+          myPlayer = this,
+          requestN = 0;
+        
+        myPlayer.FreeWheelPlugin(window.fw_config());
+
+        var options = {"debugAds":true, "logClasses": true, "showPlayerClasses": true, "verbose": true };
+        myPlayer.playerDebugger(options);
+
+        myPlayer.on('ads-ad-started', allowInterruptible);
+        myPlayer.on("fw-before-ad-request", function (){
+          requestN++;
+          //update just temporalSlots entry in the config. Play preroll or midroll, in order to see the difference when switching playlist items
+          //myPlayer.FreeWheelPlugin.settings.Flash.videoAssetDuration  =  myPlayer.mediainfo.duration
+          myPlayer.FreeWheelPlugin.settings.Html5.temporalSlots = [];
+          document.getElementById('slotInfo').innerHTML = "";
+          if(document.getElementById('slot-preroll').checked) {
+            document.getElementById('slotInfo').innerHTML += "<br/> Should play Preroll with id: <i>Preroll_"+requestN+"</i>";
+            myPlayer.FreeWheelPlugin.settings.Html5.temporalSlots.push({
+              'id': 'Preroll_'+requestN,
+              'timePosition': 0,
+              'adUnit': 'preroll'
+            })
+          }
+          if(document.getElementById('slot-midroll').checked) {
+            document.getElementById('slotInfo').innerHTML += "<br/> Should play Midroll with id: <i>Midroll"+requestN+"</i> at second " +document.getElementById('midroll-time').value;
+            myPlayer.FreeWheelPlugin.settings.Html5.temporalSlots.push({
+              'id': 'Midroll_'+requestN,
+              'timePosition': document.getElementById('midroll-time').value,
+              'adUnit': 'midroll'
+            })
+          }
+          if(document.getElementById('slot-postroll').checked) {
+            document.getElementById('slotInfo').innerHTML += "<br/> Should play Postroll with id: <i>Postroll_"+requestN+"</i>";
+            myPlayer.FreeWheelPlugin.settings.Html5.temporalSlots.push({
+              'id': 'Postroll_'+requestN,
+              'timePosition': 500,
+              'adUnit': 'postroll'
+            })
+          }
+
+        })
+        document.getElementById('interruptible').addEventListener('click', function(){
+          document.getElementById('myCheck').checked = !document.getElementById('myCheck').checked;
+          this.innerHTML = document.getElementById('myCheck').checked ? 'Disable interruptible ads' : 'Enable interruptible ads'
+          //on ad-start check if interruptible ads are allowed or not
+          if (document.getElementById('myCheck').checked) {
+            myPlayer.on('ads-ad-started', allowInterruptible);
+          } else{
+            myPlayer.off('ads-ad-started', allowInterruptible);
+          }        
+        })
+
+        function allowInterruptible() {
+          document.getElementsByClassName('vjs-playlist')[0].className = document.getElementsByClassName('vjs-playlist')[0].className.replace(/\bvjs-ad-playing\b/,'');
+        }
+       
+        function itemsClickEnabled() {
+            if(document.getElementsByClassName("vjs-playlist-item").length) {
+              for (var i = 0; i < document.getElementsByClassName("vjs-playlist-item").length; i++) {
+                  document.getElementsByClassName("vjs-playlist-item")[i].onclick = function() {
+                    if (document.getElementById('myCheck').checked) {
+                      //Playlist Item was clicked. Destroy ads and disable next snapshot restore of contrib ads
+                      if (myPlayer.ads.state  === 'ad-playback') {
+                        myPlayer.ads.disableNextSnapshotRestore = true;
+                        myPlayer.FreeWheelPlugin.destroyAdManager();
+                      }
+                    } else{
+                      //do nothing;
+                    }
+                  }
+              }
+            } else {
+              window.setTimeout(function() {
+                itemsClickEnabled();
+              },1000)
+            }
+        }
+
+        window.setTimeout(function() {
+          itemsClickEnabled();
+        },1200)
+      })
+    })();
+  </script>
+</body>
+</html>

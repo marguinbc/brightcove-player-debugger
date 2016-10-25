@@ -1,0 +1,13 @@
+{
+  "name": "videojs-player-debugger",
+  "author": "Brightcove, Inc.",
+  "license": "Apache-2.0",
+  "main": [
+    "dist/videojs-player-debugger.min.js"
+  ],
+  "keywords": [
+    "videojs",
+    "videojs-plugin"
+  ]
+}
+
