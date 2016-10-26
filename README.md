@@ -21,20 +21,18 @@ The debugger will attach itself below the first player on the page. Using the Sh
 
 You can also toggle the visibility for any of the four debugger panes: Player Classes, Ad Setting, Player Settings and the Log.
 
-[How to use the Brightcove Player Debugger](how-to)
-
-[Configuring Player Options](options)
+[Configuring Player Options](#options)
 
 ## Tabs
- - [Log](log)
- - [Player Settings](player_settings)
- - [Playback Info](playback_info)
- - [Classes](player_classes)
- - [Ad Settings](ad_settings)
- -- [IMA3](ima3_ad_settings)
- -- [Freewheel](freewheel_ad_settings)
+ - [Log](#log)
+ - [Player Settings](#player_settings)
+ - [Playback Info](#playback_info)
+ - [Classes](#player_classes)
+ - [Ad Settings](#ad_settings)
+ -- [IMA3](#ima3_ad_settings)
+ -- [Freewheel](#freewheel_ad_settings)
 
-### <a name="options">Debugger Options</a>
+### <a name="options"></a>Debugger Options
  - verbose (default=false): log detailed player and ad event messages
  - useLineNums (default=false): include line numbers in log output
  - logClasses (default=false): log player classes with each event; useful for tracking player state
@@ -47,7 +45,7 @@ You can also toggle the visibility for any of the four debugger panes: Player Cl
  - startMinimized (default=false): start in minimized (button) state
 
 ## Player Tabs
-### <a name="log">Log</a>
+### <a name="log"></a>Log
 The Log pane displays all of the player events that the plugin has captured. If an event exposes additional information, that information can also be displayed. For example, on loadedmetadata, the account id, video id, duration and short description are also displayed.
 
 You can set the option verbose to false to only log the events without the event details.
@@ -59,7 +57,7 @@ The log includes filters to show/hide the following types of events:
  - Console log events - events written to the console by the player, plugins or browser
  - Other events (not categorized)
 
-### <a name="player_settings">Player Settings</a>
+### <a name="player_settings"></a>Player Settings
 Displays the media info for the current video loaded in the player including renditions, sources, master files, etc.
   - Player ID
   - Account ID
@@ -78,7 +76,7 @@ Displays the media info for the current video loaded in the player including ren
   - Sources array
   - Current Source URL
 
-### <a name="playback_info">Playback Info (hls only)</a>
+### <a name="playback_info"></a>Playback Info (hls only)
   - TechName
   - Current Source
   - Master (hls)
@@ -101,10 +99,10 @@ Displays the media info for the current video loaded in the player including ren
 
 
 
-### <a name="ad_settings">Ad Events and States</a>
+### <a name="ad_settings"></a>Ad Events and States
 The debugger captures and records ad events and the state of the player at the time the event occured, creating a breadcrumb trail which makes it easier to see the progression of events during ad playback.
 
-### <a name="ima3_ad_settings">Ad Settings - IMA3</a>
+### <a name="ima3_ad_settings"></a>Ad Settings - IMA3
 Displays the current IMA3 configuration and current Ad information
   - IMA3 Plugin version
   - IMA3 SDK URL
@@ -127,7 +125,7 @@ Displays the current IMA3 configuration and current Ad information
   - ID
   - Includes Ad Pod Information when available
 
-### <a name="freewheel_ad_settings>Ad Settings - Freewheel</a>
+### <a name="freewheel_ad_settings"></a>Ad Settings - Freewheel
 Displays the current Freewheel configuration and current Ad information
   - Freewheel Plugin version
   - Freewheel SDK URL
@@ -157,7 +155,7 @@ Displays the current Freewheel configuration and current Ad information
   - Ad Width
   - Coming soon ( slot / pod information)
  
-### <a name="player_classes">Player CLasses</a>
+### <a name="player_classes"></a>Player CLasses
 The debugger also includes a panel to view CSS classes attached to the player. Active classes show up in green/bold text, inactive in white/normal text. You can click on a class to apply it to the player to test various player states.
  
 | Classes | |
