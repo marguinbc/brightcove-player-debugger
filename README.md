@@ -2,6 +2,9 @@
 
 brightcove-player-debugger is a plugin for the Brightcove Player that will log, capture and display various information about the player, media and advertising in use. With this plugin, you can observe:
 
+## Example:
+http://solutions.brightcove.com/marguin/debugger/index.html
+
 ## Features:
 
  - Attaches itself to a Brightcove Player by using the video element’s ID attribute
@@ -197,7 +200,7 @@ videojs-player-debugger uses a number of open source projects to work properly:
 
 ### Installation
 
-
+npm install
 
 ### Build steps
 
