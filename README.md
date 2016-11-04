@@ -199,8 +199,9 @@ videojs-player-debugger uses a number of open source projects to work properly:
 * npm
 
 ### Installation
-
+```sh 
 npm install
+```
 
 ### Build steps
 
