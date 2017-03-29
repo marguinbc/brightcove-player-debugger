@@ -91,6 +91,7 @@ export let buildClassesListPane = (player) => {
 
     let classesListPane, classesListHeader, classesListFooter, classItem, toggleLink;
 
+    thisPlayer = player;
     classesListPane = videojs.createEl("div",
       {'id': IDs.classesList}
     );
