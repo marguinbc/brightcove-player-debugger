@@ -29,7 +29,9 @@ let   _options,
 
 let timeString = () => {
     let d = new Date();
-    let timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' + (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds());
+    let timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' +
+                    (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds()) +
+                    (_options.logMilliseconds ? ':' + (d.getMilliseconds()) : '');
     return timestamp;
   };
 
