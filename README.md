@@ -34,6 +34,7 @@ You can also toggle the visibility for any of the four debugger panes: Player Cl
  - [Ad Settings](#ad_settings)
  -- [IMA3](#ima3_ad_settings)
  -- [Freewheel](#freewheel_ad_settings)
+ -- [OnceUX](#onceux_ad_settings)
 
 ### <a name="options"></a>Debugger Options
  - verbose (default=false): log detailed player and ad event messages
@@ -160,17 +161,17 @@ Displays the current Freewheel configuration and current Ad information
 
 ### <a name="onceux_ad_settings"></a>Ad Settings - OnceUX
   Displays the current OnceUX configuration and current Ad information
-  ### Current Ad Information
-    - Ad Id
-    - Current Rendition Id
-    - Media Url
-    - Ad Name
-    - Content type
-    - Slot Custom Id
-    - Duration
-    - Ad Height
-    - Ad Width
-    - VMAP
+### Current Ad Information
+  - Ad Id
+  - Current Rendition Id
+  - Media Url
+  - Ad Name
+  - Content type
+  - Slot Custom Id
+  - Duration
+  - Ad Height
+  - Ad Width
+  - VMAP
 ### <a name="player_classes"></a>Player CLasses
 The debugger also includes a panel to view CSS classes attached to the player. Active classes show up in green/bold text, inactive in white/normal text. You can click on a class to apply it to the player to test various player states.
 
