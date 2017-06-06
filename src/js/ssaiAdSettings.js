@@ -66,6 +66,26 @@ let adEvents = [
   'ads-pod-started'
 ];
 
+let ppJSON = (json) => {
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+   return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+       var cls = 'number';
+       if (/^"/.test(match)) {
+           if (/:$/.test(match)) {
+               cls = 'key';
+           } else {
+               cls = 'string';
+           }
+       } else if (/true|false/.test(match)) {
+           cls = 'boolean';
+       } else if (/null/.test(match)) {
+           cls = 'null';
+       }
+       return '<span class="' + cls + '">' + match + '</span>';
+   });
+}
+
+
 let getElapsedTime = (startTime, endTime) => {
   let startMsec = startTime.getTime();
   let endMsec = endTime.getTime();
@@ -83,7 +103,6 @@ let getAdSettingsStr = (player) => {
       '<h3>Once UX Settings</h3>', '<span>Timeline</span>', '<span class="adMsg">contenturi:</span> ' + player.onceux.timeline.contenturi,
       '<span class="adMsg">absoluteDuration:</span> ' + player.onceux.timeline.absoluteDuration,
       '<span class="adMsg">contentDuration:</span> ' + player.onceux.timeline.contentDuration,
-      '<span class="adMsg">adRolls:</span> ' + JSON.stringify(player.onceux.timeline.adRolls, undefined, 2)
     ].join('<br>');
 }
   contentStr = '<span class="adMsg">Ad state:</span> <span id="adstate">' + player.ads.state + '</span><br>';
@@ -105,13 +124,15 @@ let getCurrentAdStr = (player) => {
     }if (path) {
     currentAdStr = '<h3>Current TimeLine Snapshot (path):</h3>';
     currentAdStr += [
-      '<span class="adMsg">absoluteTime:</span>' + path.absoluteTime,
+      '<br/><span class="adMsg">absoluteTime:</span>' + path.absoluteTime,
       '<span class="adMsg">contentTime:</span>' + path.contentTime
     ].join('<br>');
     if (path.adRoll) {
       currentAdStr += [
 
-        '<span class="adMsg">adRoll:</span>', '<span class="adMsg">adRoll.absoluteBeginTime:</span>' + path.adRoll.absoluteBeginTime,
+        '<br/><h3 class="adMsg">adRoll:</h3>',
+        '<span class="adMsg">adRolls:</span> ' + ppJSON(JSON.stringify(player.onceux.timeline.adRolls, undefined, 4)),
+        '<span class="adMsg">adRoll.absoluteBeginTime:</span>' + path.adRoll.absoluteBeginTime,
         '<span class="adMsg">adRoll.absoluteEndTime:</span>' + path.adRoll.absoluteEndTime,
         '<span class="adMsg">adRoll.index:</span>' + path.adRoll.index,
         '<span class="adMsg">adRoll.linearAdCount:</span>' + path.adRoll.linearAdCount,
@@ -121,16 +142,17 @@ let getCurrentAdStr = (player) => {
     if (path.linearAd) {
       currentAdStr += [
 
-        '<span class="adMsg">linearAd:</span>', '<span class="adMsg">linearAd.AdSource:</span>' + JSON.stringify(path.linearAd.AdSource, undefined, 2),
+        '<br/><h3 class="adMsg">linearAd:</h3>', '<span class="adMsg">linearAd.AdSource:</span>' + ppJSON(JSON.stringify(path.linearAd.AdSource, undefined, 4)),
         '<span class="adMsg">linearAd.absoluteBeginTime:</span>' + path.linearAd.absoluteBeginTime,
         '<span class="adMsg">linearAd.absoluteEndTime:</span>' + path.linearAd.absoluteEndTime,
         '<span class="adMsg">linearAd.breakId:</span>' + path.linearAd.breakId,
         '<span class="adMsg">linearAd.breakType:</span>' + path.linearAd.breakType,
-        '<span class="adMsg">linearAd.companionAd:</span>' + JSON.stringify(path.linearAd.companionAd, undefined, 2),
         '<span class="adMsg">linearAd.index:</span>' + path.linearAd.index,
         '<span class="adMsg">linearAd.playCount:</span>' + path.linearAd.playCount,
         '<span class="adMsg">linearAd.skipoffset:</span>' + path.linearAd.skipoffset,
-        '<span class="adMsg">linearAd.timeOffset:</span>' + path.linearAd.timeOffset
+        '<span class="adMsg">linearAd.timeOffset:</span>' + path.linearAd.timeOffset,
+        '<h3 class="adMsg">linearAd.companionAd:</h3>' + ppJSON(JSON.stringify(path.linearAd.companionAd, undefined, 4))
+
       ].join('<br>');
     }
 
