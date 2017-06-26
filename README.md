@@ -41,6 +41,7 @@ You can also toggle the visibility for any of the four debugger panes: Player Cl
  - useLineNums (default=false): include line numbers in log output
  - logClasses (default=false): log player classes with each event; useful for tracking player state
  - logType (default=list): choose the type of log; choices: table, list
+ - logMilliseconds (defaul=false): log milliseconds or just seconds
  - showProgress (default=false): log progess events
  - showMediaInfo (default=true): include the mediainfo in the Player Settings Pane
  - debugAds (default=true): log ad events and debugging information

@@ -561,6 +561,7 @@ let   bbird,
     if (opt.useLineNums === undefined) { _options.useLineNums = true; }
     if (opt.logClasses === undefined) { _options.logClasses = false; }
     if (opt.logType === undefined) { _options.logType = logTypes.list; }
+    if (opt.logMilliseconds === undefined) { _options.logMilliseconds = false; } 
     if (opt.showProgress === undefined) { _options.showProgress = false; }
     if (opt.showMediaInfo === undefined ) { _options.showMediaInfo = true;}
     if (opt.debugAds === undefined) { _options.debugAds = false; }
