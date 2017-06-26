@@ -17,7 +17,7 @@ http://solutions.brightcove.com/marguin/debugger/index.html
  - Records the current Ad information when an ad is playing (pause the player to make sure you can view the info in the Ad Settings Tab)
  - Captures and displays the current ‘player state’ using the CSS classes that are attached to the player
  - Can toggle player state by clicking on the class name and adding/removing classes from the player
- - Can toggle the display of the Log, Classes, Player Settings, Ad Settings 
+ - Can toggle the display of the Log, Classes, Player Settings, Ad Settings
 
 ### Conveniently Show/Hide the debugger
 The debugger will attach itself below the first player on the page. Using the Show/Hide debugger button it can be colapsed to take up just enough space for the Show Debugger button.  
@@ -34,6 +34,7 @@ You can also toggle the visibility for any of the four debugger panes: Player Cl
  - [Ad Settings](#ad_settings)
  -- [IMA3](#ima3_ad_settings)
  -- [Freewheel](#freewheel_ad_settings)
+ -- [OnceUX](#onceux_ad_settings)
 
 ### <a name="options"></a>Debugger Options
  - verbose (default=false): log detailed player and ad event messages
@@ -55,7 +56,7 @@ You can set the option verbose to false to only log the events without the event
 
 The log includes filters to show/hide the following types of events:
  - Player events - events associated with the player’s activity
- - Loading events - 
+ - Loading events -
  - Ad events - ima3, contrib-ads and other ad-related events
  - Console log events - events written to the console by the player, plugins or browser
  - Other events (not categorized)
@@ -95,7 +96,7 @@ Displays the media info for the current video loaded in the player including ren
   - highestVideoBitrate
   - lowestVideoBitrate
   - measuredBitRate (calculated)
-  - highestMeasuredBitrate 
+  - highestMeasuredBitrate
   - lowestMeasuredBitrate
   - Total segments in master
   - Current Segments: lists the filenames and end times for the segments currently loaded
@@ -117,7 +118,7 @@ Displays the current IMA3 configuration and current Ad information
   - timeout
   - requestMode
   - serverURL
- 
+
 ### Current Ad Information
   - Ad System
   - Media URL
@@ -145,7 +146,7 @@ Displays the current Freewheel configuration and current Ad information
   - temporalSlots
   - videoAssetCustomId
   - videoAssetDuration
- 
+
 ### Current Ad Information
   - Ad Id
   - Current Rendition Id
@@ -157,10 +158,23 @@ Displays the current Freewheel configuration and current Ad information
   - Ad Height
   - Ad Width
   - Coming soon ( slot / pod information)
- 
+
+### <a name="onceux_ad_settings"></a>Ad Settings - OnceUX
+  Displays the current OnceUX configuration and current Ad information
+### Current Ad Information
+  - Ad Id
+  - Current Rendition Id
+  - Media Url
+  - Ad Name
+  - Content type
+  - Slot Custom Id
+  - Duration
+  - Ad Height
+  - Ad Width
+  - VMAP
 ### <a name="player_classes"></a>Player CLasses
 The debugger also includes a panel to view CSS classes attached to the player. Active classes show up in green/bold text, inactive in white/normal text. You can click on a class to apply it to the player to test various player states.
- 
+
 | Classes | |
 | ---- | --- |
 | ima3-loading-spinner   | vjs-live                   |
@@ -177,8 +191,8 @@ The debugger also includes a panel to view CSS classes attached to the player. A
 | vjs-has-started        | vjs-using-native-controls  |
 | vjs-ima3-flash         | vjs-waiting                |
 | vjs-ima3-html5         | not-hover                  |
- 
- 
+
+
 ### What's Next?
  - Converting modules to Classes
  - Converting to use Brightcove's Plugin Framework
@@ -199,15 +213,15 @@ videojs-player-debugger uses a number of open source projects to work properly:
 * npm
 
 ### Installation
-```sh 
+```sh
 npm install
 ```
 
 ### Build steps
 
 Build the plugin
-```sh 
-npm run build 
+```sh
+npm run build
 ```
 
 Run the http-server to view the sample player implementation

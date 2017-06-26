@@ -1,4 +1,5 @@
 import * as imaAdSettings from './js/imaAdSettings.js';
+import * as ssaiAdSettings from './js/ssaiAdSettings.js';
 import * as fwAdSettings from './js/fwAdSettings.js';
 import * as classesList from './js/classesList.js';
 import * as playerSettings from './js/playerSettings.js';
@@ -20,7 +21,7 @@ import {IDs} from './js/componentIDs.js';
 // Default options for the plugin.
 const defaults = {};
 
-  // Version 0.9 updated 25 October 2016 
+  // Version 0.9 updated 25 October 2016
   // my debugger lets
   let _options,
       player,
@@ -34,9 +35,9 @@ const defaults = {};
       vPosterStyles="",
       vBPBStyles="",
       slider,
-      buttonBar, 
+      buttonBar,
       btnToggleSlider,
-      btnToggleLog, 
+      btnToggleLog,
       btnToggleClassList,
       btnToggleAdSettings,
       btnTogglePlayerSettings,
@@ -51,14 +52,14 @@ const defaults = {};
       currentClasses="",
       lastClasses = "",
       firstpass = true,
-      initialDuration=0, 
+      initialDuration=0,
       previousDuration=0,
-      initialSource="", 
+      initialSource="",
       previousSource="",
-      initialMedia="", 
+      initialMedia="",
       previousMedia="",
-      currentDuration, 
-      currentSource, 
+      currentDuration,
+      currentSource,
       currentMedia,
       allClassesList,
       classesListPane,
@@ -80,7 +81,7 @@ const defaults = {};
 
       /* jshint -W040 */
 let   bbird,
-      outputList, 
+      outputList,
       state = {
         pos: 1,
         size: 0
@@ -99,7 +100,7 @@ let   bbird,
     'error',            // videojs_player
     'firstplay',        // videojs_player
     'fullscreenchange', // videojs_qos, videojs_player
-    'loadedalldata',    
+    'loadedalldata',
     'loadeddata',       // videojs_player, videojs_swf
     'loadedmetadata',   // videojs_qos, videojs_player, videojs_contrib_hls, videojs_swf
     'loadstart',        // videojs_qos, videojs_player, videojs_swf
@@ -200,7 +201,7 @@ let   bbird,
   let getClassesStr = (obj) => {
       if (typeof obj == 'object') {
         let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
-        return  { logClassesStr };    
+        return  { logClassesStr };
       }
   };
 
@@ -212,16 +213,16 @@ let   bbird,
       let playerClasses="";
       let posterClasses="";
 
-      if (firstpass) { 
-        posterStyles.innerHTML = "<h2>BC Poster Opacity</h2>"; 
-        firstpass=false; 
+      if (firstpass) {
+        posterStyles.innerHTML = "<h2>BC Poster Opacity</h2>";
+        firstpass=false;
       }
-      if (lastEvent != currentEvent) { 
-        lastEvent = currentEvent; 
+      if (lastEvent != currentEvent) {
+        lastEvent = currentEvent;
         vPosterStyles = "Opacity: " + cs + " lastEvent:" + lastEvent;
         posterStyles.innerHTML += '<span style="color:blue;">' + vPosterStyles + '</span><br/>';
         currentClasses= Array.prototype.slice.apply(player.el_.classList).join(' ');
-        if (currentClasses != lastClasses) { 
+        if (currentClasses != lastClasses) {
           lastClasses = currentClasses;
           posterStyles.innerHTML += '<span style="color:green;">Player Classes: ' + currentClasses + '</span><br/>';
         }
@@ -240,13 +241,13 @@ let   bbird,
       let cs = window.getComputedStyle(vBPB, null);
       let bpbClasses="";
 
-      if (firstpass) { 
-        bigPlayButtonStyles.innerHTML = "<h2>Big Play Button Styles</h2>"; 
+      if (firstpass) {
+        bigPlayButtonStyles.innerHTML = "<h2>Big Play Button Styles</h2>";
         bigPlayButtonStyles.innerHTML += "User-Agent: " + navigator.userAgent + "<br>";
-        firstpass=false; 
+        firstpass=false;
       }
-      if (lastEvent != currentEvent) { 
-        lastEvent = currentEvent; 
+      if (lastEvent != currentEvent) {
+        lastEvent = currentEvent;
         if (cs.length!==0) {
           for (let i=0; i<cs.length; i++) {
             bpbStyles.push([cs.item(i) + ':', cs.getPropertyValue(cs.item(i))] + '<br>');
@@ -255,7 +256,7 @@ let   bbird,
           bigPlayButtonStyles.innerHTML += '<span style="color:blue;">' + vBPBStyles + '</span><br/>';
         }
         currentClasses= Array.prototype.slice.apply(player.el_.classList).join(' ');
-        if (currentClasses != lastClasses) { 
+        if (currentClasses != lastClasses) {
           lastClasses = currentClasses;
           bigPlayButtonStyles.innerHTML += '<span style="color:green;">Big Play Button Classes: ' + currentClasses + '</span><br/>';
         }
@@ -264,7 +265,7 @@ let   bbird,
   };
 
   let listenForPlayerEvents = (player) => {
-  
+
     player.one('durationchange', function(e){
       currentDuration = player.duration();
       let msgStr = 'currentDuration: ' + currentDuration + '<br>previousDuration: ' + previousDuration;
@@ -335,13 +336,13 @@ let   bbird,
           break;
           case 'contentupdate':
             msgStr = [
-              'oldValue: ' + e.oldValue, 
+              'oldValue: ' + e.oldValue,
               'newValue:' + e.newValue
             ].join('<br>');
             levelStr='media';
           break;
           case 'seeking':
-            currentTime = player.currentTime();  
+            currentTime = player.currentTime();
             msgStr = [
               'seeking from:' + previousTime,
               'to:' + currentTime
@@ -371,13 +372,13 @@ let   bbird,
 
             if (currentDuration !== previousDuration) {
               msgStr = 'currentDuration: ' + currentDuration + ',<br>previousDuration: ' + previousDuration;
-              previousDuration = currentDuration; 
+              previousDuration = currentDuration;
             } else {
               msgStr = 'Duration remained the same - currentDuration: ' + currentDuration;
             }
             if(playerTech == 'Hls') {
               currentMedia = player.hls.playlists.media_.uri;
-              assetid = currentMedia.substring(currentMedia.search("assetId=")+8,92);            
+              assetid = currentMedia.substring(currentMedia.search("assetId=")+8,92);
               if  (currentSource !== previousSource) {
                   srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
                   previousSource = currentSource;
@@ -400,13 +401,13 @@ let   bbird,
               levelStr = 'media';
             }
           }
-          break; 
+          break;
           default:
             msgStr='';
             levelStr = 'debug';
         }
         if ((e.type!= 'progress' && !_options.showProgress) && e.type!= 'timeupdate')  {
-          
+
         if (_options.verbose) {
           db.logDebug(levelStr, 'playerMsg', e.type, msgStr);
         } else {
@@ -427,7 +428,7 @@ let   bbird,
 
   let buildButtonBar = (slider) => {
 
-    buttonBar = videojs.createEl('div', 
+    buttonBar = videojs.createEl('div',
       {'id': IDs.buttonBar}
     );
 
@@ -436,15 +437,15 @@ let   bbird,
     let options = {
       "id": IDs.btnToggleSlider,
       "className" : "myButton active",
-      "content" : "Hide Debugger" 
+      "content" : "Hide Debugger"
     };
 
     btnToggleSlider = new SliderToggle(player, options);
-    
+
     options = {
       "id": IDs.btnToggleLog,
       "className" : "myButton active",
-      "content" : "Log" 
+      "content" : "Log"
     };
 
     btnToggleLog = new DebugLogToggle(player, options);
@@ -452,7 +453,7 @@ let   bbird,
     options = {
       "id": IDs.btnTogglePlaybackInfo,
       "className" : "myButton",
-      "content" : "Playback Info" 
+      "content" : "Playback Info"
     };
 
     btnTogglePlaybackInfo = new PlaybackInfoToggle(player, options);
@@ -460,7 +461,7 @@ let   bbird,
     options = {
       "id": IDs.btnToggleClassList,
       "className" : "myButton",
-      "content" : "Classes" 
+      "content" : "Classes"
     };
 
     btnToggleClassList = new ClassListToggle(player, options);
@@ -468,7 +469,7 @@ let   bbird,
      options = {
       "id": IDs.btnTogglePlayerSettings,
       "className" : "myButton",
-      "content" : "Player Settings" 
+      "content" : "Player Settings"
     };
 
     btnTogglePlayerSettings = new PlayerSettingsToggle(player, options);
@@ -477,7 +478,7 @@ let   bbird,
       options = {
         "id": IDs.btnToggleAdSettings,
         "className" : "myButton",
-        "content" : "Ad Settings" 
+        "content" : "Ad Settings"
       };
 
       btnToggleAdSettings = new AdSettingsToggle(player, options);
@@ -486,7 +487,7 @@ let   bbird,
     /*options = {
       "id": IDs.btnToggleDebuggerSettings,
       "className" : "myButton",
-      "content" : "Debugger Settings" 
+      "content" : "Debugger Settings"
     };
 
     btnToggleDebuggerSettings = new DebuggerSettingsToggle(player, options);
@@ -506,7 +507,7 @@ let   bbird,
   };
 
   let buildDebugger = (player) => {
-    slider = videojs.createEl('div', 
+    slider = videojs.createEl('div',
       {
         'id': IDs.slider
       }
@@ -522,8 +523,8 @@ let   bbird,
    // slider.insertBefore(debuggerSettingsPane.el_, logPane.el_);
 
   //  events = (events || player.debuggerWindow.events)(db.toggleVisibility);
-  
-    // TypeError cannot reade property 'constructor' of undefined in AdEvent... 
+
+    // TypeError cannot reade property 'constructor' of undefined in AdEvent...
     addEvent(IDs.sendEmail, 'click', db.clickSendEmail);
     addEvent(IDs.filters, 'click', db.clickFilter);
     addEvent(IDs.controls, 'click', db.clickControl);
@@ -538,11 +539,15 @@ let   bbird,
     if(_options.debugAds) {
       if (player.ima3) {
         console.log('Using IMA3 Ad Plugin');
-        adSettings = imaAdSettings; 
-      } 
-      else if (FW_plugin) {        
+        adSettings = imaAdSettings;
+      }
+      else if (player.FreeWheelPlugin) {
         console.log('Using Freewheel Ad Plugin');
         adSettings = fwAdSettings;
+      }
+      else if (player.onceux){
+        console.log('Using OnceUX Ad Plugin');
+        adSettings = ssaiAdSettings;
       }
       adSettingsPane = adSettings.buildAdSettingsPane(player, _options);
       slider.insertBefore(adSettingsPane.el_,playerSettingsPane.el_);
@@ -561,8 +566,8 @@ let   bbird,
     if (opt.debugAds === undefined) { _options.debugAds = false; }
     if (opt.showPosterStyles === undefined) { _options.showPosterStyles = false; }
     if (opt.showBigPlayButtonStyles === undefined) { _options.showBigPlayButtonStyles = false; }
-    if (opt.captureConsole === undefined ) { _options.captureConsole = true; } 
-    if (opt.startMinimized === undefined ) { _options.startMinimized = false; }   
+    if (opt.captureConsole === undefined ) { _options.captureConsole = true; }
+    if (opt.startMinimized === undefined ) { _options.startMinimized = false; }
 
     if (_options.captureConsole) {
       db.myConsole();
@@ -573,13 +578,13 @@ let   bbird,
       bigPlayButtonStyles.setAttribute("id", IDs.bigPlayButtonStyles);
       logPane.appendChild(bigPlayButtonStyles);
      }
-    
+
     if (_options.showPosterStyles===true) {
       let posterStyles = document.createElement("div");
       posterStyles.setAttribute("id", IDs.posterStyles);
       logPane.appendChild(posterStyles);
      }
-    
+
     if (_options.startMinimized) {
       toggleSlider();
     }
@@ -600,7 +605,7 @@ let   bbird,
 const onPlayerReady = (bcplayer, options) => {
 
   console.log('Brightcove Player Debugger loaded');
-  
+
   //events = bcplayer.debuggerWindow.getEvents;
 
   //bcplayer.addClass('vjs-player-debugger');
