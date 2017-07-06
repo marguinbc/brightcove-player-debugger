@@ -1,4 +1,4 @@
-/** 
+/**
  * @file log-toggle.js
  */
 import videojs from 'video.js';
@@ -35,5 +35,5 @@ class DebugLogToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('DebugLogToggle', DebugLogToggle);
+videojs.registerComponent('DebugLogToggle', DebugLogToggle);
 export default DebugLogToggle;

@@ -1,4 +1,4 @@
-/** 
+/**
  * @file playerSettings-toggle.js
  */
 
@@ -20,7 +20,7 @@ class PlayerSettingsToggle extends ButtonBarButton {
   constructor(player, options) {
 
     super(player, options);
-   
+
   }
 
 /**
@@ -40,5 +40,5 @@ class PlayerSettingsToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('PlayerSettingsToggle', PlayerSettingsToggle);
+videojs.registerComponent('PlayerSettingsToggle', PlayerSettingsToggle);
 export default PlayerSettingsToggle;

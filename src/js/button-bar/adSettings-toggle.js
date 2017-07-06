@@ -1,4 +1,4 @@
-/** 
+/**
  * @file adSettings-toggle.js
  */
 
@@ -38,5 +38,5 @@ class AdSettingsToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('AdSettingsToggle', AdSettingsToggle);
+videojs.registerComponent('AdSettingsToggle', AdSettingsToggle);
 export default AdSettingsToggle;

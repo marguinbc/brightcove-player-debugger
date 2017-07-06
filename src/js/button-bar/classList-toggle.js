@@ -1,4 +1,4 @@
-/** 
+/**
  * @file classList-toggle.js
  */
 
@@ -25,25 +25,25 @@ class ClassListToggle extends ButtonBarButton {
    *
    * @method handleClick
    */
-  handleClick() {
+  handleClick(event) {
 
     var classesListPane = document.getElementById('classesList');
     var playerSettingsPane = document.getElementById('playerSettings');
     var adSettingsPane = document.getElementById('adSettings');
     var logPane = document.getElementById('myBlackbird');
     var playbackInfoPane = document.getElementById('playbackInfo');
-    
+
     this.el_.classList.toggle('active');
-    classesListPane.classList.toggle('activePane'); 
-    playerSettingsPane.classList.toggle('classListVisible'); 
-    playbackInfoPane.classList.toggle('classListVisible'); 
-    if (options.debugAds) {
-      adSettingsPane.classList.toggle('classListVisible'); 
+    classesListPane.classList.toggle('activePane');
+    playerSettingsPane.classList.toggle('classListVisible');
+    playbackInfoPane.classList.toggle('classListVisible');
+    if(adSettingsPane){
+      adSettingsPane.classList.toggle('classListVisible');
     }
-    logPane.classList.toggle('classListVisible'); 
+    logPane.classList.toggle('classListVisible');
 
   }
 
 }
-videojs.Component.registerComponent('ClassListToggle', ClassListToggle);
+videojs.registerComponent('ClassListToggle', ClassListToggle);
 export default ClassListToggle;
