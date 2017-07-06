@@ -1,5 +1,6 @@
 import { IDs } from './componentIDs.js';
 /* classesListPane */
+const dom = videojs.dom || videojs;
 
   let allClassesList,
       allClasses = [
@@ -32,7 +33,7 @@ import { IDs } from './componentIDs.js';
         "vjs-using-native-controls",
         "vjs-waiting",
         "vjs-workinghover"
-      ], 
+      ],
       thisPlayer;
 
   export let togglePlayerClass = (playerClass) => {
@@ -49,20 +50,20 @@ import { IDs } from './componentIDs.js';
   let allPlayerClasses = (player) => {
     let listItems, classItem, toggleLink;
     allClasses.forEach(function(entry, index) {
-      if (player.el_.classList.contains(entry)) {              
-        classItem = videojs.createEl('li',
+      if (player.el_.classList.contains(entry)) {
+        classItem = dom.createEl('li',
         {
           "className" : 'active',
           "id" : entry,
           "title" : entry + ' active'
         });
       } else {
-        classItem = videojs.createEl('li', {
+        classItem = dom.createEl('li', {
           "id" : entry,
           "title" : entry
         });
       }
-      toggleLink = videojs.createEl('a', {"href" : "#"});
+      toggleLink = dom.createEl('a', {"href" : "#"});
       toggleLink.onclick = function() {  togglePlayerClass(entry) };
       toggleLink.innerHTML = entry;
       classItem.appendChild(toggleLink);
@@ -92,14 +93,14 @@ export let buildClassesListPane = (player) => {
     let classesListPane, classesListHeader, classesListFooter, classItem, toggleLink;
 
     thisPlayer = player;
-    classesListPane = videojs.createEl("div",
+    classesListPane = dom.createEl("div",
       {'id': IDs.classesList}
     );
 
-    classesListHeader = videojs.createEl('div',{
+    classesListHeader = dom.createEl('div',{
       "className" : "classListHeader"
     });
-    classesListHeader.innerHTML = '<h2>Player Classes</h2><span class="active">active</span><span class="inactive">inactive</span>';        
+    classesListHeader.innerHTML = '<h2>Player Classes</h2><span class="active">active</span><span class="inactive">inactive</span>';
     classesListPane.appendChild(classesListHeader);
 
     allClassesList = document.createElement('ul');
@@ -108,12 +109,12 @@ export let buildClassesListPane = (player) => {
     allPlayerClasses(player);
 
     classesListPane.appendChild( allClassesList);
-  
+
     classesListPane.appendChild(document.createElement('br'));
 
     classesListFooter = document.createElement('span');
     classesListFooter.innerHTML = "Click on a class to toggle its state";
     classesListPane.appendChild(classesListFooter);
- 
+
     return classesListPane;
   }

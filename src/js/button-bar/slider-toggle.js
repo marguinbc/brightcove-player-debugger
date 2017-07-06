@@ -1,4 +1,4 @@
-/** 
+/**
  * @file slider-toggle.js
  */
 
@@ -39,13 +39,16 @@ class SliderToggle extends ButtonBarButton {
     var btnToggleLog = document.getElementById(IDs.btnToggleLog);
     var btnToggleClassList = document.getElementById(IDs.btnToggleClassList);
     var btnToggleAdSettings = document.getElementById(IDs.btnToggleAdSettings);
-    var btnTogglePlayerSettings = document.getElementById(IDs.btnTogglePlayerSettings); 
+    var btnTogglePlayerSettings = document.getElementById(IDs.btnTogglePlayerSettings);
     var btnTogglePlayerInfo = document.getElementById(IDs.btnTogglePlaybackInfo);
 
     btnToggleLog.classList.toggle('hide');
     btnTogglePlaybackInfo.classList.toggle('hide');
     btnToggleClassList.classList.toggle('hide');
-    btnToggleAdSettings.classList.toggle('hide');
+    if(btnToggleAdSettings){
+      btnToggleAdSettings.classList.toggle('hide');
+
+    }
     btnTogglePlayerSettings.classList.toggle('hide');
   }
 
@@ -58,5 +61,5 @@ class SliderToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('SliderToggle', SliderToggle);
+videojs.registerComponent('SliderToggle', SliderToggle);
 export default SliderToggle;

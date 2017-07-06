@@ -1,4 +1,4 @@
-/** 
+/**
  * @file playerSettings-toggle.js
  */
 
@@ -20,7 +20,7 @@ class DebuggerSettingsToggle extends ButtonBarButton {
   constructor(player, options) {
 
     super(player, options);
-   
+
   }
 
 /**
@@ -40,5 +40,5 @@ class DebuggerSettingsToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('DebuggerSettingsToggle', DebuggerSettingsToggle);
+videojs.registerComponent('DebuggerSettingsToggle', DebuggerSettingsToggle);
 export default DebuggerSettingsToggle;
