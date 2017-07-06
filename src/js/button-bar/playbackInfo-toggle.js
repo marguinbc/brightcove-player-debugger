@@ -1,4 +1,4 @@
-/** 
+/**
  * @file playbackInfo-toggle.js
  */
 
@@ -20,7 +20,7 @@ class PlaybackInfoToggle extends ButtonBarButton {
   constructor(player, options) {
 
     super(player, options);
-   
+
   }
 
 /**
@@ -40,5 +40,5 @@ class PlaybackInfoToggle extends ButtonBarButton {
   }
 
 }
-videojs.Component.registerComponent('PlaybackInfoToggle', PlaybackInfoToggle);
+videojs.registerComponent('PlaybackInfoToggle', PlaybackInfoToggle);
 export default PlaybackInfoToggle;

@@ -1,15 +1,15 @@
-/** 
+/**
  * @file button-bar.js
  */
  import videojs from 'video.js';
 
 // Required children
 
-import SliderToggle from './slider-toggle.js'; 
-import DebugLogToggle from './log-toggle.js'; 
-import ClassListToggle from './classList-toggle.js'; 
-import PlayerSettingsToggle from './playerSettings-toggle.js'; 
-import AdSettingsToggle from './adSettings-toggle.js'; 
+import SliderToggle from './slider-toggle.js';
+import DebugLogToggle from './log-toggle.js';
+import ClassListToggle from './classList-toggle.js';
+import PlayerSettingsToggle from './playerSettings-toggle.js';
+import AdSettingsToggle from './adSettings-toggle.js';
 import {IDs} from '../../js/componentIDs.js';
 
 /**
@@ -20,8 +20,8 @@ import {IDs} from '../../js/componentIDs.js';
  * @extends Component
  * @class ButtonBar
  */
-class ButtonBar extends videojs.Component {
-  
+class ButtonBar extends videojs.getComponent('ClickableComponent') {
+
     createEl() {
       return super.createEl("div", {
         id : this.options_.id,
@@ -42,5 +42,5 @@ ButtonBar.prototype.options_ = {
   ]
 };
 
-videojs.Component.registerComponent('ButtonBar', ButtonBar);
+videojs.registerComponent('ButtonBar', ButtonBar);
 export default ButtonBar;

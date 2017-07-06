@@ -41,8 +41,8 @@ QUnit.test('registers itself with video.js', function(assert) {
   assert.expect(2);
 
   assert.strictEqual(
-    Player.prototype.playerDebugger,
-    plugin,
+    typeof Player.prototype.playerDebugger,
+    'function',
     'videojs-player-debugger plugin was registered'
   );
 

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-player-debugger Demo</title>
+  <link href="dist/videojs-player-debugger.css" rel="stylesheet">
+</head>
+<body>
+  <video id="videojs-player-debugger-player"
+  data-video-id="5263728079001"
+data-account="5092057275001"
+data-player="S1gNveZGxb"
+data-embed="default"
+data-application-id
+class="video-js"
+controls></video>
+<script src="//players.brightcove.net/5092057275001/S1gNveZGxb_default/index.js"></script>
+  <ul>
+    <li><a href="test/">Run unit tests in browser.</a></li>
+    <li><a href="docs/api/">Read generated docs.</a></li>
+  </ul>
+
+  <script src="dist/videojs-player-debugger.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('videojs-player-debugger-player');
+      var options = {
+        "debugAds": false,
+        "logClasses": true,
+        "showPlayerClasses": true,
+        "verbose": true
+      };
+      player.playerDebugger(options);
+    }(window, window.videojs));
+  </script>
+</body>
+</html>

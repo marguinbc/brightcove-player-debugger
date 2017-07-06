@@ -1,9 +1,11 @@
-/** 
+/**
  * @file buttonBar-button.js
  */
 
 import videojs from 'video.js';
 import { IDs } from '../componentIDs.js';
+const Button = videojs.getComponent('Button');
+const dom = videojs.dom || videojs;
 
 
 /**
@@ -14,22 +16,17 @@ import { IDs } from '../componentIDs.js';
  * @extends Component
  * @class ButtonBarButton
  */
-class ButtonBarButton extends videojs.Component {
+class ButtonBarButton extends Button {
 
   constructor(player, options) {
-
     super(player, options);
-    this.el_ = videojs.createEl("button", 
-      {
-        "id" : this.options_.id,
-        "className": this.options_.className
-      }
-    );
+    this.el_.id = this.options_.id;
+    this.el_.className = this.options_.className;
     this.el_.innerHTML = this.options_.content;
 
-    this.on('click', this.handleClick);
-  }
+    //this.on(['tap','click'], this.handleClick);
 
+  }
   content(value) {
     if (typeof value !== 'undefined') {
       this.contentEl_.innerHTML = value;
@@ -42,8 +39,8 @@ class ButtonBarButton extends videojs.Component {
    *
    * @method handleClick
    */
-  handleClick() {}
+  handleClick(event) {}
 
 }
-videojs.Component.registerComponent('ButtonBarButton', ButtonBarButton);
+videojs.registerComponent('ButtonBarButton', ButtonBarButton);
 export default ButtonBarButton;
