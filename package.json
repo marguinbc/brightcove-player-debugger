@@ -21,13 +21,10 @@
     "build:test": "rollup -c scripts/test.rollup.config.js",
     "clean": "rimraf dist test/dist",
     "postclean": "mkdirp dist test/dist",
-    "docs": "npm-run-all docs:*",
-    "docs:api": "jsdoc src -r -c jsdoc.json -d docs/api",
-    "docs:toc": "doctoc README.md",
     "lint": "vjsstandard",
     "prestart": "npm run build",
     "start": "npm-run-all -p start:server watch",
-    "start:server": "static examples -a 0.0.0.0 -p 9999 -H '{\"Cache-Control\": \"no-cache, must-revalidate\"}' .",
+    "start:server": "static -a 0.0.0.0 -p 9999 -H '{\"Cache-Control\": \"no-cache, must-revalidate\"}' .",
     "pretest": "npm-run-all lint build",
     "test": "karma start test/karma.conf.js",
     "preversion": "npm test",
@@ -39,7 +36,7 @@
     "watch:test": "rollup -c scripts/test.rollup.config.js -w",
     "prepublish": "npm run build",
     "prepush": "npm run lint",
-    "precommit": "npm run docs && git add README.md"
+    "precommit": "git add README.md"
   },
   "keywords": [
     "videojs",
