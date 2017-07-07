@@ -6,10 +6,7 @@ import videojs from 'video.js';
 import { IDs } from '../componentIDs.js';
 const Button = videojs.getComponent('Button');
 const dom = videojs.dom || videojs;
-<<<<<<< HEAD
-=======
 
->>>>>>> upstream/master
 
 /**
  * Root button class for Debugger ButtonBar buttons
@@ -27,11 +24,7 @@ class ButtonBarButton extends Button {
     this.el_.className = this.options_.className;
     this.el_.innerHTML = this.options_.content;
 
-<<<<<<< HEAD
-    // this.on(['tap','click'], this.handleClick);
-=======
     //this.on(['tap','click'], this.handleClick);
->>>>>>> upstream/master
 
   }
   content(value) {
