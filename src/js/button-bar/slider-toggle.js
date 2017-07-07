@@ -27,14 +27,14 @@ class SliderToggle extends ButtonBarButton {
    */
   handleClick() {
 
-  this.el_.classList.toggle('active');
-  slider.classList.toggle('closed');
+    this.el_.classList.toggle('active');
+    slider.classList.toggle('closed');
     // toggle closed on debugger window
-   if (slider.classList.contains('closed')) {
-     this.handleOpen();
-   } else {
-     this.handleClose();
-   }
+    if (slider.classList.contains('closed')) {
+      this.handleOpen();
+    } else {
+      this.handleClose();
+    }
    // show/hide siblings
     var btnToggleLog = document.getElementById(IDs.btnToggleLog);
     var btnToggleClassList = document.getElementById(IDs.btnToggleClassList);
@@ -45,7 +45,11 @@ class SliderToggle extends ButtonBarButton {
     btnToggleLog.classList.toggle('hide');
     btnTogglePlaybackInfo.classList.toggle('hide');
     btnToggleClassList.classList.toggle('hide');
+<<<<<<< HEAD
+    if (btnToggleAdSettings) {
+=======
     if(btnToggleAdSettings){
+>>>>>>> upstream/master
       btnToggleAdSettings.classList.toggle('hide');
 
     }
@@ -53,11 +57,11 @@ class SliderToggle extends ButtonBarButton {
   }
 
   handleOpen() {
-    this.el_.innerHTML="Show Debugger";
+    this.el_.innerHTML = 'Show Debugger';
   }
 
   handleClose() {
-    this.el_.innerHTML="Hide Debugger";
+    this.el_.innerHTML = 'Hide Debugger';
   }
 
 }

@@ -68,23 +68,22 @@ let adEvents = [
 
 let ppJSON = (json) => {
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-   return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-       var cls = 'number';
-       if (/^"/.test(match)) {
-           if (/:$/.test(match)) {
-               cls = 'key';
-           } else {
-               cls = 'string';
-           }
-       } else if (/true|false/.test(match)) {
-           cls = 'boolean';
-       } else if (/null/.test(match)) {
-           cls = 'null';
-       }
-       return '<span class="' + cls + '">' + match + '</span>';
-   });
-}
-
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+    var cls = 'number';
+    if (/^"/.test(match)) {
+      if (/:$/.test(match)) {
+        cls = 'key';
+      } else {
+        cls = 'string';
+      }
+    } else if (/true|false/.test(match)) {
+      cls = 'boolean';
+    } else if (/null/.test(match)) {
+      cls = 'null';
+    }
+    return '<span class="' + cls + '">' + match + '</span>';
+  });
+};
 
 let getElapsedTime = (startTime, endTime) => {
   let startMsec = startTime.getTime();
@@ -95,33 +94,33 @@ let getElapsedTime = (startTime, endTime) => {
 
 let getAdSettingsStr = (player) => {
 
-  let previousStateStr = "",
+  let previousStateStr = '',
     adStr,
     contentStr = '';
-    if(player.onceux.timeline){
+  if (player.onceux.timeline) {
     adStr = [
       '<h3>Once UX Settings</h3>', '<span>Timeline</span>', '<span class="adMsg">contenturi:</span> ' + player.onceux.timeline.contenturi,
       '<span class="adMsg">absoluteDuration:</span> ' + player.onceux.timeline.absoluteDuration,
-      '<span class="adMsg">contentDuration:</span> ' + player.onceux.timeline.contentDuration,
+      '<span class="adMsg">contentDuration:</span> ' + player.onceux.timeline.contentDuration
     ].join('<br>');
-}
+  }
   contentStr = '<span class="adMsg">Ad state:</span> <span id="adstate">' + player.ads.state + '</span><br>';
   contentStr += '<span class="adMsg">Previous Ad state(s): ';
   for (let i = 0; i < priorAdEvents.length; i++) {
     previousStateStr += priorAdEvents[i] + ' -&gt; ';
-  };
+  }
   contentStr += previousStateStr + '</span><br>';
   contentStr += adStr;
   return contentStr;
-}
+};
 
 let getCurrentAdStr = (player) => {
   let currentAdStr,
     currentAdPodInfo,
     path;
-    if(player.onceux.currentTime() !== undefined && player.onceux.timeline ){
-       path = player.onceux.timeline.pathAtAbsoluteTime(player.onceux.currentTime());
-    }if (path) {
+  if (player.onceux.currentTime() !== undefined && player.onceux.timeline) {
+    path = player.onceux.timeline.pathAtAbsoluteTime(player.onceux.currentTime());
+  } if (path) {
     currentAdStr = '<h3>Current TimeLine Snapshot (path):</h3>';
     currentAdStr += [
       '<br/><span class="adMsg">absoluteTime:</span>' + path.absoluteTime,
@@ -156,30 +155,30 @@ let getCurrentAdStr = (player) => {
       ].join('<br>');
     }
 
-}
-return currentAdStr;
-}
+  }
+  return currentAdStr;
+};
 
 export let showAdInfo = (player) => {
-let adSettingsStr = "",
-  currentAdStr = "",
-  contentStr;
-if (player.onceux) {
-  adSettingsStr = getAdSettingsStr(player);
-  currentAdStr = getCurrentAdStr(player);
+  let adSettingsStr = '',
+    currentAdStr = '',
+    contentStr;
+  if (player.onceux) {
+    adSettingsStr = getAdSettingsStr(player);
+    currentAdStr = getCurrentAdStr(player);
 
-};
-contentStr = adSettingsStr + currentAdStr;
-adSettingsPane.content(contentStr);
+  }
+  contentStr = adSettingsStr + currentAdStr;
+  adSettingsPane.content(contentStr);
 };
 
 export let listenForAdEvents = (player) => {
-console.log('player.techName_:' + player.techName_);
-let msgStr = '',
-  levelStr;
-for (let i = 0; i < ssaiAdEvents.length; i++) {
-  player.on(ssaiAdEvents[i], function(e) {
-    switch (e.type) {
+  console.log('player.techName_:' + player.techName_);
+  let msgStr = '',
+    levelStr;
+  for (let i = 0; i < ssaiAdEvents.length; i++) {
+    player.on(ssaiAdEvents[i], function(e) {
+      switch (e.type) {
       case 'onceux-linearad-start':
         break;
       case 'onceux-linearad-impression':
@@ -219,23 +218,23 @@ for (let i = 0; i < ssaiAdEvents.length; i++) {
       default:
         msgStr = e.type;
         levelStr = 'debug';
-    }
-    classesList.refreshPlayerClasses(player);
-    if (_options.verbose) {
-      db.logDebug('debug', 'adMsg', e.type, 'OnceUX_AD_EVENT:' + msgStr);
-    } else {
-      db.logDebug('debug', 'adMsg', e.type, '');
-    }
-    priorAdEvents.push('event:' + e.type);
-    priorAdEvents.push('state:' + player.ads.state);
-    showAdInfo(player);
+      }
+      classesList.refreshPlayerClasses(player);
+      if (_options.verbose) {
+        db.logDebug('debug', 'adMsg', e.type, 'OnceUX_AD_EVENT:' + msgStr);
+      } else {
+        db.logDebug('debug', 'adMsg', e.type, '');
+      }
+      priorAdEvents.push('event:' + e.type);
+      priorAdEvents.push('state:' + player.ads.state);
+      showAdInfo(player);
 
-  });
-};
-for (let i = 0; i < adEvents.length; i++) {
-  let msgStr = '';
-  player.on(adEvents[i], function(e) {
-    switch (e.type) {
+    });
+  }
+  for (let i = 0; i < adEvents.length; i++) {
+    let msgStr = '';
+    player.on(adEvents[i], function(e) {
+      switch (e.type) {
       case 'readyforpreroll':
         {
           readyForPrerollTime = new Date();
@@ -261,31 +260,31 @@ for (let i = 0; i < adEvents.length; i++) {
         classesList.refreshPlayerClasses(player);
         break;
 
-    }
-    if (_options.verbose) {
-      db.logDebug('debug', 'adMsg', e.type, msgStr);
-    } else {
-      db.logDebug('debug', 'adMsg', e.type, '');
-    }
-    priorAdEvents.push('event:' + e.type);
-    priorAdEvents.push('state:' + player.ads.state);
-    showAdInfo(player);
-    classesList.refreshPlayerClasses(player);
-    //db.updateLogPane(player);
-  });
-}
+      }
+      if (_options.verbose) {
+        db.logDebug('debug', 'adMsg', e.type, msgStr);
+      } else {
+        db.logDebug('debug', 'adMsg', e.type, '');
+      }
+      priorAdEvents.push('event:' + e.type);
+      priorAdEvents.push('state:' + player.ads.state);
+      showAdInfo(player);
+      classesList.refreshPlayerClasses(player);
+    // db.updateLogPane(player);
+    });
+  }
 };
 
 export let buildAdSettingsPane = (player, opt) => {
 
-let options = {
-  'id': IDs.adSettings,
-  'name': 'Ad Settings'
+  let options = {
+    'id': IDs.adSettings,
+    'name': 'Ad Settings'
+  };
+
+  _options = opt;
+
+  adSettingsPane = new DebuggerPane(player, options);
+
+  return adSettingsPane;
 };
-
-_options = opt;
-
-adSettingsPane = new DebuggerPane(player, options);
-
-return adSettingsPane;
-}

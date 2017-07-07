@@ -18,14 +18,14 @@ let previousSegmentDuration = null;
 
 let timeRangesToString = function timeRangesToString(tr) {
   var arr = [];
-    for (let i = 0; i < tr.length; i++) {
-      arr.push('[' + tr.start(i).toFixed(2) + ', ' + tr.end(i).toFixed(2) + ']');
-    } 
+  for (let i = 0; i < tr.length; i++) {
+    arr.push('[' + tr.start(i).toFixed(2) + ', ' + tr.end(i).toFixed(2) + ']');
+  }
   return arr;
-}
+};
 
 let calcVideoBitrate = function calcVideoBitrate(pl) {
-  var vbr=0;
+  var vbr = 0;
   if (pl && pl.attributes && pl.attributes.BANDWIDTH) {
     vbr = (pl.attributes.BANDWIDTH / 1024).toFixed(3);
     if (parseFloat(vbr) >= highestVideoBitrate || highestVideoBitrate === 0) {
@@ -36,7 +36,7 @@ let calcVideoBitrate = function calcVideoBitrate(pl) {
     }
     return vbr + ' kbps';
   }
-}
+};
 
 let calcMeasuredBitrate = function calcMeasuredBitrate(hls) {
   var mbr;
@@ -50,16 +50,16 @@ let calcMeasuredBitrate = function calcMeasuredBitrate(hls) {
     }
     return mbr + ' kbps';
   }
-}
+};
 
 let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
   var currentSegmentStr;
-  if (pl.segments.length > 0) {  
+  if (pl.segments.length > 0) {
     var currTime = player_.currentTime();
     var segments = pl.segments;
     var lower;
     var upper;
-    for (var i = 0; i < segments.length-1; i++) {
+    for (var i = 0; i < segments.length - 1; i++) {
       if (segments[i].end !== undefined) {
         lower = segments[i].end - segments[i].duration;
       } else {
@@ -76,27 +76,27 @@ let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
           previousSegment = currentSegment;
           previousSegmentDuration = currentSegmentDuration;
           previousSegmentEnd = currentSegmentEnd;
-          
+
           currentSegment = currentSegmentStr;
           currentSegmentEnd = segments[i].end;
           currentSegmentDuration = segments[i].duration;
 
-          var debugMsg = 'Previous segment: ' + previousSegment + 
+          var debugMsg = 'Previous segment: ' + previousSegment +
             '<br>Previous segment start: ' + (previousSegmentEnd - previousSegmentDuration) +
             ' Previous segment end: ' + previousSegmentEnd +
             ' Previous segment duration: ' + previousSegmentDuration;
 
-          debugMsg +='<br>Current segment: ' + currentSegment +
+          debugMsg += '<br>Current segment: ' + currentSegment +
             '<br>Current segment start: ' + (currentSegmentEnd - currentSegmentDuration) +
             ' Current segment end: ' + currentSegmentEnd +
             ' Current segment duration: ' + currentSegmentDuration;
 
-          db.logDebug('debug', 'playerMsg', 'SEGMENT-CHANGE-RECORDED', debugMsg);            
+          db.logDebug('debug', 'playerMsg', 'SEGMENT-CHANGE-RECORDED', debugMsg);
         }
-        
+
         // how to determine when to update previous
         // null until it is set, can it simply be i-1?
-        //if (previousSegment !== null && currentSegment !== previousSegment) {
+        // if (previousSegment !== null && currentSegment !== previousSegment) {
         //  previousSegment = currentSegment;
         //  previousSegmentDuration = currentSegmentDuration;
         //  previousSegmentEnd = currentSegmentEnd;
@@ -105,17 +105,17 @@ let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
       }
     }
   }
-}
+};
 
 let loadedSegments = function loadedSegments(m_) {
-   var segArr = [];
-   if (m_.segments.length > 0) {
-     for (var i = 0; i < m_.segments.length; i++) {
-       segArr.push('[' + i + '] ' + m_.segments[i].uri + ' end: ' + m_.segments[i].end + '<br>');
-     }
-     return segArr;
-   }
-}
+  var segArr = [];
+  if (m_.segments.length > 0) {
+    for (var i = 0; i < m_.segments.length; i++) {
+      segArr.push('[' + i + '] ' + m_.segments[i].uri + ' end: ' + m_.segments[i].end + '<br>');
+    }
+    return segArr;
+  }
+};
 
 let getPlaybackInfo = (player) => {
   let playbackInfoStr;
@@ -123,9 +123,9 @@ let getPlaybackInfo = (player) => {
   let plyrID = player.el_.getAttribute('data-player');
   let acct = player.el_.getAttribute('data-account');
 
-  if ( player.tech_.hls) {
+  if (player.tech_.hls) {
     playlist = player.tech_.hls.playlists.media_;
-  } 
+  }
   playbackInfoStr = '<h3>Video Playback Information:</h3>';
   playbackInfoStr += '<span class="playerMsg">TechName: </span> ' + player.techName_;
   playbackInfoStr += '<br><span class="playerMsg">Current Source: </span> ' + player.currentSrc();
@@ -164,13 +164,12 @@ let getPlaybackInfo = (player) => {
   }
   if (player.tech_.hls && player.tech_.hls.playlists.media_) {
     playbackInfoStr += '<br><span class="playerMsg">Total Segments:</span>' + player.tech_.hls.playlists.media_.segments.length;
-    playbackInfoStr += '<br><span class="playerMsg">Current Segments:</span><br>' + loadedSegments(playlist).join("");
+    playbackInfoStr += '<br><span class="playerMsg">Current Segments:</span><br>' + loadedSegments(playlist).join('');
   }
   return playbackInfoStr;
-}
+};
 
-
-/*let getMediaInfoStr = (player, mInfo) => {
+/* let getMediaInfoStr = (player, mInfo) => {
   let mStr = '';
   if (mInfo != undefined) {
     mStr = '<h3>Mediainfo</h3>';
@@ -197,8 +196,7 @@ let getPlaybackInfo = (player) => {
 }
 */
 
-
-/*let getSourcesStr = (mSrcArray) => {
+/* let getSourcesStr = (mSrcArray) => {
   let sourcesStr="";
         for (let i=0; i < mSrcArray.length; i++ ) {
           let httpSrc = mSrcArray[i].src;
@@ -217,39 +215,38 @@ let getPlaybackInfo = (player) => {
 
 export let buildPlaybackInfoPane = (player) => {
 
-  //let mediaInfo='', mediaStr='';
+  // let mediaInfo='', mediaStr='';
   player_ = player;
 
    // Get information about the player to use in main content
-   let playbackInfoStr = getPlaybackInfo(player);
+  let playbackInfoStr = getPlaybackInfo(player);
 
   // mediaInfo = player.mediainfo;
   // mediaStr = getMediaInfoStr(player, mediaInfo);
 
-   let options = { 
-                   'id' : IDs.playbackInfo, 
-                   'name' : 'Playback Information',
-                   'content' : playbackInfoStr
-                 };
+  let options = {
+    'id': IDs.playbackInfo,
+    'name': 'Playback Information',
+    'content': playbackInfoStr
+  };
 
-   playbackInfoPane = new DebuggerPane(player, options);
- 
-   return playbackInfoPane;
-  }
+  playbackInfoPane = new DebuggerPane(player, options);
 
+  return playbackInfoPane;
+};
 
 export let showPlaybackInfo = (player) => {
-    let mediaInfo, mediaStr, adStr, srcArray, contentStr;
-      
+  let mediaInfo, mediaStr, adStr, srcArray, contentStr;
+
       // Get information about the player to use in main content
-      let playbackInfoStr = getPlaybackInfo(player);
+  let playbackInfoStr = getPlaybackInfo(player);
 
      // contentStr = playerStr;
 
-      //mediaInfo = player.mediainfo;
-      //mediaStr = getMediaInfoStr(player, mediaInfo);
-      
-      //contentStr += mediaStr;
+      // mediaInfo = player.mediainfo;
+      // mediaStr = getMediaInfoStr(player, mediaInfo);
 
-      playbackInfoPane.content(playbackInfoStr);
-  };
+      // contentStr += mediaStr;
+
+  playbackInfoPane.content(playbackInfoStr);
+};

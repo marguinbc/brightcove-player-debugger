@@ -12,14 +12,55 @@
  * @extends Component
  * @class DebuggerPane
  */
+<<<<<<< HEAD
+ class DebuggerPane extends videojs.getComponent('Component') {
+=======
 class DebuggerPane extends videojs.getComponent('Component') {
 
   constructor(player, options) {
+>>>>>>> upstream/master
 
-    super(player,options);
+   constructor(player, options) {
 
-    //this.content(this.options_.content);
+     super(player, options);
 
+<<<<<<< HEAD
+    // this.content(this.options_.content);
+
+     this.el_ = dom.createEl('div',
+       {
+         'id': this.options_.id
+       }
+
+    );
+
+     this.headerEl_ = dom.createEl('div',
+      {'className': 'header'}
+    );
+     this.headerEl_.innerHTML = '<h2>' + this.options_.name + '</h2>';
+     this.el_.appendChild(this.headerEl_);
+
+     this.contentEl_ = dom.createEl('div', {'className': 'main'});
+     this.contentEl_.innerHTML = this.options_.content;
+     this.el_.appendChild(this.contentEl_);
+
+     this.footerEl_ = dom.createEl('div', {'className': 'footer'});
+     this.el_.appendChild(this.footerEl_);
+     return this;
+   }
+
+   content(value) {
+     if (typeof value !== 'undefined') {
+       this.contentEl_.innerHTML = value;
+     }
+     return this.contentEl_.innerHTML;
+   }
+
+}
+
+ videojs.registerComponent('DebuggerPane', DebuggerPane);
+ export default DebuggerPane;
+=======
     this.el_ = dom.createEl("div",
       {
         "id" : this.options_.id
@@ -54,3 +95,4 @@ class DebuggerPane extends videojs.getComponent('Component') {
 
 videojs.registerComponent('DebuggerPane', DebuggerPane);
 export default DebuggerPane;
+>>>>>>> upstream/master
