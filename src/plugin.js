@@ -23,6 +23,7 @@ const defaults = {};
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
 const dom = videojs.dom || videojs;
 
+<<<<<<< HEAD
 let slider;
 let _options;
 let buttonBar;
@@ -86,6 +87,74 @@ const playerEvents = [
 const toggleSlider = () => {
   slider.classList.toggle('closed');
   btnToggleSlider.classList.toggle('active');
+=======
+let slider,
+  buttonBar,
+  btnToggleLog,
+  btnToggleSlider,
+  adSettings,
+  adSettingsPane,
+  classesListPane,
+  initialDuration=0,
+  previousDuration=0,
+  initialSource="",
+  previousSource="",
+  initialMedia="",
+  previousMedia="",
+  currentDuration,
+  currentSource,
+  currentMedia,
+  playerTech="",
+  playbackInfoPane,
+  playerSettingsPane,
+  btnToggleClassList,
+  btnTogglePlaybackInfo,
+  btnToggleAdSettings,
+  btnTogglePlayerSettings,
+  logPane,
+  logTypes = {
+    array: 'array',
+    table: 'table',
+    list: 'list',
+    json: 'json'
+  };
+// Array of events I came up with by watching debugger window and using documentation
+let playerEvents = [
+  'ready', // vidojs_component
+  'durationchange', // videojs_player, videojs_swf, videojs_contrib_hls
+  'ended', // videojs_contrib_ads, videojs_player, videojs_swf, videojs_qos
+  'error', // videojs_player
+  'firstplay', // videojs_player
+  'fullscreenchange', // videojs_qos, videojs_player
+  'loadedalldata',
+  'loadeddata', // videojs_player, videojs_swf
+  'loadedmetadata', // videojs_qos, videojs_player, videojs_contrib_hls, videojs_swf
+  'loadstart', // videojs_qos, videojs_player, videojs_swf
+  'pause', // videojs_qos, videojs_player, videojs_swf
+  'play', // videojs_qos, videojs_player, videojs_swf
+  'player_load', // videojs_bc_analytics
+  'contentupdate', // videojs_contrib_ads
+  'seeking', // videojs_player, videojs_swf
+  'seeked', // videojs_player, videojs_swf
+  'progress', // videojs_contrib_hls, videojs_player (videojs_swf?)
+  'catalog_request', // videojs_catalog
+  'catalog_response', // videojs_catalog
+  'playing', // videojs_qos, videojs_player, videojs_swf
+  'waiting', // videojs_player, videojs_swf
+  'video_view', // videojs_bc_analytics
+  'video_impression', // videojs_bc_analytics
+  'video_engagement', // videojs_bc_analytics
+  'play_request', // videojs_bc_analytics
+  'canplay', // videojs_player, videojs_swf
+  'canplaythrough', // videojs_player, videojs_swf
+  'timeupdate'
+];
+let clear = () => {};
+
+let toggleSlider = () => {
+  slider.classList.toggle('closed');
+  btnToggleSlider.classList.toggle("active");
+>>>>>>> upstream/master
 
   btnToggleLog.classList.toggle('hide');
   btnTogglePlaybackInfo.classList.toggle('hide');
@@ -95,6 +164,7 @@ const toggleSlider = () => {
     btnToggleAdSettings.classList.toggle('hide');
   }
   if (slider.classList.contains('closed')) {
+<<<<<<< HEAD
     btnToggleSlider.innerHTML = 'Show Debugger';
   } else {
     btnToggleSlider.innerHTML = 'Hide Debugger';
@@ -131,11 +201,54 @@ const showPosterStyles = (evt) => {
 
     if (firstpass) {
       posterStyles.innerHTML = '<h2>BC Poster Opacity</h2>';
+=======
+    btnToggleSlider.innerHTML = "Show Debugger";
+  } else {
+    btnToggleSlider.innerHTML = "Hide Debugger";
+  }
+};
+
+let getPlayerEvents = () => {
+  allPlayerEventsJSON = videojs.getData(player.el_).handlers;
+
+  for (prop in allPlayerEventsJSON) {
+    allPlayerEvents.push(prop);
+  }
+
+  allPlayerEvents.sort();
+
+  for (i = 1; i < allPlayerEvents.length; i++) {
+    console.log(allPlayerEvents[i]);
+  }
+};
+
+let getClassesStr = (obj) => {
+  if (typeof obj == 'object') {
+    let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
+    return {logClassesStr};
+  }
+};
+
+let showPosterStyles = (evt) => {
+  if (_options.showPosterStyles) {
+    let vPoster = document.getElementsByClassName("vjs-poster")[0];
+    let posterOpacity = "";
+    let cs = window.getComputedStyle(vPoster, null).opacity;
+    let playerClasses = "";
+    let posterClasses = "";
+
+    if (firstpass) {
+      posterStyles.innerHTML = "<h2>BC Poster Opacity</h2>";
+>>>>>>> upstream/master
       firstpass = false;
     }
     if (lastEvent != currentEvent) {
       lastEvent = currentEvent;
+<<<<<<< HEAD
       vPosterStyles = 'Opacity: ' + cs + ' lastEvent:' + lastEvent;
+=======
+      vPosterStyles = "Opacity: " + cs + " lastEvent:" + lastEvent;
+>>>>>>> upstream/master
       posterStyles.innerHTML += '<span style="color:blue;">' + vPosterStyles + '</span><br/>';
       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
       if (currentClasses != lastClasses) {
@@ -148,6 +261,7 @@ const showPosterStyles = (evt) => {
     }
   }
 };
+<<<<<<< HEAD
 const showBigPlayButtonStyles = (evt) => {
   if (_options.showBigPlayButtonStyles) {
     const vBPB = document.getElementsByClassName('vjs-big-play-button')[0];
@@ -159,6 +273,20 @@ const showBigPlayButtonStyles = (evt) => {
     if (firstpass) {
       bigPlayButtonStyles.innerHTML = '<h2>Big Play Button Styles</h2>';
       bigPlayButtonStyles.innerHTML += 'User-Agent: ' + navigator.userAgent + '<br>';
+=======
+
+let showBigPlayButtonStyles = (evt) => {
+  if (_options.showBigPlayButtonStyles) {
+    let vBPB = document.getElementsByClassName("vjs-big-play-button")[0];
+    let bpbOpacity = "";
+    let bpbStyles = [];
+    let cs = window.getComputedStyle(vBPB, null);
+    let bpbClasses = "";
+
+    if (firstpass) {
+      bigPlayButtonStyles.innerHTML = "<h2>Big Play Button Styles</h2>";
+      bigPlayButtonStyles.innerHTML += "User-Agent: " + navigator.userAgent + "<br>";
+>>>>>>> upstream/master
       firstpass = false;
     }
     if (lastEvent != currentEvent) {
@@ -170,7 +298,11 @@ const showBigPlayButtonStyles = (evt) => {
             cs.getPropertyValue(cs.item(i))
           ] + '<br>');
         }
+<<<<<<< HEAD
         vBPBStyles = 'CurrentStyles: ' + bpbStyles + '<br>';
+=======
+        vBPBStyles = "CurrentStyles: " + bpbStyles + "<br>";
+>>>>>>> upstream/master
         bigPlayButtonStyles.innerHTML += '<span style="color:blue;">' + vBPBStyles + '</span><br/>';
       }
       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
@@ -182,6 +314,7 @@ const showBigPlayButtonStyles = (evt) => {
   }
 };
 
+<<<<<<< HEAD
 const listenForPlayerEvents = (player, options) => {
 
   player.one('durationchange', function(e) {
@@ -302,20 +435,152 @@ const listenForPlayerEvents = (player, options) => {
             if (currentSource !== previousSource) {
               srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
               previousSource = currentSource;
+=======
+let listenForPlayerEvents = (player, options) => {
+
+  player.one('durationchange', function(e) {
+    currentDuration = player.duration();
+    let msgStr = 'currentDuration: ' + currentDuration + '<br>previousDuration: ' + previousDuration;
+    db.logDebug('media', 'playerMsg', 'one: ' + e.type, msgStr);
+  });
+
+  let playCounter = 0;
+  let msgStr,
+    currentTime,
+    previousTime,
+    levelStr = 'debug';
+  for (let i = 0; i < playerEvents.length; i++) {
+    player.on(playerEvents[i], function(e) {
+      switch (e.type) {
+        case 'error':
+          msgStr = [player.error().type, '-', player.error().message, console.trace()].join(' ');
+          break;
+        case 'firstplay':
+          initialDuration = player.duration();
+          currentDuration = initialDuration;
+          initialSource = player.currentSrc();
+          previousSource = initialSource;
+          currentTime = player.currentTime();
+          msgStr = [
+            'Initial source:' + initialSource,
+            'Current time: ' + currentTime
+          ].join('<br>');
+          break;
+        case 'play':
+          playCounter++;
+          msgStr = [
+            'Plays: ' + playCounter,
+            'Current source: ' + player.currentSrc(),
+            'Playing from: ' + player.currentTime()
+          ].join('<br>');
+          break;
+        case 'loadedmetadata':
+          if (options.showMediaInfo) {
+            let mInfo = '';
+            mInfo = player.mediainfo;
+            if (mInfo != undefined) {
+              msgStr = [
+                'Account ID: ' + mInfo.account_id,
+                'Video ID: ' + mInfo.id,
+                'Title: ' + mInfo.name,
+                'Duration: ' + mInfo.duration
+              ].join('<br>');
+            }
+            playerSettings.showPlayerSettings(player);
+            playbackInfo.showPlaybackInfo(player);
+          };
+          levelStr = 'media';
+          break;
+        case 'pause':
+          currentTime = player.currentTime();
+          msgStr = 'Paused at: ' + currentTime;
+          break;
+        case 'progress':
+          currentTime = player.currentTime();
+          msgStr = ['currentTime:', currentTime].join(' ');
+          previousTime = currentTime;
+          //playbackInfo.showPlaybackInfo(player);
+          break;
+        case 'contentupdate':
+          msgStr = [
+            'oldValue: ' + e.oldValue,
+            'newValue:' + e.newValue
+          ].join('<br>');
+          levelStr = 'media';
+          break;
+        case 'seeking':
+          currentTime = player.currentTime();
+          msgStr = [
+            'seeking from:' + previousTime,
+            'to:' + currentTime
+          ].join('<br>');
+          previousTime = currentTime;
+          playbackInfo.showPlaybackInfo(player);
+          break;
+        case 'canplaythrough':
+          msgStr = 'currentTime: ' + player.currentTime();
+          break;
+        case 'timeupdate':
+          //   msgStr = 'currentTime: ' + player.currentTime();
+          playbackInfo.showPlaybackInfo(player);
+          playerSettings.showPlayerSettings(player);
+          break;
+        case 'seeked':
+          msgStr = 'currentTime: ' + player.currentTime();
+          break;
+        case 'catalog_response':
+          msgStr = 'url: ' + e.url;
+          levelStr = 'media';
+          break;
+        case 'durationchange':
+          {
+            let srcStr,
+              mediaStr,
+              assetid;
+            currentDuration = player.duration();
+            currentSource = player.currentSrc();
+
+            if (currentDuration !== previousDuration) {
+              msgStr = 'currentDuration: ' + currentDuration + ',<br>previousDuration: ' + previousDuration;
+              previousDuration = currentDuration;
+>>>>>>> upstream/master
             } else {
               srcStr = '<br>Source remained same: ' + currentSource;
             }
+<<<<<<< HEAD
             if (currentMedia !== previousMedia) {
               mediaStr = '<br>Media (Rendition) changed: currentMedia ' + currentMedia + ', previousMedia: ' + previousMedia;
               previousMedia = currentMedia;
             } else {
               mediaStr = '<br>Media (Rendition) remained same: currentMedia: ' + currentMedia;
+=======
+            if (playerTech == 'Hls') {
+              currentMedia = player.hls.playlists.media_.uri;
+              assetid = currentMedia.substring(currentMedia.search("assetId=") + 8, 92);
+              if (currentSource !== previousSource) {
+                srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
+                previousSource = currentSource;
+              } else {
+                srcStr = '<br>Source remained same: ' + currentSource;
+              }
+              if (currentMedia !== previousMedia) {
+                mediaStr = '<br>Media (Rendition) changed: currentMedia ' + currentMedia + ', previousMedia: ' + previousMedia;
+                previousMedia = currentMedia;
+              } else {
+                mediaStr = '<br>Media (Rendition) remained same: currentMedia: ' + currentMedia;
+              }
+              mediaStr += '<br>Bandwidth: ' + player.hls.bandwidth + 'bps';
+              mediaStr += '<br>Segment Download time: ' + player.hls.segmentXhrTime + 'ms';
+              msgStr = [msgStr, srcStr, mediaStr].join(' ');
+              levelStr = 'media';
+>>>>>>> upstream/master
             }
             mediaStr += '<br>Bandwidth: ' + player.hls.bandwidth + 'bps';
             mediaStr += '<br>Segment Download time: ' + player.hls.segmentXhrTime + 'ms';
             msgStr = [msgStr, srcStr, mediaStr].join(' ');
             levelStr = 'media';
           }
+<<<<<<< HEAD
         }
         break;
       default:
@@ -323,6 +588,14 @@ const listenForPlayerEvents = (player, options) => {
         levelStr = 'debug';
       }
       if ((e.type !== 'progress' && !options.showProgress) && e.type !== 'timeupdate') {
+=======
+          break;
+        default:
+          msgStr = '';
+          levelStr = 'debug';
+      }
+      if ((e.type != 'progress' && !options.showProgress) && e.type != 'timeupdate') {
+>>>>>>> upstream/master
 
         if (options.verbose) {
           db.logDebug(levelStr, 'playerMsg', e.type, msgStr);
@@ -336,17 +609,28 @@ const listenForPlayerEvents = (player, options) => {
         adSettings.showAdInfo(player);
       }
       classesList.refreshPlayerClasses(player);
+<<<<<<< HEAD
       // db.updateLogPane(player);
+=======
+      //db.updateLogPane(player);
+>>>>>>> upstream/master
     });
   }
 };
 
+<<<<<<< HEAD
 // event management (thanks John Resig)
+=======
+//event management (thanks John Resig)
+>>>>>>> upstream/master
 let addEvent = (obj1, type, fn) => {
   let obj = (obj1.constructor === String)
     ? document.getElementById(obj1)
     : obj1;
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
   if (obj.attachEvent) {
     obj['e' + type + fn] = fn;
     obj[type + fn] = function() {
@@ -399,7 +683,11 @@ let buildDebugger = (player, options) => {
   playerSettingsPane = playerSettings.buildPlayerSettingsPane(player);
   slider.insertBefore(playerSettingsPane.el_, logPane.el_);
 
+<<<<<<< HEAD
   if (options.debugAds === true) {
+=======
+  if (options.debugAds == true) {
+>>>>>>> upstream/master
     if (player.ima3) {
       console.log('Using IMA3 Ad Plugin');
       adSettings = imaAdSettings;
@@ -423,14 +711,21 @@ let buildButtonBar = (slider, options) => {
   slider.appendChild(buttonBar);
 
   let _options = {
+<<<<<<< HEAD
     'id': IDs.btnToggleSlider,
     'className': 'myButton active',
     'content': 'Hide Debugger'
+=======
+    "id": IDs.btnToggleSlider,
+    "className": "myButton active",
+    "content": "Hide Debugger"
+>>>>>>> upstream/master
   };
 
   btnToggleSlider = new SliderToggle(player, _options);
 
   _options = {
+<<<<<<< HEAD
     'id': IDs.btnToggleLog,
     'className': 'myButton active',
     'content': 'Log'
@@ -442,19 +737,39 @@ let buildButtonBar = (slider, options) => {
     'id': IDs.btnTogglePlaybackInfo,
     'className': 'myButton',
     'content': 'Playback Info'
+=======
+    "id": IDs.btnToggleLog,
+    "className": "myButton active",
+    "content": "Log"
+  };
+
+  btnToggleLog = new DebugLogToggle(player, _options);
+
+  _options = {
+    "id": IDs.btnTogglePlaybackInfo,
+    "className": "myButton",
+    "content": "Playback Info"
+>>>>>>> upstream/master
   };
 
   btnTogglePlaybackInfo = new PlaybackInfoToggle(player, _options);
 
   _options = {
+<<<<<<< HEAD
     'id': IDs.btnToggleClassList,
     'className': 'myButton',
     'content': 'Classes'
+=======
+    "id": IDs.btnToggleClassList,
+    "className": "myButton",
+    "content": "Classes"
+>>>>>>> upstream/master
   };
 
   btnToggleClassList = new ClassListToggle(player, _options);
   if (options.debugAds === true) {
     _options = {
+<<<<<<< HEAD
       'id': IDs.btnTogglePlayerSettings,
       'className': 'myButton',
       'content': 'Player Settings',
@@ -465,6 +780,18 @@ let buildButtonBar = (slider, options) => {
       'id': IDs.btnTogglePlayerSettings,
       'className': 'myButton',
       'content': 'Player Settings'
+=======
+      "id": IDs.btnTogglePlayerSettings,
+      "className": "myButton",
+      "content": "Player Settings",
+      "debugAds": true
+    };
+  } else {
+    _options = {
+      "id": IDs.btnTogglePlayerSettings,
+      "className": "myButton",
+      "content": "Player Settings"
+>>>>>>> upstream/master
     };
   }
 
@@ -472,15 +799,25 @@ let buildButtonBar = (slider, options) => {
 
   if (options.debugAds == true) {
     _options = {
+<<<<<<< HEAD
       'id': IDs.btnToggleAdSettings,
       'className': 'myButton',
       'content': 'Ad Settings'
+=======
+      "id": IDs.btnToggleAdSettings,
+      "className": "myButton",
+      "content": "Ad Settings"
+>>>>>>> upstream/master
     };
 
     btnToggleAdSettings = new AdSettingsToggle(player, _options);
   }
 
+<<<<<<< HEAD
   /* options = {
+=======
+  /*options = {
+>>>>>>> upstream/master
     "id": IDs.btnToggleDebuggerSettings,
     "className" : "myButton",
     "content" : "Debugger Settings"
@@ -507,17 +844,29 @@ let setOptions = (opt, callback) => {
   // default using line numbers to true
   if (opt.verbose === undefined) {
     opts.verbose = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.verbose = opt.verbose;
   }
   if (opt.useLineNums === undefined) {
     opts.useLineNums = true;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.useLineNums = opt.useLineNums;
   }
   if (opt.logClasses === undefined) {
     opts.logClasses = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.logClasses = opt.logClasses;
   }
   if (opt.logType === undefined) {
@@ -525,53 +874,95 @@ let setOptions = (opt, callback) => {
   }
   if (opt.logMilliseconds === undefined) {
     opts.logMilliseconds = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.logMilliseconds = opt.logMilliseconds;
   }
   if (opt.showProgress === undefined) {
     opts.showProgress = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.showProgress = opt.showProgress;
   }
   if (opt.showMediaInfo === undefined) {
     opts.showMediaInfo = true;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.showMediaInfo = opt.showMediaInfo;
   }
   if (opt.debugAds === undefined) {
     opts.debugAds = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.debugAds = opt.debugAds;
   }
   if (opt.showPosterStyles === undefined) {
     opts.showPosterStyles = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.showPosterStyles = opt.showPosterStyles;
   }
   if (opt.showBigPlayButtonStyles === undefined) {
     opts.showBigPlayButtonStyles = false;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opts.showBigPlayButtonStyles = opt.showBigPlayButtonStyles;
   }
   if (opt.captureConsole === undefined) {
     opts.captureConsole = true;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> upstream/master
     opt.captureConsole = opt.captureConsole;
   }
   if (opt.startMinimized === undefined) {
     opts.startMinimized = false;
+<<<<<<< HEAD
   } else {
     opts.startMinimized = opt.startMinimized;
   }
   if (opt.showBigPlayButtonStyles === true) {
     let bigPlayButtonStyles = document.createElement('div');
     bigPlayButtonStyles.setAttribute('id', IDs.bigPlayButtonStyles);
+=======
+  }else{
+    opts.startMinimized = opt.startMinimized;
+  }
+  if (opt.showBigPlayButtonStyles === true) {
+    let bigPlayButtonStyles = document.createElement("div");
+    bigPlayButtonStyles.setAttribute("id", IDs.bigPlayButtonStyles);
+>>>>>>> upstream/master
     logPane.appendChild(bigPlayButtonStyles);
   }
 
   if (opts.showPosterStyles === true) {
+<<<<<<< HEAD
     let posterStyles = document.createElement('div');
     posterStyles.setAttribute('id', IDs.posterStyles);
+=======
+    let posterStyles = document.createElement("div");
+    posterStyles.setAttribute("id", IDs.posterStyles);
+>>>>>>> upstream/master
     logPane.appendChild(posterStyles);
   }
 
@@ -608,9 +999,12 @@ const onPlayerReady = (player, options) => {
 
     buildDebugger(player, opts);
     listenForPlayerEvents(player, opts);
+<<<<<<< HEAD
     if (opts.debugAds === true) {
       adSettings.listenForAdEvents(player);
     }
+=======
+>>>>>>> upstream/master
 
   });
 };

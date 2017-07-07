@@ -45,7 +45,11 @@ class SliderToggle extends ButtonBarButton {
     btnToggleLog.classList.toggle('hide');
     btnTogglePlaybackInfo.classList.toggle('hide');
     btnToggleClassList.classList.toggle('hide');
+<<<<<<< HEAD
     if (btnToggleAdSettings) {
+=======
+    if(btnToggleAdSettings){
+>>>>>>> upstream/master
       btnToggleAdSettings.classList.toggle('hide');
 
     }
