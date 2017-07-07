@@ -6,10 +6,9 @@ import { IDs } from './componentIDs.js';
 let debuggerSettings;
 let player_;
 
-
 let getDebuggerSettings = (player) => {
-  
-}
+
+};
 
 export let buildDebuggerSettingsPane = (player) => {
 
@@ -18,31 +17,29 @@ export let buildDebuggerSettingsPane = (player) => {
    // Get information about the player to use in main content
 //   let playbackInfoStr = getPlaybackInfo(player);
 
+  let options = {
+    'id': IDs.debuggerSettings,
+    'name': 'Debugger Settings',
+    'content': 'form goes here'
+  };
 
-   let options = { 
-                   'id' : IDs.debuggerSettings, 
-                   'name' : 'Debugger Settings',
-                   'content' : 'form goes here'
-                 };
+  debuggerSettings = new DebuggerPane(player, options);
 
-   debuggerSettings = new DebuggerPane(player, options);
- 
-   return debuggerSettings;
-  }
-
+  return debuggerSettings;
+};
 
 export let showDebuggerSettings = (player) => {
    // let mediaInfo, mediaStr, adStr, srcArray, contentStr;
-      
+
       // Get information about the player to use in main content
-      //let playbackInfoStr = getPlaybackInfo(player);
+      // let playbackInfoStr = getPlaybackInfo(player);
 
      // contentStr = playerStr;
 
-      //mediaInfo = player.mediainfo;
-      //mediaStr = getMediaInfoStr(player, mediaInfo);
-      
-      //contentStr += mediaStr;
+      // mediaInfo = player.mediainfo;
+      // mediaStr = getMediaInfoStr(player, mediaInfo);
 
-      //playbackInfoPane.content(playbackInfoStr);
-  };
+      // contentStr += mediaStr;
+
+      // playbackInfoPane.content(playbackInfoStr);
+};
