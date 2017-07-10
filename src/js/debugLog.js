@@ -46,7 +46,7 @@ export let clickSendEmail = (evt) => {
 export let clickCopyLog = (e) => {
   // find target element
   let a = document.createElement('input');
-  a.value = JSON.stringify(emailArray, null, 4);
+  a.value = document.getElementsByClassName('main')[0].innerHTML;
   // is element selectable?
   if (a) {
     // select text
