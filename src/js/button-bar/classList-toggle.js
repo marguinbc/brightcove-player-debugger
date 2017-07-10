@@ -37,11 +37,7 @@ class ClassListToggle extends ButtonBarButton {
     classesListPane.classList.toggle('activePane');
     playerSettingsPane.classList.toggle('classListVisible');
     playbackInfoPane.classList.toggle('classListVisible');
-<<<<<<< HEAD
-    if (adSettingsPane) {
-=======
     if(adSettingsPane){
->>>>>>> upstream/master
       adSettingsPane.classList.toggle('classListVisible');
     }
     logPane.classList.toggle('classListVisible');
