@@ -10,9 +10,13 @@ let getPlayerInfo = (player) => {
   let plyrID = player.el_.getAttribute('data-player');
   let acct = player.el_.getAttribute('data-account');
   playerStr = '<h3>Player Information:</h3>';
-  playerStr += '<span class="playerMsg">Player ID:</span> ' + plyrID + '<br>';
-  playerStr += '<span class="playerMsg">Account ID:</span> ' + acct + '<br>';
-  configUrl = 'http://players.brightcove.net/' + acct + '/' + plyrID + '_default/config.json';
+  if (plyrID !== null) {
+    playerStr += '<span class="playerMsg">Player ID:</span> ' + plyrID + '<br>';
+  }
+  if (acct !== null) {
+    playerStr += '<span class="playerMsg">Account ID:</span> ' + acct + '<br>';
+    configUrl = 'http://players.brightcove.net/' + acct + '/' + plyrID + '_default/config.json';
+  }
   playerStr += '<span class="playerMsg">Player Tech:</span> ' + player.techName_ + '<br>';
   playerStr += '<span class="playerMsg">Playback Rate:</span>' + player.playbackRate() + '<br>';
   playerStr += '<span class="playerMsg">preload: </span>' + player.preload() + '<br>';
@@ -25,10 +29,13 @@ let getPlayerInfo = (player) => {
   playerStr += '<span class="playerMsg">width: </span>' + player.width() + '<br>';
   playerStr += '<span class="playerMsg">videoHeight: </span>' + player.videoHeight() + '<br>';
   playerStr += '<span class="playerMsg">videoWidth: </span>' + player.videoWidth() + '<br>';
-  plyrUrl = 'http://players.brightcove.net/' + acct + '/' + plyrID + '_default/index.html';
-  playerStr += '<span class="playerMsg">Standalone player:</span> <a style="color: white;" href="' + plyrUrl + '" target="_blank">' + plyrUrl + '</a><br>';
-  playerStr += '<span class="playerMsg">Player config.json:</span> <a style="color: white;" href="' + configUrl + '" target="_blank">' + configUrl + '</a><br>';
-  return {playerStr, configUrl, plyrUrl};
+  if (plyrID !== null || acct !== null) {
+    plyrUrl = 'http://players.brightcove.net/' + acct + '/' + plyrID + '_default/index.html';
+    playerStr += '<span class="playerMsg">Standalone player:</span> <a style="color: white;" href="' + plyrUrl + '" target="_blank">' + plyrUrl + '</a><br>';
+    playerStr += '<span class="playerMsg">Player config.json:</span> <a style="color: white;" href="' + configUrl + '" target="_blank">' + configUrl + '</a><br>';
+
+  }
+    return {playerStr, configUrl, plyrUrl};
 };
 
 let getMediaInfoStr = (player, mInfo) => {

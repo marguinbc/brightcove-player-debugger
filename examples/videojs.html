@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-player-debugger Demo</title>
+  <link href="../dist/videojs-player-debugger.css" rel="stylesheet">
+  <link href="http://vjs.zencdn.net/6.2.0/video-js.css" rel="stylesheet">
+  <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+   <script src="http://vjs.zencdn.net/6.2.0/video.js"></script>
+</head>
+<body>
+  <video id="videojs-player-debugger-player" class="video-js vjs-default-skin" controls preload="none" width="640" height="264" poster="http://vjs.zencdn.net/v/oceans.png" data-setup="{}">
+      <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+      <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
+      <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg">
+      <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+    </video>  <ul>
+    <li><a href="test/">Run unit tests in browser.</a></li>
+    <li><a href="docs/api/">Read generated docs.</a></li>
+  </ul>
+
+  <script src="../dist/videojs-player-debugger.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('videojs-player-debugger-player');
+      var options = {
+        "debugAds": false,
+        "logClasses": true,
+        "showPlayerClasses": true,
+        "verbose": true
+      };
+      player.playerDebugger(options);
+    }(window, window.videojs));
+  </script>
+</body>
+</html>

@@ -392,6 +392,7 @@ let buildDebugger = (player, options) => {
 
   // TypeError cannot reade property 'constructor' of undefined in AdEvent...
   addEvent(IDs.sendEmail, 'click', db.clickSendEmail);
+  addEvent(IDs.copyLog, 'click', db.clickCopyLog);
   addEvent(IDs.filters, 'click', db.clickFilter);
   addEvent(IDs.controls, 'click', db.clickControl);
 

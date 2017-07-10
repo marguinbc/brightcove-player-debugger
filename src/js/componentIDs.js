@@ -4,6 +4,7 @@ export let IDs = {
   controls: 'bbControls',
     // size: 'bbSize',
   sendEmail: 'sendEmail',
+  copyLog: 'copyLog',
   slider: 'slider',
   buttonBar: 'buttonBar',
   log: 'myBlackbird',
