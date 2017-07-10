@@ -50,7 +50,7 @@ export let clickCopyLog = (e) => {
   // is element selectable?
   if (a) {
     // select text
-    var logPane = document.getElementById('myBlackbird')
+    var logPane = document.getElementById('myBlackbird');
     logPane.appendChild(a);
     a.select();
     try {
@@ -109,7 +109,7 @@ export let clickFilter = (evt) => {
       for (entry in messageTypes) {
         if (messageTypes[entry])
           active++;
-        }
+      }
       oneActiveFilter = (active == 1 && messageTypes[type]);
 
       for (i = 0; filters[i]; i++) {
@@ -206,71 +206,71 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
     : content;
 
   switch (_options.logType) {
-    case 'table':
-      let row,
-        col1,
-        col2,
-        col3,
-        col4;
-      row = document.createElement('tr');
-      row.setAttribute('class', type);
-      fragment.appendChild(row);
+  case 'table':
+    let row,
+      col1,
+      col2,
+      col3,
+      col4;
+    row = document.createElement('tr');
+    row.setAttribute('class', type);
+    fragment.appendChild(row);
 
-      col1 = document.createElement('td');
+    col1 = document.createElement('td');
       /* col1.setAttribute('class', 'fa ' +  level);*/
-      col1.setAttribute('title', level);
-      col1.innerText = level;
-      row.appendChild(col1);
+    col1.setAttribute('title', level);
+    col1.innerText = level;
+    row.appendChild(col1);
 
-      col2 = document.createElement('td');
-      col2.setAttribute('class', 'timestamp');
-      col2.innerText = timeStr;
-      row.appendChild(col2);
+    col2 = document.createElement('td');
+    col2.setAttribute('class', 'timestamp');
+    col2.innerText = timeStr;
+    row.appendChild(col2);
 
-      col3 = document.createElement('td');
-      col3.setAttribute('class', 'messageType');
-      col3.innerText = type;
-      row.appendChild(col3);
+    col3 = document.createElement('td');
+    col3.setAttribute('class', 'messageType');
+    col3.innerText = type;
+    row.appendChild(col3);
 
-      col4 = document.createElement('td');
-      col4.setAttribute('class', 'eventType');
-      col4.innerText = eventType;
-      row.appendChild(col4);
+    col4 = document.createElement('td');
+    col4.setAttribute('class', 'eventType');
+    col4.innerText = eventType;
+    row.appendChild(col4);
 
-      col5 = document.createElement('td');
-      col5.setAttribute('class', 'message');
-      col5.innerHTML = content;
-      row.appendChild(col5);
+    col5 = document.createElement('td');
+    col5.setAttribute('class', 'message');
+    col5.innerHTML = content;
+    row.appendChild(col5);
 
-      if (_options.logClasses) {
-        col6 = document.createElement('td');
-        col6.setAttribute('class', 'playerclasses');
-        col6.innerText = playerclasses;
-        row.appendChild(col6);
-      }
-      break;
-    case 'list':
-      let listItem = document.createElement('li'),
-        innerContent,
-        span;
-      listItem.setAttribute('class', type);
-      fragment.appendChild(listItem);
+    if (_options.logClasses) {
+      col6 = document.createElement('td');
+      col6.setAttribute('class', 'playerclasses');
+      col6.innerText = playerclasses;
+      row.appendChild(col6);
+    }
+    break;
+  case 'list':
+    let listItem = document.createElement('li'),
+      innerContent,
+      span;
+    listItem.setAttribute('class', type);
+    fragment.appendChild(listItem);
 
-      span = document.createElement('span');
-      span.setAttribute('class', 'fa ' + type);
-      span.setAttribute('title', level);
-      listItem.appendChild(span);
+    span = document.createElement('span');
+    span.setAttribute('class', 'fa ' + type);
+    span.setAttribute('title', level);
+    listItem.appendChild(span);
 
-      innerContent = '[' + level + '] ' + timeStr + ' ' + type + ' ' + eventType;
-      if (content) {
-        innerContent += '<br>' + content;
-      }
+    innerContent = '[' + level + '] ' + timeStr + ' ' + type + ' ' + eventType;
+    if (content) {
+      innerContent += '<br>' + content;
+    }
 
-      if ((type === 'player') && (_options.logClasses) && (playerclasses != '')) {
-        innerContent += '<br>[CLASSES] ' + playerclasses;
-      }
-      listItem.innerHTML += innerContent;
-      break;
+    if ((type === 'player') && (_options.logClasses) && (playerclasses != '')) {
+      innerContent += '<br>[CLASSES] ' + playerclasses;
+    }
+    listItem.innerHTML += innerContent;
+    break;
   }
 
   allContent = fragment.innerHTML;
@@ -340,35 +340,35 @@ let myGenerateMarkup = (obj) => {
     strInnerHTML = '';
 
   switch (obj) {
-    case 'table':
-      let col = '';
-      logContainer = 'tbody';
-      if (_options.logClasses) {
-        col = '<th>Player Classes</th>';
-      }
-      strInnerHTML = [
-        '<table id="',
-        IDs.logTable,
-        '">',
-        '<caption>Brightcove Player Debug Log</caption>',
-        '<thead><tr>',
-        '<th class="hdrLevel">Level</th><th class="hdrTime">TimeStamp</th><th class="hdrType">Type</th><th class="hdrEvent">Event</th><th class="hdrMsg">Message</th>',
-        col,
-        '</tr></thead>',
-        '<tbody>',
-        cache.join(''),
-        '</tbody>',
-        '</table>'
-      ].join('');
-      break;
-    case 'list':
-      logContainer = 'ol';
-      strInnerHTML = ['<ol id="', IDs.logList, '">', cache.join(''), '</ol>'].join('');
-      break;
-    case 'json':
-      logContainer = 'json';
-      strInnerHTML = ['<ol>', cache.join(''), '</ol>'].join('');
-      break;
+  case 'table':
+    let col = '';
+    logContainer = 'tbody';
+    if (_options.logClasses) {
+      col = '<th>Player Classes</th>';
+    }
+    strInnerHTML = [
+      '<table id="',
+      IDs.logTable,
+      '">',
+      '<caption>Brightcove Player Debug Log</caption>',
+      '<thead><tr>',
+      '<th class="hdrLevel">Level</th><th class="hdrTime">TimeStamp</th><th class="hdrType">Type</th><th class="hdrEvent">Event</th><th class="hdrMsg">Message</th>',
+      col,
+      '</tr></thead>',
+      '<tbody>',
+      cache.join(''),
+      '</tbody>',
+      '</table>'
+    ].join('');
+    break;
+  case 'list':
+    logContainer = 'ol';
+    strInnerHTML = ['<ol id="', IDs.logList, '">', cache.join(''), '</ol>'].join('');
+    break;
+  case 'json':
+    logContainer = 'json';
+    strInnerHTML = ['<ol>', cache.join(''), '</ol>'].join('');
+    break;
   }
   strInnerHTML += '</div>';
 
@@ -390,22 +390,22 @@ export let logDebug = (logLevel, logClass, logEvent, logStr) => {
   let entryType;
 
   switch (logClass) {
-    case 'playerMsg':
-      entryType = 'player';
-      break;
-    case 'adMsg':
-      entryType = 'ads';
-      break;
-    case 'techFlash':
-    case 'techHTML':
-    case 'techOther':
-      entryType = 'loading';
-      break;
-    case 'sysMsg':
-      entryType = 'console';
-      break;
-    default:
-      entryType = 'other';
+  case 'playerMsg':
+    entryType = 'player';
+    break;
+  case 'adMsg':
+    entryType = 'ads';
+    break;
+  case 'techFlash':
+  case 'techHTML':
+  case 'techOther':
+    entryType = 'loading';
+    break;
+  case 'sysMsg':
+    entryType = 'console';
+    break;
+  default:
+    entryType = 'other';
   }
 
   logJSONObj = '{' +
@@ -448,12 +448,12 @@ export let clickControl = (evt) => {
 
   if (el.tagName == 'SPAN') {
     switch (el.getAttributeNode('op').nodeValue) {
-      case 'clear':
-        clear();
-        break;
-      case 'close':
-        hide();
-        break;
+    case 'clear':
+      clear();
+      break;
+    case 'close':
+      hide();
+      break;
     }
   }
 };

@@ -35,7 +35,7 @@ let getPlayerInfo = (player) => {
     playerStr += '<span class="playerMsg">Player config.json:</span> <a style="color: white;" href="' + configUrl + '" target="_blank">' + configUrl + '</a><br>';
 
   }
-    return {playerStr, configUrl, plyrUrl};
+  return {playerStr, configUrl, plyrUrl};
 };
 
 let getMediaInfoStr = (player, mInfo) => {
