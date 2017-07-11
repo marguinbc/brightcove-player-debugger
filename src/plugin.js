@@ -505,7 +505,7 @@ let buildButtonBar = (slider, options) => {
   return buttonBar;
 };
 
-let setOptions = (opt, callback) => {
+let setOptions = (opt, player, callback) => {
   let opts = {};
   // default using line numbers to true
   if (opt.verbose === undefined) {
@@ -542,7 +542,9 @@ let setOptions = (opt, callback) => {
     opts.showMediaInfo = opt.showMediaInfo;
   }
   if (opt.debugAds === undefined) {
-    opts.debugAds = false;
+    if(player.FreeWheelPlugin || player.ima3 || player.onceux){
+      opts.debugAds = true;
+    }
   } else {
     opts.debugAds = opt.debugAds;
   }
@@ -606,7 +608,7 @@ const onPlayerReady = (player, options) => {
   fontawesome.rel = 'stylesheet';
   fontawesome.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
   document.body.appendChild(fontawesome);
-  setOptions(options, function(callback) {
+  setOptions(options, player, function(callback) {
     let opts = callback;
 
     buildDebugger(player, opts);

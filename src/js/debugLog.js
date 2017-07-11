@@ -47,6 +47,14 @@ export let clickCopyLog = (e) => {
   // find target element
   let a = document.createElement('input');
   a.value = document.getElementsByClassName('main')[0].innerHTML;
+  a.value += document.getElementsByClassName('main')[1].innerHTML;
+  a.value += document.getElementsByClassName('main')[2].innerHTML;
+  if(document.getElementsByClassName('main')[3]){
+    a.value += document.getElementsByClassName('main')[3].innerHTML;
+
+  }
+
+
   // is element selectable?
   if (a) {
     // select text
