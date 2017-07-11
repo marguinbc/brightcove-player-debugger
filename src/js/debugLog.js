@@ -12,7 +12,7 @@ let _options,
   frogger,
   outputList,
   messageTypes = {
-      // order of these properties imply render order of filter controls
+    // order of these properties imply render order of filter controls
     player: true,
     loading: true,
     ads: true,
@@ -29,9 +29,9 @@ let _options,
 
 let timeString = () => {
   let d = new Date();
-  let timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' +
-                    (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds()) +
-                    (_options.logMilliseconds ? ':' + (d.getMilliseconds()) : '');
+  let timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' + (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds()) + (_options.logMilliseconds
+    ? ':' + (d.getMilliseconds())
+    : '');
   return timestamp;
 };
 
@@ -43,9 +43,30 @@ export let clickSendEmail = (evt) => {
   el = (evt.target) ? evt.target : evt.srcElement;
   window.open('mailto:email@example.com?subject=Brightcove Player Debugger Log&body=' + encodeURIComponent(emailArray.join('\n')));
 };
+export let clickCopyLog = (e) => {
+  // find target element
+  let a = document.createElement('input');
+  a.value = document.getElementsByClassName('main')[0].innerHTML;
+  // is element selectable?
+  if (a) {
+    // select text
+    var logPane = document.getElementById('myBlackbird');
+    logPane.appendChild(a);
+    a.select();
+    try {
+      // copy text
+      document.execCommand('copy');
+      inp.blur();
+    } catch (err) {
+      alert('please press Ctrl/Cmd+C to copy');
+    }
+    a.remove();
+
+  }
+};
 
 let hide = () => {
-    // frogger.style.display = 'none';
+  // frogger.style.display = 'none';
   var logPane = document.getElementById('myBlackbird');
   var btnToggleLog = document.getElementById(IDs.btnToggleLog);
 
@@ -54,18 +75,28 @@ let hide = () => {
 };
 
 let scrollToBottom = () => {
-    // scroll list output to the bottom
+  // scroll list output to the bottom
   outputList.scrollTop = outputList.scrollHeight;
 };
 
 export let clickFilter = (evt) => {
   // show/hide a specific message type
-  let entry, span, type, filters, active, oneActiveFilter, i, spanType, disabledTypes;
+  let entry,
+    span,
+    type,
+    filters,
+    active,
+    oneActiveFilter,
+    i,
+    spanType,
+    disabledTypes;
 
   if (!evt) {
     evt = window.event;
   }
-  span = (evt.target) ? evt.target : evt.srcElement;
+  span = (evt.target)
+    ? evt.target
+    : evt.srcElement;
 
   if (span && span.tagName == 'SPAN') {
 
@@ -76,23 +107,27 @@ export let clickFilter = (evt) => {
 
       active = 0;
       for (entry in messageTypes) {
-        if (messageTypes[entry]) active++;
+        if (messageTypes[entry])
+          active++;
       }
       oneActiveFilter = (active == 1 && messageTypes[type]);
 
       for (i = 0; filters[i]; i++) {
         spanType = filters[i].getAttributeNode('type').nodeValue;
 
-        filters[i].className = 'fa ' + spanType + ((oneActiveFilter || (spanType == type)) ? '' : ' disabled');
+        filters[i].className = 'fa ' + spanType + ((oneActiveFilter || (spanType == type))
+          ? ''
+          : ' disabled');
         messageTypes[spanType] = oneActiveFilter || (spanType == type);
       }
-    }
-    else {
+    } else {
       messageTypes[type] = !messageTypes[type];
-      span.className = 'fa ' + type + ((messageTypes[type]) ? '' : ' disabled');
+      span.className = 'fa ' + type + ((messageTypes[type])
+        ? ''
+        : ' disabled');
     }
 
-      // build outputList's class from messageTypes object
+    // build outputList's class from messageTypes object
     disabledTypes = [];
     for (type in messageTypes) {
       if (!messageTypes[type]) {
@@ -111,7 +146,8 @@ export let myConsole = () => {
   let console = window.console;
   let messagestr = '';
 
-  if (!console) return;
+  if (!console)
+    return;
 
   function intercept(method) {
     let original = console[method];
@@ -121,10 +157,10 @@ export let myConsole = () => {
       let logHTML;
       let timestr = timeString();
 
-        // capture console messages to log div on page
+      // capture console messages to log div on page
       if (original.apply) {
 
-          // if the message is an object, concatenate
+        // if the message is an object, concatenate
         if (typeof arguments == 'object') {
           let message = Array.prototype.slice.apply(arguments).join(' ');
           messagestr = '';
@@ -135,14 +171,14 @@ export let myConsole = () => {
           }
           currentEvent = messagestr;
         } else {
-            // else just log out the string to the div
+          // else just log out the string to the div
           messagestr = message;
         }
         myAddMessage('debug', timestr, 'console', messagestr, '', '');
-          // log object to console.log as intended
+        // log object to console.log as intended
         original.apply(console, arguments);
       } else {
-          // needed for IE since apply does not work there
+        // needed for IE since apply does not work there
         let message = Array.prototype.slice.apply(arguments).join(' ');
         original(message);
         myAddMessage('debug', timestr, 'console', message, '', '');
@@ -156,26 +192,32 @@ export let myConsole = () => {
 };
 
 export let myAddMessage = (level, timeStr, type, eventType, content, playerclasses) => {
-    // adds a message to the output list
+  // adds a message to the output list
   let innerContent,
     allContent,
     newMsg;
   let fragment = document.createDocumentFragment();
 
-    // push new event array onto log array
+  // push new event array onto log array
   logEvents.push([level, timeStr, type, content]);
 
-  content = (content.constructor == Array) ? content.join('') : content;
+  content = (content.constructor == Array)
+    ? content.join('')
+    : content;
 
   switch (_options.logType) {
   case 'table':
-    let row, col1, col2, col3, col4;
+    let row,
+      col1,
+      col2,
+      col3,
+      col4;
     row = document.createElement('tr');
     row.setAttribute('class', type);
     fragment.appendChild(row);
 
     col1 = document.createElement('td');
-        /* col1.setAttribute('class', 'fa ' +  level);*/
+      /* col1.setAttribute('class', 'fa ' +  level);*/
     col1.setAttribute('title', level);
     col1.innerText = level;
     row.appendChild(col1);
@@ -208,7 +250,9 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
     }
     break;
   case 'list':
-    let listItem = document.createElement('li'), innerContent, span;
+    let listItem = document.createElement('li'),
+      innerContent,
+      span;
     listItem.setAttribute('class', type);
     fragment.appendChild(listItem);
 
@@ -241,22 +285,44 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
 };
 
 let getHeaderStr = (player) => {
-  let type, spans = [], headerStr;
+  let type,
+    spans = [],
+    headerStr;
 
   for (type in messageTypes) {
-    spans.push(['<span class="fa ', type, '" type="', type, '" title="Hide ', type, ' messages"></span>'].join(''));
+    spans.push([
+      '<span class="fa ',
+      type,
+      '" type="',
+      type,
+      '" title="Hide ',
+      type,
+      ' messages"></span>'
+    ].join(''));
   }
 
   headerStr = [
     '<div class="left">',
-    '<div id="', IDs.filters, '" class="filters">', spans.join(''),
+    '<div id="',
+    IDs.filters,
+    '" class="filters">',
+    spans.join(''),
     '</div>',
     '</div>',
     '<h2>Brightcove Player Debug Log</h2>',
     '<div class="right">',
-    '<div id="', IDs.controls, '" class="controls">',
-    '<span class="fa email" id="', IDs.sendEmail, '" title="Send log via email" op="email"></span>',
-    '<span id="', IDs.size, '" title="contract" op="resize"></span>',
+    '<div id="',
+    IDs.controls,
+    '" class="controls">',
+    '<span class="fa fa-clipboard" id="',
+    IDs.copyLog,
+    '" title="Copy log to Clipboard" op="copy"></span>',
+    '<span class="fa email" id="',
+    IDs.sendEmail,
+    '" title="Send log via email" op="email"></span>',
+    '<span id="',
+    IDs.size,
+    '" title="contract" op="resize"></span>',
     '<span class="fa clear" title="Clear Log Messages" op="clear"></span>',
     '<span class="fa close" title="Hide Log" op="close"></span>',
     '</div>',
@@ -268,8 +334,10 @@ let getHeaderStr = (player) => {
 
 let myGenerateMarkup = (obj) => {
 
-    // build markup
-  let type, rows = [], strInnerHTML = '';
+  // build markup
+  let type,
+    rows = [],
+    strInnerHTML = '';
 
   switch (obj) {
   case 'table':
@@ -279,7 +347,9 @@ let myGenerateMarkup = (obj) => {
       col = '<th>Player Classes</th>';
     }
     strInnerHTML = [
-      '<table id="', IDs.logTable, '">',
+      '<table id="',
+      IDs.logTable,
+      '">',
       '<caption>Brightcove Player Debug Log</caption>',
       '<thead><tr>',
       '<th class="hdrLevel">Level</th><th class="hdrTime">TimeStamp</th><th class="hdrType">Type</th><th class="hdrEvent">Event</th><th class="hdrMsg">Message</th>',
@@ -293,17 +363,11 @@ let myGenerateMarkup = (obj) => {
     break;
   case 'list':
     logContainer = 'ol';
-    strInnerHTML = [
-      '<ol id="', IDs.logList, '">',
-      cache.join(''),
-      '</ol>'
-    ].join('');
+    strInnerHTML = ['<ol id="', IDs.logList, '">', cache.join(''), '</ol>'].join('');
     break;
   case 'json':
     logContainer = 'json';
-    strInnerHTML = [
-      '<ol>', cache.join(''), '</ol>'
-    ].join('');
+    strInnerHTML = ['<ol>', cache.join(''), '</ol>'].join('');
     break;
   }
   strInnerHTML += '</div>';
@@ -319,30 +383,33 @@ let getClassesStr = (obj) => {
 };
 
 export let logDebug = (logLevel, logClass, logEvent, logStr) => {
-  let logHTML = '', logSpan, logJSONObj;
+  let logHTML = '',
+    logSpan,
+    logJSONObj;
   let timestr = timeString();
   let entryType;
 
   switch (logClass) {
-  case 'playerMsg' :
+  case 'playerMsg':
     entryType = 'player';
     break;
-  case 'adMsg' :
+  case 'adMsg':
     entryType = 'ads';
     break;
-  case 'techFlash' :
+  case 'techFlash':
   case 'techHTML':
   case 'techOther':
     entryType = 'loading';
     break;
-  case 'sysMsg' :
+  case 'sysMsg':
     entryType = 'console';
     break;
   default:
     entryType = 'other';
   }
 
-  logJSONObj = '{' + 'level:' + logLevel + ', timestamp:' + timestr + ', type:' + entryType + ', message:' + logStr + '}';
+  logJSONObj = '{' +
+    'level:' + logLevel + ', timestamp:' + timestr + ', type:' + entryType + ', message:' + logStr + '}';
 
   if (logStr) {
     logHTML += logStr;
@@ -358,7 +425,7 @@ export let logDebug = (logLevel, logClass, logEvent, logStr) => {
   //  if (options.showPlayerClasses) {
   //    showPlayerClasses(player.el_.classList);
   //  }
-    // showBigPlayButtonStyles();
+  // showBigPlayButtonStyles();
 };
 
 let clear = () => {
@@ -375,12 +442,18 @@ export let clickControl = (evt) => {
   if (!evt) {
     evt = window.event;
   }
-  el = (evt.target) ? evt.target : evt.srcElement;
+  el = (evt.target)
+    ? evt.target
+    : evt.srcElement;
 
   if (el.tagName == 'SPAN') {
     switch (el.getAttributeNode('op').nodeValue) {
-    case 'clear': clear(); break;
-    case 'close': hide(); break;
+    case 'clear':
+      clear();
+      break;
+    case 'close':
+      hide();
+      break;
     }
   }
 };
@@ -402,7 +475,7 @@ export let buildLogPane = (player, opt) => {
   log = new DebuggerPane(player, paneOptions);
 
   log.el_.className = 'activePane';
-    // let innerHTML = log.content();
+  // let innerHTML = log.content();
 
   log.headerEl_.innerHTML = getHeaderStr(player);
 

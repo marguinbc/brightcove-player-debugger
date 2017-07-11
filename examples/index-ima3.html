@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <title>videojs-player-debugger Demo</title>
   <link href="../dist/videojs-player-debugger.css" rel="stylesheet">
+  <link href="//players.brightcove.net/videojs-ima3/2/videojs.ima3.min.css" rel="stylesheet">
+
 </head>
 <body>
   <video id="videojs-player-debugger-player"
@@ -15,6 +17,8 @@ data-application-id
 class="video-js"
 controls></video>
 <script src="//players.brightcove.net/5092057275001/r14QCxe4Z_default/index.js"></script>
+<script src="//players.brightcove.net/videojs-ima3/2/videojs.ima3.min.js"></script>
+
   <ul>
     <li><a href="test/">Run unit tests in browser.</a></li>
     <li><a href="docs/api/">Read generated docs.</a></li>
@@ -23,14 +27,22 @@ controls></video>
   <script src="../dist/videojs-player-debugger.js"></script>
   <script>
     (function(window, videojs) {
+      var options = {};
+  		options.serverUrl =
+  			"https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator="
+  		options.timeout = 5000;
+  		options.requestMode = "onload";
+  		options.adTechOrder = ["html5", "flash"];
+  		options.debug = true;
+      bc('videojs-player-debugger-player').ima3(options)
       var player = window.player = videojs('videojs-player-debugger-player');
-      var options = {
-        "debugAds": false,
+      var options1 = {
+        "debugAds": true,
         "logClasses": true,
         "showPlayerClasses": true,
         "verbose": true
       };
-      player.playerDebugger(options);
+      player.playerDebugger(options1);
     }(window, window.videojs));
   </script>
 </body>

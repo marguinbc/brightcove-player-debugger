@@ -5,7 +5,6 @@ import videojs from 'video.js';
 import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
 
-
 /**
  * Button to toggle the debugger's ad settings pane open / closed
  *

@@ -6,7 +6,7 @@ import * as fwAdSettings from './js/fwAdSettings.js';
 import * as classesList from './js/classesList.js';
 import * as playerSettings from './js/playerSettings.js';
 import * as playbackInfo from './js/playbackInfo.js';
-//import * as debuggerSettings from './js/debuggerSettings.js';
+// import * as debuggerSettings from './js/debuggerSettings.js';
 import * as db from './js/debugLog.js';
 import ButtonBarButton from './js/button-bar/buttonBar-button.js';
 import SliderToggle from './js/button-bar/slider-toggle.js';
@@ -15,7 +15,6 @@ import PlayerSettingsToggle from './js/button-bar/playerSettings-toggle.js';
 import PlaybackInfoToggle from './js/button-bar/playbackInfo-toggle.js';
 import AdSettingsToggle from './js/button-bar/adSettings-toggle.js';
 import DebugLogToggle from './js/button-bar/log-toggle.js';
-
 
 import {IDs} from './js/componentIDs.js';
 
@@ -33,16 +32,16 @@ let slider,
   adSettings,
   adSettingsPane,
   classesListPane,
-  initialDuration=0,
-  previousDuration=0,
-  initialSource="",
-  previousSource="",
-  initialMedia="",
-  previousMedia="",
+  initialDuration = 0,
+  previousDuration = 0,
+  initialSource = '',
+  previousSource = '',
+  initialMedia = '',
+  previousMedia = '',
   currentDuration,
   currentSource,
   currentMedia,
-  playerTech="",
+  playerTech = '',
   playbackInfoPane,
   playerSettingsPane,
   btnToggleClassList,
@@ -91,7 +90,7 @@ let clear = () => {};
 
 let toggleSlider = () => {
   slider.classList.toggle('closed');
-  btnToggleSlider.classList.toggle("active");
+  btnToggleSlider.classList.toggle('active');
 
   btnToggleLog.classList.toggle('hide');
   btnTogglePlaybackInfo.classList.toggle('hide');
@@ -101,9 +100,9 @@ let toggleSlider = () => {
     btnToggleAdSettings.classList.toggle('hide');
   }
   if (slider.classList.contains('closed')) {
-    btnToggleSlider.innerHTML = "Show Debugger";
+    btnToggleSlider.innerHTML = 'Show Debugger';
   } else {
-    btnToggleSlider.innerHTML = "Hide Debugger";
+    btnToggleSlider.innerHTML = 'Hide Debugger';
   }
 };
 
@@ -130,19 +129,19 @@ let getClassesStr = (obj) => {
 
 let showPosterStyles = (evt) => {
   if (_options.showPosterStyles) {
-    let vPoster = document.getElementsByClassName("vjs-poster")[0];
-    let posterOpacity = "";
+    let vPoster = document.getElementsByClassName('vjs-poster')[0];
+    let posterOpacity = '';
     let cs = window.getComputedStyle(vPoster, null).opacity;
-    let playerClasses = "";
-    let posterClasses = "";
+    let playerClasses = '';
+    let posterClasses = '';
 
     if (firstpass) {
-      posterStyles.innerHTML = "<h2>BC Poster Opacity</h2>";
+      posterStyles.innerHTML = '<h2>BC Poster Opacity</h2>';
       firstpass = false;
     }
     if (lastEvent != currentEvent) {
       lastEvent = currentEvent;
-      vPosterStyles = "Opacity: " + cs + " lastEvent:" + lastEvent;
+      vPosterStyles = 'Opacity: ' + cs + ' lastEvent:' + lastEvent;
       posterStyles.innerHTML += '<span style="color:blue;">' + vPosterStyles + '</span><br/>';
       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
       if (currentClasses != lastClasses) {
@@ -158,15 +157,15 @@ let showPosterStyles = (evt) => {
 
 let showBigPlayButtonStyles = (evt) => {
   if (_options.showBigPlayButtonStyles) {
-    let vBPB = document.getElementsByClassName("vjs-big-play-button")[0];
-    let bpbOpacity = "";
+    let vBPB = document.getElementsByClassName('vjs-big-play-button')[0];
+    let bpbOpacity = '';
     let bpbStyles = [];
     let cs = window.getComputedStyle(vBPB, null);
-    let bpbClasses = "";
+    let bpbClasses = '';
 
     if (firstpass) {
-      bigPlayButtonStyles.innerHTML = "<h2>Big Play Button Styles</h2>";
-      bigPlayButtonStyles.innerHTML += "User-Agent: " + navigator.userAgent + "<br>";
+      bigPlayButtonStyles.innerHTML = '<h2>Big Play Button Styles</h2>';
+      bigPlayButtonStyles.innerHTML += 'User-Agent: ' + navigator.userAgent + '<br>';
       firstpass = false;
     }
     if (lastEvent != currentEvent) {
@@ -178,7 +177,7 @@ let showBigPlayButtonStyles = (evt) => {
             cs.getPropertyValue(cs.item(i))
           ] + '<br>');
         }
-        vBPBStyles = "CurrentStyles: " + bpbStyles + "<br>";
+        vBPBStyles = 'CurrentStyles: ' + bpbStyles + '<br>';
         bigPlayButtonStyles.innerHTML += '<span style="color:blue;">' + vBPBStyles + '</span><br/>';
       }
       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
@@ -206,125 +205,125 @@ let listenForPlayerEvents = (player, options) => {
   for (let i = 0; i < playerEvents.length; i++) {
     player.on(playerEvents[i], function(e) {
       switch (e.type) {
-        case 'error':
-          msgStr = [player.error().type, '-', player.error().message, console.trace()].join(' ');
-          break;
-        case 'firstplay':
-          initialDuration = player.duration();
-          currentDuration = initialDuration;
-          initialSource = player.currentSrc();
-          previousSource = initialSource;
-          currentTime = player.currentTime();
-          msgStr = [
-            'Initial source:' + initialSource,
-            'Current time: ' + currentTime
-          ].join('<br>');
-          break;
-        case 'play':
-          playCounter++;
-          msgStr = [
-            'Plays: ' + playCounter,
-            'Current source: ' + player.currentSrc(),
-            'Playing from: ' + player.currentTime()
-          ].join('<br>');
-          break;
-        case 'loadedmetadata':
-          if (options.showMediaInfo) {
-            let mInfo = '';
-            mInfo = player.mediainfo;
-            if (mInfo != undefined) {
-              msgStr = [
-                'Account ID: ' + mInfo.account_id,
-                'Video ID: ' + mInfo.id,
-                'Title: ' + mInfo.name,
-                'Duration: ' + mInfo.duration
-              ].join('<br>');
-            }
-            playerSettings.showPlayerSettings(player);
-            playbackInfo.showPlaybackInfo(player);
-          };
-          levelStr = 'media';
-          break;
-        case 'pause':
-          currentTime = player.currentTime();
-          msgStr = 'Paused at: ' + currentTime;
-          break;
-        case 'progress':
-          currentTime = player.currentTime();
-          msgStr = ['currentTime:', currentTime].join(' ');
-          previousTime = currentTime;
-          //playbackInfo.showPlaybackInfo(player);
-          break;
-        case 'contentupdate':
-          msgStr = [
-            'oldValue: ' + e.oldValue,
-            'newValue:' + e.newValue
-          ].join('<br>');
-          levelStr = 'media';
-          break;
-        case 'seeking':
-          currentTime = player.currentTime();
-          msgStr = [
-            'seeking from:' + previousTime,
-            'to:' + currentTime
-          ].join('<br>');
-          previousTime = currentTime;
-          playbackInfo.showPlaybackInfo(player);
-          break;
-        case 'canplaythrough':
-          msgStr = 'currentTime: ' + player.currentTime();
-          break;
-        case 'timeupdate':
-          //   msgStr = 'currentTime: ' + player.currentTime();
-          playbackInfo.showPlaybackInfo(player);
-          playerSettings.showPlayerSettings(player);
-          break;
-        case 'seeked':
-          msgStr = 'currentTime: ' + player.currentTime();
-          break;
-        case 'catalog_response':
-          msgStr = 'url: ' + e.url;
-          levelStr = 'media';
-          break;
-        case 'durationchange':
-          {
-            let srcStr,
-              mediaStr,
-              assetid;
-            currentDuration = player.duration();
-            currentSource = player.currentSrc();
-
-            if (currentDuration !== previousDuration) {
-              msgStr = 'currentDuration: ' + currentDuration + ',<br>previousDuration: ' + previousDuration;
-              previousDuration = currentDuration;
-            } else {
-              msgStr = 'Duration remained the same - currentDuration: ' + currentDuration;
-            }
-            if (playerTech == 'Hls') {
-              currentMedia = player.hls.playlists.media_.uri;
-              assetid = currentMedia.substring(currentMedia.search("assetId=") + 8, 92);
-              if (currentSource !== previousSource) {
-                srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
-                previousSource = currentSource;
-              } else {
-                srcStr = '<br>Source remained same: ' + currentSource;
-              }
-              if (currentMedia !== previousMedia) {
-                mediaStr = '<br>Media (Rendition) changed: currentMedia ' + currentMedia + ', previousMedia: ' + previousMedia;
-                previousMedia = currentMedia;
-              } else {
-                mediaStr = '<br>Media (Rendition) remained same: currentMedia: ' + currentMedia;
-              }
-              mediaStr += '<br>Bandwidth: ' + player.hls.bandwidth + 'bps';
-              mediaStr += '<br>Segment Download time: ' + player.hls.segmentXhrTime + 'ms';
-              msgStr = [msgStr, srcStr, mediaStr].join(' ');
-              levelStr = 'media';
-            }
+      case 'error':
+        msgStr = [player.error().type, '-', player.error().message, console.trace()].join(' ');
+        break;
+      case 'firstplay':
+        initialDuration = player.duration();
+        currentDuration = initialDuration;
+        initialSource = player.currentSrc();
+        previousSource = initialSource;
+        currentTime = player.currentTime();
+        msgStr = [
+          'Initial source:' + initialSource,
+          'Current time: ' + currentTime
+        ].join('<br>');
+        break;
+      case 'play':
+        playCounter++;
+        msgStr = [
+          'Plays: ' + playCounter,
+          'Current source: ' + player.currentSrc(),
+          'Playing from: ' + player.currentTime()
+        ].join('<br>');
+        break;
+      case 'loadedmetadata':
+        if (options.showMediaInfo) {
+          let mInfo = '';
+          mInfo = player.mediainfo;
+          if (mInfo != undefined) {
+            msgStr = [
+              'Account ID: ' + mInfo.account_id,
+              'Video ID: ' + mInfo.id,
+              'Title: ' + mInfo.name,
+              'Duration: ' + mInfo.duration
+            ].join('<br>');
           }
-          break;
-        default:
-          msgStr = '';
-          levelStr = 'debug';
+          playerSettings.showPlayerSettings(player);
+          playbackInfo.showPlaybackInfo(player);
+        }
+        levelStr = 'media';
+        break;
+      case 'pause':
+        currentTime = player.currentTime();
+        msgStr = 'Paused at: ' + currentTime;
+        break;
+      case 'progress':
+        currentTime = player.currentTime();
+        msgStr = ['currentTime:', currentTime].join(' ');
+        previousTime = currentTime;
+          // playbackInfo.showPlaybackInfo(player);
+        break;
+      case 'contentupdate':
+        msgStr = [
+          'oldValue: ' + e.oldValue,
+          'newValue:' + e.newValue
+        ].join('<br>');
+        levelStr = 'media';
+        break;
+      case 'seeking':
+        currentTime = player.currentTime();
+        msgStr = [
+          'seeking from:' + previousTime,
+          'to:' + currentTime
+        ].join('<br>');
+        previousTime = currentTime;
+        playbackInfo.showPlaybackInfo(player);
+        break;
+      case 'canplaythrough':
+        msgStr = 'currentTime: ' + player.currentTime();
+        break;
+      case 'timeupdate':
+          //   msgStr = 'currentTime: ' + player.currentTime();
+        playbackInfo.showPlaybackInfo(player);
+        playerSettings.showPlayerSettings(player);
+        break;
+      case 'seeked':
+        msgStr = 'currentTime: ' + player.currentTime();
+        break;
+      case 'catalog_response':
+        msgStr = 'url: ' + e.url;
+        levelStr = 'media';
+        break;
+      case 'durationchange':
+        {
+          let srcStr,
+            mediaStr,
+            assetid;
+          currentDuration = player.duration();
+          currentSource = player.currentSrc();
+
+          if (currentDuration !== previousDuration) {
+            msgStr = 'currentDuration: ' + currentDuration + ',<br>previousDuration: ' + previousDuration;
+            previousDuration = currentDuration;
+          } else {
+            msgStr = 'Duration remained the same - currentDuration: ' + currentDuration;
+          }
+          if (playerTech == 'Hls') {
+            currentMedia = player.hls.playlists.media_.uri;
+            assetid = currentMedia.substring(currentMedia.search('assetId=') + 8, 92);
+            if (currentSource !== previousSource) {
+              srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
+              previousSource = currentSource;
+            } else {
+              srcStr = '<br>Source remained same: ' + currentSource;
+            }
+            if (currentMedia !== previousMedia) {
+              mediaStr = '<br>Media (Rendition) changed: currentMedia ' + currentMedia + ', previousMedia: ' + previousMedia;
+              previousMedia = currentMedia;
+            } else {
+              mediaStr = '<br>Media (Rendition) remained same: currentMedia: ' + currentMedia;
+            }
+            mediaStr += '<br>Bandwidth: ' + player.hls.bandwidth + 'bps';
+            mediaStr += '<br>Segment Download time: ' + player.hls.segmentXhrTime + 'ms';
+            msgStr = [msgStr, srcStr, mediaStr].join(' ');
+            levelStr = 'media';
+          }
+        }
+        break;
+      default:
+        msgStr = '';
+        levelStr = 'debug';
       }
       if ((e.type != 'progress' && !options.showProgress) && e.type != 'timeupdate') {
 
@@ -340,12 +339,12 @@ let listenForPlayerEvents = (player, options) => {
         adSettings.showAdInfo(player);
       }
       classesList.refreshPlayerClasses(player);
-      //db.updateLogPane(player);
+      // db.updateLogPane(player);
     });
   }
 };
 
-//event management (thanks John Resig)
+// event management (thanks John Resig)
 let addEvent = (obj1, type, fn) => {
   let obj = (obj1.constructor === String)
     ? document.getElementById(obj1)
@@ -392,6 +391,7 @@ let buildDebugger = (player, options) => {
 
   // TypeError cannot reade property 'constructor' of undefined in AdEvent...
   addEvent(IDs.sendEmail, 'click', db.clickSendEmail);
+  addEvent(IDs.copyLog, 'click', db.clickCopyLog);
   addEvent(IDs.filters, 'click', db.clickFilter);
   addEvent(IDs.controls, 'click', db.clickControl);
 
@@ -426,48 +426,48 @@ let buildButtonBar = (slider, options) => {
   slider.appendChild(buttonBar);
 
   let _options = {
-    "id": IDs.btnToggleSlider,
-    "className": "myButton active",
-    "content": "Hide Debugger"
+    'id': IDs.btnToggleSlider,
+    'className': 'myButton active',
+    'content': 'Hide Debugger'
   };
 
   btnToggleSlider = new SliderToggle(player, _options);
 
   _options = {
-    "id": IDs.btnToggleLog,
-    "className": "myButton active",
-    "content": "Log"
+    'id': IDs.btnToggleLog,
+    'className': 'myButton active',
+    'content': 'Log'
   };
 
   btnToggleLog = new DebugLogToggle(player, _options);
 
   _options = {
-    "id": IDs.btnTogglePlaybackInfo,
-    "className": "myButton",
-    "content": "Playback Info"
+    'id': IDs.btnTogglePlaybackInfo,
+    'className': 'myButton',
+    'content': 'Playback Info'
   };
 
   btnTogglePlaybackInfo = new PlaybackInfoToggle(player, _options);
 
   _options = {
-    "id": IDs.btnToggleClassList,
-    "className": "myButton",
-    "content": "Classes"
+    'id': IDs.btnToggleClassList,
+    'className': 'myButton',
+    'content': 'Classes'
   };
 
   btnToggleClassList = new ClassListToggle(player, _options);
   if (options.debugAds === true) {
     _options = {
-      "id": IDs.btnTogglePlayerSettings,
-      "className": "myButton",
-      "content": "Player Settings",
-      "debugAds": true
+      'id': IDs.btnTogglePlayerSettings,
+      'className': 'myButton',
+      'content': 'Player Settings',
+      'debugAds': true
     };
   } else {
     _options = {
-      "id": IDs.btnTogglePlayerSettings,
-      "className": "myButton",
-      "content": "Player Settings"
+      'id': IDs.btnTogglePlayerSettings,
+      'className': 'myButton',
+      'content': 'Player Settings'
     };
   }
 
@@ -475,15 +475,15 @@ let buildButtonBar = (slider, options) => {
 
   if (options.debugAds == true) {
     _options = {
-      "id": IDs.btnToggleAdSettings,
-      "className": "myButton",
-      "content": "Ad Settings"
+      'id': IDs.btnToggleAdSettings,
+      'className': 'myButton',
+      'content': 'Ad Settings'
     };
 
     btnToggleAdSettings = new AdSettingsToggle(player, _options);
   }
 
-  /*options = {
+  /* options = {
     "id": IDs.btnToggleDebuggerSettings,
     "className" : "myButton",
     "content" : "Debugger Settings"
@@ -510,17 +510,17 @@ let setOptions = (opt, callback) => {
   // default using line numbers to true
   if (opt.verbose === undefined) {
     opts.verbose = false;
-  }else{
+  } else {
     opts.verbose = opt.verbose;
   }
   if (opt.useLineNums === undefined) {
     opts.useLineNums = true;
-  }else{
+  } else {
     opts.useLineNums = opt.useLineNums;
   }
   if (opt.logClasses === undefined) {
     opts.logClasses = false;
-  }else{
+  } else {
     opts.logClasses = opt.logClasses;
   }
   if (opt.logType === undefined) {
@@ -528,53 +528,53 @@ let setOptions = (opt, callback) => {
   }
   if (opt.logMilliseconds === undefined) {
     opts.logMilliseconds = false;
-  }else{
+  } else {
     opts.logMilliseconds = opt.logMilliseconds;
   }
   if (opt.showProgress === undefined) {
     opts.showProgress = false;
-  }else{
+  } else {
     opts.showProgress = opt.showProgress;
   }
   if (opt.showMediaInfo === undefined) {
     opts.showMediaInfo = true;
-  }else{
+  } else {
     opts.showMediaInfo = opt.showMediaInfo;
   }
   if (opt.debugAds === undefined) {
     opts.debugAds = false;
-  }else{
+  } else {
     opts.debugAds = opt.debugAds;
   }
   if (opt.showPosterStyles === undefined) {
     opts.showPosterStyles = false;
-  }else{
+  } else {
     opts.showPosterStyles = opt.showPosterStyles;
   }
   if (opt.showBigPlayButtonStyles === undefined) {
     opts.showBigPlayButtonStyles = false;
-  }else{
+  } else {
     opts.showBigPlayButtonStyles = opt.showBigPlayButtonStyles;
   }
   if (opt.captureConsole === undefined) {
     opts.captureConsole = true;
-  }else{
+  } else {
     opt.captureConsole = opt.captureConsole;
   }
   if (opt.startMinimized === undefined) {
     opts.startMinimized = false;
-  }else{
+  } else {
     opts.startMinimized = opt.startMinimized;
   }
   if (opt.showBigPlayButtonStyles === true) {
-    let bigPlayButtonStyles = document.createElement("div");
-    bigPlayButtonStyles.setAttribute("id", IDs.bigPlayButtonStyles);
+    let bigPlayButtonStyles = document.createElement('div');
+    bigPlayButtonStyles.setAttribute('id', IDs.bigPlayButtonStyles);
     logPane.appendChild(bigPlayButtonStyles);
   }
 
   if (opts.showPosterStyles === true) {
-    let posterStyles = document.createElement("div");
-    posterStyles.setAttribute("id", IDs.posterStyles);
+    let posterStyles = document.createElement('div');
+    posterStyles.setAttribute('id', IDs.posterStyles);
     logPane.appendChild(posterStyles);
   }
 
@@ -604,13 +604,18 @@ const onPlayerReady = (player, options) => {
 
   let fontawesome = document.createElement('link');
   fontawesome.rel = 'stylesheet';
-  fontawesome.href = "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";
+  fontawesome.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
   document.body.appendChild(fontawesome);
   setOptions(options, function(callback) {
     let opts = callback;
 
     buildDebugger(player, opts);
     listenForPlayerEvents(player, opts);
+
+  if (opts.debugAds) {
+    adSettings.listenForAdEvents(player);
+  }
+
 
   });
 };
