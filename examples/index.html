@@ -20,10 +20,10 @@ controls></video>
     <li><a href="docs/api/">Read generated docs.</a></li>
   </ul>
 
-  <script src="../dist/videojs-player-debugger.js"></script>
+  <script src="../dist/videojs-player-debugger.min.js"></script>
   <script>
     (function(window, videojs) {
-      var player = window.player = videojs('videojs-player-debugger-player');
+      var myPlayer = window.player = videojs('videojs-player-debugger-player');
       var options = {
         "debugAds": false,
         "logClasses": true,
@@ -31,7 +31,7 @@ controls></video>
         "verbose": true,
         "showPosterStyles": false,
       };
-      player.playerDebugger(options);
+      layer.playerDebugger(options);
     }(window, window.videojs));
   </script>
 </body>

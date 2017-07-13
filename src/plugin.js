@@ -41,6 +41,7 @@ let slider,
   currentDuration,
   currentSource,
   currentMedia,
+  player,
   playerTech = '',
   playbackInfoPane,
   playerSettingsPane,
@@ -376,7 +377,7 @@ let buildDebugger = (player, options) => {
   slider = dom.createEl('div', {'id': IDs.slider});
   document.body.appendChild(slider);
 
-  buttonBar = buildButtonBar(slider, options);
+  buttonBar = buildButtonBar(slider, player, options);
 
   logPane = db.buildLogPane(player, options);
   if (options.captureConsole) {
@@ -419,7 +420,7 @@ let buildDebugger = (player, options) => {
 
 };
 
-let buildButtonBar = (slider, options) => {
+let buildButtonBar = (slider, player, options) => {
 
   buttonBar = dom.createEl('div', {'id': IDs.buttonBar});
 
