@@ -19,7 +19,19 @@ import DebugLogToggle from './js/button-bar/log-toggle.js';
 import {IDs} from './js/componentIDs.js';
 
 // Default options for the plugin.
-const defaults = {};
+const defaults = {
+  verbose: false,
+  useLineNums: true,
+  logClasses: false,
+  logType: 'list',
+  logMilliseconds: false,
+  showProgress: false,
+  showMediaInfo: true,
+  showPosterStyles: false,
+  showBigPlayButtonStyles: false,
+  captureConsole: true,
+  startMinimized: false
+};
 
 // Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
@@ -506,87 +518,6 @@ let buildButtonBar = (slider, player, options) => {
   return buttonBar;
 };
 
-let setOptions = (opt, player, callback) => {
-  let opts = {};
-  // default using line numbers to true
-  if (opt.verbose === undefined) {
-    opts.verbose = false;
-  } else {
-    opts.verbose = opt.verbose;
-  }
-  if (opt.useLineNums === undefined) {
-    opts.useLineNums = true;
-  } else {
-    opts.useLineNums = opt.useLineNums;
-  }
-  if (opt.logClasses === undefined) {
-    opts.logClasses = false;
-  } else {
-    opts.logClasses = opt.logClasses;
-  }
-  if (opt.logType === undefined) {
-    opts.logType = logTypes.list;
-  }
-  if (opt.logMilliseconds === undefined) {
-    opts.logMilliseconds = false;
-  } else {
-    opts.logMilliseconds = opt.logMilliseconds;
-  }
-  if (opt.showProgress === undefined) {
-    opts.showProgress = false;
-  } else {
-    opts.showProgress = opt.showProgress;
-  }
-  if (opt.showMediaInfo === undefined) {
-    opts.showMediaInfo = true;
-  } else {
-    opts.showMediaInfo = opt.showMediaInfo;
-  }
-  if (opt.debugAds === undefined) {
-    if(player.FreeWheelPlugin || player.ima3 || player.onceux){
-      opts.debugAds = true;
-    }
-  } else {
-    opts.debugAds = opt.debugAds;
-  }
-  if (opt.showPosterStyles === undefined) {
-    opts.showPosterStyles = false;
-  } else {
-    opts.showPosterStyles = opt.showPosterStyles;
-  }
-  if (opt.showBigPlayButtonStyles === undefined) {
-    opts.showBigPlayButtonStyles = false;
-  } else {
-    opts.showBigPlayButtonStyles = opt.showBigPlayButtonStyles;
-  }
-  if (opt.captureConsole === undefined) {
-    opts.captureConsole = true;
-  } else {
-    opt.captureConsole = opt.captureConsole;
-  }
-  if (opt.startMinimized === undefined) {
-    opts.startMinimized = false;
-  } else {
-    opts.startMinimized = opt.startMinimized;
-  }
-  if (opt.showBigPlayButtonStyles === true) {
-    let bigPlayButtonStyles = document.createElement('div');
-    bigPlayButtonStyles.setAttribute('id', IDs.bigPlayButtonStyles);
-    logPane.appendChild(bigPlayButtonStyles);
-  }
-
-  if (opts.showPosterStyles === true) {
-    let posterStyles = document.createElement('div');
-    posterStyles.setAttribute('id', IDs.posterStyles);
-    logPane.appendChild(posterStyles);
-  }
-
-  if (opts.startMinimized) {
-    toggleSlider();
-  }
-  callback(opts);
-};
-
 /**
  * Function to invoke when the player is ready.
  *
@@ -609,18 +540,31 @@ const onPlayerReady = (player, options) => {
   fontawesome.rel = 'stylesheet';
   fontawesome.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
   document.body.appendChild(fontawesome);
-  setOptions(options, player, function(callback) {
-    let opts = callback;
-
-    buildDebugger(player, opts);
-    listenForPlayerEvents(player, opts);
-
-  if (opts.debugAds) {
-    adSettings.listenForAdEvents(player);
+  if (player.ima3 || player.FreeWheelPlugin || player.onceux) {
+    options.debugAds = true;
+  }
+  if (options.showBigPlayButtonStyles === true) {
+    let bigPlayButtonStyles = document.createElement('div');
+    bigPlayButtonStyles.setAttribute('id', IDs.bigPlayButtonStyles);
+    logPane.appendChild(bigPlayButtonStyles);
   }
 
+  if (options.showPosterStyles === true) {
+    let posterStyles = document.createElement('div');
+    posterStyles.setAttribute('id', IDs.posterStyles);
+    logPane.appendChild(posterStyles);
+  }
 
-  });
+  if (options.startMinimized) {
+    toggleSlider();
+  }
+  console.log(options);
+  buildDebugger(player, options);
+  listenForPlayerEvents(player, options);
+  if(options.debugAds === true){
+    adSettings.listenForAdEvents(player);
+
+  }
 };
 
 /**
