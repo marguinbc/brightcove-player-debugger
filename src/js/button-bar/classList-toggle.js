@@ -27,11 +27,11 @@ class ClassListToggle extends ButtonBarButton {
    */
   handleClick(event) {
 
-    var classesListPane = document.getElementById('classesList');
-    var playerSettingsPane = document.getElementById('playerSettings');
-    var adSettingsPane = document.getElementById('adSettings');
-    var logPane = document.getElementById('myBlackbird');
-    var playbackInfoPane = document.getElementById('playbackInfo');
+    const classesListPane = document.getElementById('classesList');
+    const playerSettingsPane = document.getElementById('playerSettings');
+    const adSettingsPane = document.getElementById('adSettings');
+    const logPane = document.getElementById('myBlackbird');
+    const playbackInfoPane = document.getElementById('playbackInfo');
 
     this.el_.classList.toggle('active');
     classesListPane.classList.toggle('activePane');

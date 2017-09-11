@@ -26,7 +26,7 @@ class DebugLogToggle extends ButtonBarButton {
    */
   handleClick() {
 
-    var logPane = document.getElementById('myBlackbird');
+    const logPane = document.getElementById('myBlackbird');
 
     this.el_.classList.toggle('active');
     logPane.classList.toggle('activePane');

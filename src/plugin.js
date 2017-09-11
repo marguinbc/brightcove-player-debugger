@@ -560,7 +560,7 @@ const onPlayerReady = (player, options) => {
   }
   buildDebugger(player, options);
   listenForPlayerEvents(player, options);
-  if(options.debugAds === true){
+  if (options.debugAds === true) {
     adSettings.listenForAdEvents(player);
 
   }

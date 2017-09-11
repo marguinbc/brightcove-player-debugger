@@ -3,28 +3,33 @@ import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import { IDs } from './componentIDs.js';
 
-let priorAdEvents = [],
-  adTimer = new Date(),
-  adReadyTime,
-  readyForPrerollTime,
-  adRequestTime,
-  adStartTime,
-  adSettingsPane,
-  _options;
+const priorAdEvents = [];
+const adTimer = new Date();
+let adReadyTime;
+let readyForPrerollTime;
+let adRequestTime;
+let adStartTime;
+let adSettingsPane;
+let _options;
 
-let ima3Html5AdEvents = [
-  'ima3-ready',  // not standard IMA AdEvent
+const ima3Html5AdEvents = [
+  // not standard IMA AdEvent
+  'ima3-ready',
   'ima3-ad-break-ready',
-  'ima3-ad-error', // not standard IMA HTML5 AdEvent - is adError
+  // not standard IMA HTML5 AdEvent - is adError
+  'ima3-ad-error',
   'ima3-ad-metadata',
-  'ima3-ads-manager-loaded', // not standard IMA HMTL5 AdEvent
+  // not standard IMA HMTL5 AdEvent
+  'ima3-ads-manager-loaded',
   'ima3-all-ads-completed',
   'ima3-click',
   'ima3-complete',
-  'ima3-completed',  // not standard IMA HTML5 AdEvent
+  // not standard IMA HTML5 AdEvent
+  'ima3-completed',
   'ima3-content-pause-requested',
   'ima3-content-resume-requested',
-  'ima3-error',  // not standard IMA HTML5 AdEvent
+  // not standard IMA HTML5 AdEvent
+  'ima3-error',
   'ima3-first-quartile',
   'ima3-impression',
   'ima3-linearChanged',
@@ -40,9 +45,10 @@ let ima3Html5AdEvents = [
   'ima3-user-close',
   'ima3-volume-changed',
   'ima3-volume-muted',
-  'ima3-start' // not standard IMA3 HTML5 AdEvent
+  // not standard IMA3 HTML5 AdEvent
+  'ima3-start'
 ];
-let ima3FlashAdEvents = [
+const ima3FlashAdEvents = [
   'ima3-adbreakready',
   'ima3-adMetadata',
   'ima3-allAdsCompleted',
@@ -51,7 +57,8 @@ let ima3FlashAdEvents = [
   'ima3-contentPauseRequested',
   'ima3-contentResumeRequested',
   'ima3-durationChanged',
-  'ima3-adError',   // not IMA Standard Flash AdEvent
+  // not IMA Standard Flash AdEvent
+  'ima3-adError',
   'ima3-exitFullscreen',
   'ima3-expandedChanged',
   'ima3-firstQuartile',
@@ -77,7 +84,7 @@ let ima3FlashAdEvents = [
   'ima3-volumeMuted'
 ];
 
-let adEvents = [
+const adEvents = [
   'readyforpreroll',
   'adcanplay',
   'addurationchange',
@@ -113,7 +120,7 @@ let adEvents = [
   'ads-pod-started'
 ];
 
-let getElapsedTime = (startTime, endTime) => {
+const getElapsedTime = (startTime, endTime) => {
   let startMsec = startTime.getTime();
   let endMsec = endTime.getTime();
   let elapsedTime = (endMsec - startMsec) / 1000;

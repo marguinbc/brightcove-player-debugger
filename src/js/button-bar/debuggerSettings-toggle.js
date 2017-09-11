@@ -3,7 +3,6 @@
  */
 
 import videojs from 'video.js';
-import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
 
 /**
@@ -29,8 +28,8 @@ class DebuggerSettingsToggle extends ButtonBarButton {
    */
   handleClick() {
 
-    var logPane = document.getElementById('myBlackbird');
-    var debuggerSettingsPane = document.getElementById('debuggerSettings');
+    const logPane = document.getElementById('myBlackbird');
+    const debuggerSettingsPane = document.getElementById('debuggerSettings');
 
     this.el_.classList.toggle('active');
     debuggerSettingsPane.classList.toggle('activePane');

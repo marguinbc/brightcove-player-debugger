@@ -3,7 +3,6 @@
  */
 
 import videojs from 'video.js';
-import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
 
 /**
@@ -27,8 +26,8 @@ class AdSettingsToggle extends ButtonBarButton {
    */
   handleClick() {
 
-    var logPane = document.getElementById('myBlackbird');
-    var adSettingsPane = document.getElementById('adSettings');
+    const logPane = document.getElementById('myBlackbird');
+    const adSettingsPane = document.getElementById('adSettings');
 
     this.el_.classList.toggle('active');
     adSettingsPane.classList.toggle('activePane');

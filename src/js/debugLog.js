@@ -1,31 +1,31 @@
 import {IDs} from './componentIDs.js';
 import DebuggerPane from './debugger-pane.js';
 
-let _options,
-  logEvents = [],
-  cache = [],
-  emailArray = [],
-  currentEvent,
-  lineNum = 0,
-  log,
-  logContainer,
-  frogger,
-  outputList,
-  messageTypes = {
+let _options;
+let logEvents = [];
+let cache = [];
+let emailArray = [];
+let currentEvent;
+let lineNum = 0;
+let log;
+let logContainer;
+let frogger;
+let outputList;
+let messageTypes = {
     // order of these properties imply render order of filter controls
-    player: true,
-    loading: true,
-    ads: true,
-    console: true,
-    other: true
-  },
-  _player,
-  logTypes = {
-    array: 'array',
-    table: 'table',
-    list: 'list',
-    json: 'json'
-  };
+  player: true,
+  loading: true,
+  ads: true,
+  console: true,
+  other: true
+};
+let _player;
+let logTypes = {
+  array: 'array',
+  table: 'table',
+  list: 'list',
+  json: 'json'
+};
 
 let timeString = () => {
   let d = new Date();
@@ -49,11 +49,10 @@ export let clickCopyLog = (e) => {
   a.value = document.getElementsByClassName('main')[0].innerHTML;
   a.value += document.getElementsByClassName('main')[1].innerHTML;
   a.value += document.getElementsByClassName('main')[2].innerHTML;
-  if(document.getElementsByClassName('main')[3]){
+  if (document.getElementsByClassName('main')[3]) {
     a.value += document.getElementsByClassName('main')[3].innerHTML;
 
   }
-
 
   // is element selectable?
   if (a) {

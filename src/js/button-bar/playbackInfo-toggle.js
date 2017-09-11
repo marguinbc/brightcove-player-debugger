@@ -3,7 +3,6 @@
  */
 
 import videojs from 'video.js';
-import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
 
 /**
@@ -29,8 +28,8 @@ class PlaybackInfoToggle extends ButtonBarButton {
    */
   handleClick() {
 
-    var logPane = document.getElementById('myBlackbird');
-    var playbackInfoPane = document.getElementById('playbackInfo');
+    const logPane = document.getElementById('myBlackbird');
+    const playbackInfoPane = document.getElementById('playbackInfo');
 
     this.el_.classList.toggle('active');
     playbackInfoPane.classList.toggle('activePane');

@@ -36,11 +36,11 @@ class SliderToggle extends ButtonBarButton {
       this.handleClose();
     }
    // show/hide siblings
-    var btnToggleLog = document.getElementById(IDs.btnToggleLog);
-    var btnToggleClassList = document.getElementById(IDs.btnToggleClassList);
-    var btnToggleAdSettings = document.getElementById(IDs.btnToggleAdSettings);
-    var btnTogglePlayerSettings = document.getElementById(IDs.btnTogglePlayerSettings);
-    var btnTogglePlayerInfo = document.getElementById(IDs.btnTogglePlaybackInfo);
+    const btnToggleLog = document.getElementById(IDs.btnToggleLog);
+    const btnToggleClassList = document.getElementById(IDs.btnToggleClassList);
+    const btnToggleAdSettings = document.getElementById(IDs.btnToggleAdSettings);
+    const btnTogglePlayerSettings = document.getElementById(IDs.btnTogglePlayerSettings);
+    const btnTogglePlayerInfo = document.getElementById(IDs.btnTogglePlaybackInfo);
 
     btnToggleLog.classList.toggle('hide');
     btnTogglePlaybackInfo.classList.toggle('hide');
