@@ -558,7 +558,6 @@ const onPlayerReady = (player, options) => {
   if (options.startMinimized) {
     toggleSlider();
   }
-  console.log(options);
   buildDebugger(player, options);
   listenForPlayerEvents(player, options);
   if(options.debugAds === true){

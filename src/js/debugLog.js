@@ -219,7 +219,9 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
       col1,
       col2,
       col3,
-      col4;
+      col4,
+      col5,
+      col6;
     row = document.createElement('tr');
     row.setAttribute('class', type);
     fragment.appendChild(row);
