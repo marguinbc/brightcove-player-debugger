@@ -193,7 +193,7 @@ export let myConsole = () => {
       }
     };
   }
-  let methods = ['log', 'warn', 'error'];
+  let methods = ['log', 'warn', 'error', 'VIDEOJS:'];
   for (let i = 0; i < methods.length; i++) {
     intercept(methods[i]);
   }
