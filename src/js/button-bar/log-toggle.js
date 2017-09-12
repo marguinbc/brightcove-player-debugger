@@ -2,7 +2,6 @@
  * @file log-toggle.js
  */
 import videojs from 'video.js';
-import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
 
 /**

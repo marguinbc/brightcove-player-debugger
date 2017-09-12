@@ -6,10 +6,6 @@ import { IDs } from './componentIDs.js';
 let debuggerSettings;
 let player_;
 
-let getDebuggerSettings = (player) => {
-
-};
-
 export let buildDebuggerSettingsPane = (player) => {
 
   player_ = player;
@@ -26,20 +22,4 @@ export let buildDebuggerSettingsPane = (player) => {
   debuggerSettings = new DebuggerPane(player, options);
 
   return debuggerSettings;
-};
-
-export let showDebuggerSettings = (player) => {
-   // let mediaInfo, mediaStr, adStr, srcArray, contentStr;
-
-      // Get information about the player to use in main content
-      // let playbackInfoStr = getPlaybackInfo(player);
-
-     // contentStr = playerStr;
-
-      // mediaInfo = player.mediainfo;
-      // mediaStr = getMediaInfoStr(player, mediaInfo);
-
-      // contentStr += mediaStr;
-
-      // playbackInfoPane.content(playbackInfoStr);
 };

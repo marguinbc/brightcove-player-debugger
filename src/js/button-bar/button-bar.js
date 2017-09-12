@@ -3,15 +3,6 @@
  */
  import videojs from 'video.js';
 
-// Required children
-
- import SliderToggle from './slider-toggle.js';
- import DebugLogToggle from './log-toggle.js';
- import ClassListToggle from './classList-toggle.js';
- import PlayerSettingsToggle from './playerSettings-toggle.js';
- import AdSettingsToggle from './adSettings-toggle.js';
- import {IDs} from '../../js/componentIDs.js';
-
 /**
  * Container for main controls
  *
@@ -27,7 +18,7 @@
        id: this.options_.id,
        dir: 'ltr'
      }, {
-       'role': 'group'
+       role: 'group'
      });
    }
 }

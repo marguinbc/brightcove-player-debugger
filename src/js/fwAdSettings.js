@@ -260,7 +260,7 @@ export let listenForAdEvents = (player) => {
           'serverUrl: ' + this.FreeWheelPlugin.settings.Html5.serverUrl,
           // 'capabilities: ' + this.FreeWheelPlugin.settings.Html5.capabilities.toString().split(' '),
           'keyValues: ' + JSON.stringify(this.FreeWheelPlugin.settings.Html5.keyValues, null, 2),
-          'temporalSlots: ' + JSON.stringify(this.FreeWheelPlugin.settings.Html5.temporalSlots,null, 2),
+          'temporalSlots: ' + JSON.stringify(this.FreeWheelPlugin.settings.Html5.temporalSlots, null, 2),
           'videoAssetCustomId: ' + this.FreeWheelPlugin.settings.Html5.videoAssetCustomId,
           'videoAssetDuration: ' + this.FreeWheelPlugin.settings.Html5.videoAssetDuration,
           'Time to ready: ' + elapsedTime

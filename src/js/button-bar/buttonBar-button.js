@@ -3,9 +3,7 @@
  */
 
 import videojs from 'video.js';
-import { IDs } from '../componentIDs.js';
 const Button = videojs.getComponent('Button');
-const dom = videojs.dom || videojs;
 
 /**
  * Root button class for Debugger ButtonBar buttons

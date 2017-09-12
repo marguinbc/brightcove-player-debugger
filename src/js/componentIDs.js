@@ -1,4 +1,4 @@
-export let IDs = {
+export const IDs = {
   myBlackbird: 'myBlackbird',
   filters: 'bbFilters',
   controls: 'bbControls',

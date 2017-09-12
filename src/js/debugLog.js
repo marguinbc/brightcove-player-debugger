@@ -2,16 +2,14 @@ import {IDs} from './componentIDs.js';
 import DebuggerPane from './debugger-pane.js';
 
 let _options;
-let logEvents = [];
-let cache = [];
-let emailArray = [];
-let currentEvent;
-let lineNum = 0;
+const logEvents = [];
+const cache = [];
+const emailArray = [];
 let log;
 let logContainer;
 let frogger;
 let outputList;
-let messageTypes = {
+const messageTypes = {
     // order of these properties imply render order of filter controls
   player: true,
   loading: true,
@@ -20,23 +18,17 @@ let messageTypes = {
   other: true
 };
 let _player;
-let logTypes = {
-  array: 'array',
-  table: 'table',
-  list: 'list',
-  json: 'json'
-};
 
-let timeString = () => {
-  let d = new Date();
-  let timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' + (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds()) + (_options.logMilliseconds
-    ? ':' + (d.getMilliseconds())
-    : '');
+const timeString = () => {
+  const d = new Date();
+  const timestamp = (d.getMonth() + 1) + '/' + (d.getDate()) + '/' + (d.getFullYear()) + ' ' + (d.getHours()) + ':' + (d.getMinutes()) + ':' + (d.getSeconds()) + (_options.logMilliseconds ? ':' + (d.getMilliseconds()) : '');
+
   return timestamp;
 };
 
-export let clickSendEmail = (evt) => {
+export const clickSendEmail = (evt) => {
   let el;
+
   if (!evt) {
     evt = window.event;
   }
@@ -46,6 +38,7 @@ export let clickSendEmail = (evt) => {
 export let clickCopyLog = (e) => {
   // find target element
   let a = document.createElement('input');
+
   a.value = document.getElementsByClassName('main')[0].innerHTML;
   a.value += document.getElementsByClassName('main')[1].innerHTML;
   a.value += document.getElementsByClassName('main')[2].innerHTML;
@@ -57,7 +50,8 @@ export let clickCopyLog = (e) => {
   // is element selectable?
   if (a) {
     // select text
-    var logPane = document.getElementById('myBlackbird');
+    const logPane = document.getElementById('myBlackbird');
+
     logPane.appendChild(a);
     a.select();
     try {
@@ -72,40 +66,38 @@ export let clickCopyLog = (e) => {
   }
 };
 
-let hide = () => {
+const hide = () => {
   // frogger.style.display = 'none';
-  var logPane = document.getElementById('myBlackbird');
-  var btnToggleLog = document.getElementById(IDs.btnToggleLog);
+  const logPane = document.getElementById('myBlackbird');
+  const btnToggleLog = document.getElementById(IDs.btnToggleLog);
 
   btnToggleLog.classList.toggle('active');
   logPane.classList.toggle('activePane');
 };
 
-let scrollToBottom = () => {
+const scrollToBottom = () => {
   // scroll list output to the bottom
   outputList.scrollTop = outputList.scrollHeight;
 };
 
-export let clickFilter = (evt) => {
+export const clickFilter = (evt) => {
   // show/hide a specific message type
-  let entry,
-    span,
-    type,
-    filters,
-    active,
-    oneActiveFilter,
-    i,
-    spanType,
-    disabledTypes;
+  let entry;
+  let span;
+  let type;
+  let filters;
+  let active;
+  let oneActiveFilter;
+  let i;
+  let spanType;
+  let disabledTypes;
 
   if (!evt) {
     evt = window.event;
   }
-  span = (evt.target)
-    ? evt.target
-    : evt.srcElement;
+  span = (evt.target) ? evt.target : evt.srcElement;
 
-  if (span && span.tagName == 'SPAN') {
+  if (span && span.tagName === 'SPAN') {
 
     type = span.getAttributeNode('type').nodeValue;
 
@@ -114,24 +106,21 @@ export let clickFilter = (evt) => {
 
       active = 0;
       for (entry in messageTypes) {
-        if (messageTypes[entry])
+        if (messageTypes[entry]) {
           active++;
+        }
       }
-      oneActiveFilter = (active == 1 && messageTypes[type]);
+      oneActiveFilter = (active === 1 && messageTypes[type]);
 
       for (i = 0; filters[i]; i++) {
         spanType = filters[i].getAttributeNode('type').nodeValue;
 
-        filters[i].className = 'fa ' + spanType + ((oneActiveFilter || (spanType == type))
-          ? ''
-          : ' disabled');
-        messageTypes[spanType] = oneActiveFilter || (spanType == type);
+        filters[i].className = 'fa ' + spanType + ((oneActiveFilter || (spanType === type)) ? '' : ' disabled');
+        messageTypes[spanType] = oneActiveFilter || (spanType === type);
       }
     } else {
       messageTypes[type] = !messageTypes[type];
-      span.className = 'fa ' + type + ((messageTypes[type])
-        ? ''
-        : ' disabled');
+      span.className = 'fa ' + type + ((messageTypes[type]) ? '' : ' disabled');
     }
 
     // build outputList's class from messageTypes object
@@ -148,16 +137,17 @@ export let clickFilter = (evt) => {
   }
 };
 
-export let myConsole = () => {
+export const myConsole = () => {
 
-  let console = window.console;
+  const console = window.console;
   let messagestr = '';
 
-  if (!console)
+  if (!console) {
     return;
+  }
 
   function intercept(method) {
-    let original = console[method];
+    const original = console[method];
 
     console[method] = function() {
 
@@ -176,7 +166,8 @@ export let myConsole = () => {
               messagestr += arguments[q] + ' ';
             }
           }
-          currentEvent = messagestr;
+          const currentEvent = messagestr;
+
         } else {
           // else just log out the string to the div
           messagestr = message;
@@ -200,27 +191,26 @@ export let myConsole = () => {
 
 export let myAddMessage = (level, timeStr, type, eventType, content, playerclasses) => {
   // adds a message to the output list
-  let innerContent,
-    allContent,
-    newMsg;
+  let innerContent;
+  let allContent;
+  let newMsg;
   let fragment = document.createDocumentFragment();
 
   // push new event array onto log array
   logEvents.push([level, timeStr, type, content]);
 
-  content = (content.constructor == Array)
-    ? content.join('')
-    : content;
+  content = (content.constructor === Array) ? content.join('') : content;
 
   switch (_options.logType) {
   case 'table':
-    let row,
-      col1,
-      col2,
-      col3,
-      col4,
-      col5,
-      col6;
+    let row;
+    let col1;
+    let col2;
+    let col3;
+    let col4;
+    let col5;
+    let col6;
+
     row = document.createElement('tr');
     row.setAttribute('class', type);
     fragment.appendChild(row);
@@ -259,9 +249,10 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
     }
     break;
   case 'list':
-    let listItem = document.createElement('li'),
-      innerContent,
-      span;
+    let listItem = document.createElement('li');
+    let innerContent;
+    let span;
+
     listItem.setAttribute('class', type);
     fragment.appendChild(listItem);
 
@@ -275,7 +266,7 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
       innerContent += '<br>' + content;
     }
 
-    if ((type === 'player') && (_options.logClasses) && (playerclasses != '')) {
+    if ((type === 'player') && (_options.logClasses) && (playerclasses !== '')) {
       innerContent += '<br>[CLASSES] ' + playerclasses;
     }
     listItem.innerHTML += innerContent;
@@ -294,9 +285,9 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
 };
 
 let getHeaderStr = (player) => {
-  let type,
-    spans = [],
-    headerStr;
+  let type;
+  let spans = [];
+  let headerStr;
 
   for (type in messageTypes) {
     spans.push([
@@ -351,6 +342,7 @@ let myGenerateMarkup = (obj) => {
   switch (obj) {
   case 'table':
     let col = '';
+
     logContainer = 'tbody';
     if (_options.logClasses) {
       col = '<th>Player Classes</th>';
@@ -384,17 +376,17 @@ let myGenerateMarkup = (obj) => {
   return strInnerHTML;
 };
 
-let getClassesStr = (obj) => {
-  if (typeof obj == 'object') {
+const getClassesStr = (obj) => {
+  if (typeof obj === 'object') {
     let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
     return logClassesStr;
   }
 };
 
 export let logDebug = (logLevel, logClass, logEvent, logStr) => {
-  let logHTML = '',
-    logSpan,
-    logJSONObj;
+  let logHTML = '';
+  let logSpan;
+  let logJSONObj;
   let timestr = timeString();
   let entryType;
 
@@ -451,11 +443,9 @@ export let clickControl = (evt) => {
   if (!evt) {
     evt = window.event;
   }
-  el = (evt.target)
-    ? evt.target
-    : evt.srcElement;
+  el = (evt.target) ? evt.target : evt.srcElement;
 
-  if (el.tagName == 'SPAN') {
+  if (el.tagName === 'SPAN') {
     switch (el.getAttributeNode('op').nodeValue) {
     case 'clear':
       clear();
@@ -479,8 +469,9 @@ export let buildLogPane = (player, opt) => {
   _options = opt;
 
   let paneOptions = {
-    'id': IDs.log
+    id: IDs.log
   };
+
   log = new DebuggerPane(player, paneOptions);
 
   log.el_.className = 'activePane';
@@ -488,7 +479,7 @@ export let buildLogPane = (player, opt) => {
 
   log.headerEl_.innerHTML = getHeaderStr(player);
 
-  let strContent = myGenerateMarkup(_options.logType);
+  const strContent = myGenerateMarkup(_options.logType);
 
   log.content(strContent);
 
