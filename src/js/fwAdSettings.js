@@ -3,16 +3,16 @@ import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import { IDs } from './componentIDs.js';
 
-let priorAdEvents = [],
-  adTimer = new Date(),
-  adReadyTime,
-  readyForPrerollTime,
-  adRequestTime,
-  adStartTime,
-  adSettingsPane,
-  _options;
+const priorAdEvents = [];
+const adTimer = new Date();
+let adReadyTime;
+let readyForPrerollTime;
+let adRequestTime;
+let adStartTime;
+let adSettingsPane;
+let _options;
 
-let fwHtml5AdEvents = [
+const fwHtml5AdEvents = [
   'fw-ads-manager-loaded',
   'fw-before-ad-request',
   'fw_slotCurrentTime',
@@ -36,29 +36,30 @@ let fwHtml5AdEvents = [
   'contentVideoPauseRequest',
   'contentVideoResumeRequest'
 ];
-let fwFlashAdEvents = [
-  'fw-ads-manager-loaded',
-  'fw-before-ad-request',
-  'fw_slotCurrentTime',
-  'quartile',
-  'first-quartile',
-  'ads-midpoint',
-  'thirdQuartile',
-  'complete',
-  '_pause',
-  '_play',
-  '_mute',
-  '_un-mute',
-  '_collapse',
-  '_expand',
-  '_resume',
-  '_rewind',
-  '_close',
-  '_minimize',
-  'adEvent'
-];
 
-let adEvents = [
+// const fwFlashAdEvents = [
+//   'fw-ads-manager-loaded',
+//   'fw-before-ad-request',
+//   'fw_slotCurrentTime',
+//   'quartile',
+//   'first-quartile',
+//   'ads-midpoint',
+//   'thirdQuartile',
+//   'complete',
+//   '_pause',
+//   '_play',
+//   '_mute',
+//   '_un-mute',
+//   '_collapse',
+//   '_expand',
+//   '_resume',
+//   '_rewind',
+//   '_close',
+//   '_minimize',
+//   'adEvent'
+// ];
+
+const adEvents = [
   'readyforpreroll',
   'adcanplay',
   'addurationchange',
@@ -99,37 +100,38 @@ let adEvents = [
   'ads-pod-started'
 ];
 
-let getElapsedTime = (startTime, endTime) => {
-  let startMsec = startTime.getTime();
-  let endMsec = endTime.getTime();
-  let elapsedTime = (endMsec - startMsec) / 1000;
+const getElapsedTime = (startTime, endTime) => {
+  const startMsec = startTime.getTime();
+  const endMsec = endTime.getTime();
+  const elapsedTime = (endMsec - startMsec) / 1000;
+
   return { startTime, endTime, elapsedTime };
 };
 
-let getAdSettingsStr = (player) => {
+const getAdSettingsStr = (player) => {
 
-  let previousStateStr = '',
-    contentStr = '',
-    adStr = [
-      '<h3>Freewheel Settings</h3>',
-      '<span class="adMsg">Freewheel Plugin Version:</span> ' + player.FreeWheelPlugin.getVersion(),
-      '<span class="adMsg">sdkurl:</span> ' + player.FreeWheelPlugin.settings.Flash.sdkurl,
-      '<span class="adMsg">adSwf:</span> ' + player.FreeWheelPlugin.settings.Flash.swfurl,
-      '<span class="adMsg">adTechOrder:</span> ' + player.FreeWheelPlugin.settings.adTechOrder.toString().split(' ')[0],
-      '<span class="adMsg">debug:</span> ' + player.FreeWheelPlugin.settings.debug,
-      '<span class="adMsg">prerollTimeout:</span> ' + player.FreeWheelPlugin.settings.prerollTimeout,
-      '<span class="adMsg">timeout:</span> ' + player.FreeWheelPlugin.settings.timeout,
-      '<span class="adMsg">requestMode:</span> ' + player.FreeWheelPlugin.settings.requestAdsMode,
-      '<span class="adMsg">serverUrl:</span> ' + player.FreeWheelPlugin.settings.Html5.serverUrl,
-      '<span class="adMsg">networkId:</span> ' + player.FreeWheelPlugin.settings.Html5.networkId,
-      '<span class="adMsg">siteSectionCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.siteSectionCustomId,
-      '<span class="adMsg">serverUrl:</span> ' + player.FreeWheelPlugin.settings.Html5.serverUrl,
+  let previousStateStr = '';
+  let contentStr = '';
+  const adStr = [
+    '<h3>Freewheel Settings</h3>',
+    '<span class="adMsg">Freewheel Plugin Version:</span> ' + player.FreeWheelPlugin.getVersion(),
+    '<span class="adMsg">sdkurl:</span> ' + player.FreeWheelPlugin.settings.Flash.sdkurl,
+    '<span class="adMsg">adSwf:</span> ' + player.FreeWheelPlugin.settings.Flash.swfurl,
+    '<span class="adMsg">adTechOrder:</span> ' + player.FreeWheelPlugin.settings.adTechOrder.toString().split(' ')[0],
+    '<span class="adMsg">debug:</span> ' + player.FreeWheelPlugin.settings.debug,
+    '<span class="adMsg">prerollTimeout:</span> ' + player.FreeWheelPlugin.settings.prerollTimeout,
+    '<span class="adMsg">timeout:</span> ' + player.FreeWheelPlugin.settings.timeout,
+    '<span class="adMsg">requestMode:</span> ' + player.FreeWheelPlugin.settings.requestAdsMode,
+    '<span class="adMsg">serverUrl:</span> ' + player.FreeWheelPlugin.settings.Html5.serverUrl,
+    '<span class="adMsg">networkId:</span> ' + player.FreeWheelPlugin.settings.Html5.networkId,
+    '<span class="adMsg">siteSectionCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.siteSectionCustomId,
+    '<span class="adMsg">serverUrl:</span> ' + player.FreeWheelPlugin.settings.Html5.serverUrl,
       // '<span class="adMsg">capabilities:</span> ' + player.FreeWheelPlugin.settings.Html5.capabilities.toString().split(' ')[0],
-      '<span class="adMsg">keyValues:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.keyValues, null, 2),
-      '<span class="adMsg">temporalSlots:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.temporalSlots, null, 2),
-      '<span class="adMsg">videoAssetCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetCustomId,
-      '<span class="adMsg">videoAssetDuration:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetDuration
-    ].join('<br>');
+    '<span class="adMsg">keyValues:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.keyValues, null, 2),
+    '<span class="adMsg">temporalSlots:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.temporalSlots, null, 2),
+    '<span class="adMsg">videoAssetCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetCustomId,
+    '<span class="adMsg">videoAssetDuration:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetDuration
+  ].join('<br>');
 
   contentStr = '<span class="adMsg">Ad state:</span> <span id="adstate">' + player.ads.state + '</span><br>';
   contentStr += '<span class="adMsg">Previous Ad state(s): ';
@@ -141,19 +143,16 @@ let getAdSettingsStr = (player) => {
   return contentStr;
 };
 
-let getCurrentAdStr = (player) => {
-  let currentAdStr,
-    currentAdPodInfo,
-    adTech;
+const getCurrentAdStr = (player) => {
+  let currentAdStr;
+  let adTech;
 
   if (player.hasClass('vjs-fw-flash')) {
     adTech = 'Flash';
+  } else if (player.hasClass('vjs-fw-html5')) {
+    adTech = 'Html5';
   } else {
-    if (player.hasClass('vjs-fw-html5')) {
-      adTech = 'Html5';
-    } else {
-      adTech = undefined;
-    }
+    adTech = undefined;
   }
 
   /*    if ((adTech === 'Hls') || (adTech === 'Flash')) {
@@ -182,17 +181,15 @@ let getCurrentAdStr = (player) => {
   //    } else {
   if (adTech === 'Html5') {
 
-    var asCurrentAdInstance = player.FreeWheelPlugin.Html5._currentSlot.getCurrentAdInstance();
-    var asAdId = asCurrentAdInstance._adId;
-    var asCurrentRenditionId = asCurrentAdInstance._creativeId;
-    var asRenditions = asCurrentAdInstance._creativeRenditions;
-    var asSlotCustomId = asCurrentAdInstance._slotCustomId;
-    var asPrimaryCreativeRendition = asCurrentAdInstance._primaryCreativeRendition;
-    var asPrimaryCreativeRenditionAsset = asPrimaryCreativeRendition.getPrimaryCreativeRenditionAsset();
-    var currentRendition;
-    var asAdDuration = asPrimaryCreativeRendition.getDuration();
-    var asAdWidth = asPrimaryCreativeRendition.getWidth();
-    var asAdHeight = asPrimaryCreativeRendition.getHeight();
+    const asCurrentAdInstance = player.FreeWheelPlugin.Html5._currentSlot.getCurrentAdInstance();
+    const asAdId = asCurrentAdInstance._adId;
+    const asCurrentRenditionId = asCurrentAdInstance._creativeId;
+    const asSlotCustomId = asCurrentAdInstance._slotCustomId;
+    const asPrimaryCreativeRendition = asCurrentAdInstance._primaryCreativeRendition;
+    const asPrimaryCreativeRenditionAsset = asPrimaryCreativeRendition.getPrimaryCreativeRenditionAsset();
+    const asAdDuration = asPrimaryCreativeRendition.getDuration();
+    const asAdWidth = asPrimaryCreativeRendition.getWidth();
+    const asAdHeight = asPrimaryCreativeRendition.getHeight();
 
     currentAdStr = '<h3>Current Ad:</h3>';
     currentAdStr += [
@@ -224,8 +221,11 @@ let getCurrentAdStr = (player) => {
   return currentAdStr;
 };
 
-export let showAdInfo = (player) => {
-  let adSettingsStr = '', currentAdStr = '', contentStr = '';
+export const showAdInfo = (player) => {
+  let adSettingsStr = '';
+  let currentAdStr = '';
+  let contentStr = '';
+
   if (player.FreeWheelPlugin.settings) {
     adSettingsStr = getAdSettingsStr(player);
   }
@@ -238,16 +238,18 @@ export let showAdInfo = (player) => {
   adSettingsPane.content(contentStr);
 };
 
-export let listenForAdEvents = (player) => {
-  console.log('player.techName_:' + player.techName_);
+export const listenForAdEvents = (player) => {
+   // console.log('player.techName_:' + player.techName_);
    // if(player.techName_ === "Html5") {
-  let msgStr = '', levelStr;
+  let msgStr = '';
+
   for (let i = 0; i < fwHtml5AdEvents.length; i++) {
     player.on(fwHtml5AdEvents[i], function(e) {
       switch (e.type) {
       case 'fw-ads-manager-loaded': {
         adReadyTime = new Date();
-        let {elapsedTime} = getElapsedTime(adTimer, adReadyTime);
+        const {elapsedTime} = getElapsedTime(adTimer, adReadyTime);
+
         msgStr = [
           'Freewheel Plugin Version: ' + this.FreeWheelPlugin.getVersion(),
           'sdkurl: ' + this.FreeWheelPlugin.settings.Flash.sdkurl,
@@ -272,7 +274,8 @@ export let listenForAdEvents = (player) => {
       }
         break;
       case 'ima3-loaded': {
-        let {elapsedTime} = getElapsedTime(adRequestTime, new Date());
+        const {elapsedTime} = getElapsedTime(adRequestTime, new Date());
+
         msgStr = 'Time to ima3-loaded: ' + elapsedTime;
       }
         break;
@@ -297,7 +300,6 @@ export let listenForAdEvents = (player) => {
         break;
       default:
         msgStr = e.type;
-        levelStr = 'debug';
       }
       classesList.refreshPlayerClasses(player);
       if (_options.verbose) {
@@ -308,7 +310,7 @@ export let listenForAdEvents = (player) => {
       priorAdEvents.push('event:' + e.type);
       priorAdEvents.push('state:' + player.ads.state);
       showAdInfo(player);
-      if (e.type == 'FW-AD-ERROR') {
+      if (e.type === 'FW-AD-ERROR') {
         db.logDebug('error', 'adMsg', e.type, e);
       }
     });
@@ -354,13 +356,17 @@ export let listenForAdEvents = (player) => {
 */
 
   for (let i = 0; i < adEvents.length; i++) {
-    let msgStr = '';
+    msgStr = '';
+
     player.on(adEvents[i], function(e) {
       switch (e.type) {
       case 'readyforpreroll': {
         readyForPrerollTime = new Date();
-        if (adRequestTime === undefined) { adRequestTime = new Date();}
-        let {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+        if (adRequestTime === undefined) {
+          adRequestTime = new Date();
+        }
+        const {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+
         msgStr = 'Time to readyforpreroll: ' + elapsedTime;
       }
         break;
@@ -371,7 +377,8 @@ export let listenForAdEvents = (player) => {
       case 'adstart': {
         adStartTime = new Date();
         showAdInfo(player);
-        let {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+        const {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+
         msgStr = 'Time to ad start: ' + elapsedTime;
       }
         classesList.refreshPlayerClasses(player);
@@ -392,11 +399,11 @@ export let listenForAdEvents = (player) => {
   }
 };
 
-export let buildAdSettingsPane = (player, opt) => {
+export const buildAdSettingsPane = (player, opt) => {
 
-  let paneOptions = {
-    'id': IDs.adSettings,
-    'name': 'Ad Settings'
+  const paneOptions = {
+    id: IDs.adSettings,
+    name: 'Ad Settings'
   };
 
   _options = opt;
