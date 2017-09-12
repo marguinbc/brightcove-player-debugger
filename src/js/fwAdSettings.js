@@ -125,8 +125,8 @@ let getAdSettingsStr = (player) => {
       '<span class="adMsg">siteSectionCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.siteSectionCustomId,
       '<span class="adMsg">serverUrl:</span> ' + player.FreeWheelPlugin.settings.Html5.serverUrl,
       // '<span class="adMsg">capabilities:</span> ' + player.FreeWheelPlugin.settings.Html5.capabilities.toString().split(' ')[0],
-      '<span class="adMsg">keyValues:</span> ' + player.FreeWheelPlugin.settings.Html5.keyValues.toString().split(' '),
-      '<span class="adMsg">temporalSlots:</span> ' + player.FreeWheelPlugin.settings.Html5.temporalSlots.toString().split(' ')[0],
+      '<span class="adMsg">keyValues:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.keyValues, null, 2),
+      '<span class="adMsg">temporalSlots:</span> ' + JSON.stringify(player.FreeWheelPlugin.settings.Html5.temporalSlots, null, 2),
       '<span class="adMsg">videoAssetCustomId:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetCustomId,
       '<span class="adMsg">videoAssetDuration:</span> ' + player.FreeWheelPlugin.settings.Html5.videoAssetDuration
     ].join('<br>');
@@ -259,8 +259,8 @@ export let listenForAdEvents = (player) => {
           'requestMode ' + this.FreeWheelPlugin.settings.requestAdsMode,
           'serverUrl: ' + this.FreeWheelPlugin.settings.Html5.serverUrl,
           // 'capabilities: ' + this.FreeWheelPlugin.settings.Html5.capabilities.toString().split(' '),
-          'keyValues: ' + this.FreeWheelPlugin.settings.Html5.keyValues.toString().split(' '),
-          'temporalSlots: ' + this.FreeWheelPlugin.settings.Html5.temporalSlots.toString().split(' '),
+          'keyValues: ' + JSON.stringify(this.FreeWheelPlugin.settings.Html5.keyValues, null, 2),
+          'temporalSlots: ' + JSON.stringify(this.FreeWheelPlugin.settings.Html5.temporalSlots,null, 2),
           'videoAssetCustomId: ' + this.FreeWheelPlugin.settings.Html5.videoAssetCustomId,
           'videoAssetDuration: ' + this.FreeWheelPlugin.settings.Html5.videoAssetDuration,
           'Time to ready: ' + elapsedTime
