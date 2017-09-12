@@ -3,28 +3,33 @@ import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import { IDs } from './componentIDs.js';
 
-let priorAdEvents = [],
-  adTimer = new Date(),
-  adReadyTime,
-  readyForPrerollTime,
-  adRequestTime,
-  adStartTime,
-  adSettingsPane,
-  _options;
+const priorAdEvents = [];
+const adTimer = new Date();
+let adReadyTime;
+let readyForPrerollTime;
+let adRequestTime;
+let adStartTime;
+let adSettingsPane;
+let _options;
 
-let ima3Html5AdEvents = [
-  'ima3-ready',  // not standard IMA AdEvent
+const ima3Html5AdEvents = [
+  // not standard IMA AdEvent
+  'ima3-ready',
   'ima3-ad-break-ready',
-  'ima3-ad-error', // not standard IMA HTML5 AdEvent - is adError
+  // not standard IMA HTML5 AdEvent - is adError
+  'ima3-ad-error',
   'ima3-ad-metadata',
-  'ima3-ads-manager-loaded', // not standard IMA HMTL5 AdEvent
+   // not standard IMA HMTL5 AdEvent
+  'ima3-ads-manager-loaded',
   'ima3-all-ads-completed',
   'ima3-click',
   'ima3-complete',
-  'ima3-completed',  // not standard IMA HTML5 AdEvent
+   // not standard IMA HTML5 AdEvent
+  'ima3-completed',
   'ima3-content-pause-requested',
   'ima3-content-resume-requested',
-  'ima3-error',  // not standard IMA HTML5 AdEvent
+   // not standard IMA HTML5 AdEvent
+  'ima3-error',
   'ima3-first-quartile',
   'ima3-impression',
   'ima3-linearChanged',
@@ -40,9 +45,11 @@ let ima3Html5AdEvents = [
   'ima3-user-close',
   'ima3-volume-changed',
   'ima3-volume-muted',
-  'ima3-start' // not standard IMA3 HTML5 AdEvent
+  // not standard IMA3 HTML5 AdEvent
+  'ima3-start'
 ];
-let ima3FlashAdEvents = [
+
+const ima3FlashAdEvents = [
   'ima3-adbreakready',
   'ima3-adMetadata',
   'ima3-allAdsCompleted',
@@ -51,7 +58,8 @@ let ima3FlashAdEvents = [
   'ima3-contentPauseRequested',
   'ima3-contentResumeRequested',
   'ima3-durationChanged',
-  'ima3-adError',   // not IMA Standard Flash AdEvent
+  // not IMA Standard Flash AdEvent
+  'ima3-adError',
   'ima3-exitFullscreen',
   'ima3-expandedChanged',
   'ima3-firstQuartile',
@@ -77,7 +85,7 @@ let ima3FlashAdEvents = [
   'ima3-volumeMuted'
 ];
 
-let adEvents = [
+const adEvents = [
   'readyforpreroll',
   'adcanplay',
   'addurationchange',
@@ -113,30 +121,31 @@ let adEvents = [
   'ads-pod-started'
 ];
 
-let getElapsedTime = (startTime, endTime) => {
-  let startMsec = startTime.getTime();
-  let endMsec = endTime.getTime();
-  let elapsedTime = (endMsec - startMsec) / 1000;
+const getElapsedTime = (startTime, endTime) => {
+  const startMsec = startTime.getTime();
+  const endMsec = endTime.getTime();
+  const elapsedTime = (endMsec - startMsec) / 1000;
+
   return { startTime, endTime, elapsedTime };
 };
 
-let getAdSettingsStr = (player) => {
+const getAdSettingsStr = (player) => {
 
-  let previousStateStr = '',
-    contentStr = '',
-    adStr = [
-      '<h3>IMA3 Settings</h3>',
-      '<span class="adMsg">IMA3 Plugin Version:</span> ' + player.ima3.version,
-      '<span class="adMsg">sdkurl:</span> ' + player.ima3.settings.sdkurl,
-      '<span class="adMsg">adSwf:</span> ' + player.ima3.settings.adSwf,
-      '<span class="adMsg">adTechOrder:</span> ' + player.ima3.settings.adTechOrder.toString().split(' '),
-      '<span class="adMsg">debug:</span> ' + player.ima3.settings.debug,
-      '<span class="adMsg">loadingSpinner:</span> ' + player.ima3.settings.loadingSpinner,
-      '<span class="adMsg">prerollTimeout:</span> ' + player.ima3.settings.prerollTimeout,
-      '<span class="adMsg">timeout:</span> ' + player.ima3.settings.timeout,
-      '<span class="adMsg">requestMode:</span> ' + player.ima3.settings.requestMode,
-      '<span class="adMsg">serverUrl:</span> ' + player.ima3.settings.serverUrl
-    ].join('<br>');
+  let previousStateStr = '';
+  let contentStr = '';
+  const adStr = [
+    '<h3>IMA3 Settings</h3>',
+    '<span class="adMsg">IMA3 Plugin Version:</span> ' + player.ima3.version,
+    '<span class="adMsg">sdkurl:</span> ' + player.ima3.settings.sdkurl,
+    '<span class="adMsg">adSwf:</span> ' + player.ima3.settings.adSwf,
+    '<span class="adMsg">adTechOrder:</span> ' + player.ima3.settings.adTechOrder.toString().split(' '),
+    '<span class="adMsg">debug:</span> ' + player.ima3.settings.debug,
+    '<span class="adMsg">loadingSpinner:</span> ' + player.ima3.settings.loadingSpinner,
+    '<span class="adMsg">prerollTimeout:</span> ' + player.ima3.settings.prerollTimeout,
+    '<span class="adMsg">timeout:</span> ' + player.ima3.settings.timeout,
+    '<span class="adMsg">requestMode:</span> ' + player.ima3.settings.requestMode,
+    '<span class="adMsg">serverUrl:</span> ' + player.ima3.settings.serverUrl
+  ].join('<br>');
 
   contentStr = '<span class="adMsg">Ad state:</span> <span id="adstate">' + player.ads.state + '</span><br>';
   contentStr += '<span class="adMsg">Previous Ad state(s): ';
@@ -148,19 +157,18 @@ let getAdSettingsStr = (player) => {
   return contentStr;
 };
 
-let getCurrentAdStr = (player) => {
-  let currentAdStr,
-    currentAdPodInfo,
-    adTech;
+const getCurrentAdStr = (player) => {
+  let currentAdStr;
+  let currentAdPodInfo;
+  let adTech;
 
   if (player.hasClass('vjs-ima3-flash')) {
     adTech = 'Flash';
+  } else if (player.hasClass('vjs-ima3-html5')) {
+    adTech = 'Html5';
   } else {
-    if (player.hasClass('vjs-ima3-html5')) {
-      adTech = 'Html5';
-    } else {
-      adTech = undefined;
-    }
+    adTech = undefined;
+
   }
 
   if ((adTech === 'Hls') || (adTech === 'Flash')) {
@@ -176,7 +184,7 @@ let getCurrentAdStr = (player) => {
       '<span class="adMsg">Ad ID:</span> ' + player.ima3.currentAd.id
     ].join('<br');
     currentAdPodInfo = player.ima3.currentAd.adPodInfo;
-    if (currentAdPodInfo != undefined) {
+    if (currentAdPodInfo !== undefined) {
       currentAdStr += '<h3>Ad Pod Information:</h3>';
       currentAdStr += [
         '<span class="adMsg">Position:</span>' + currentAdPodInfo.adPosition,
@@ -186,36 +194,37 @@ let getCurrentAdStr = (player) => {
         '<span class="adMsg">Total Ads:</span>' + currentAdPodInfo.totalAds
       ].join('<br>');
     }
-  } else {
-    if (adTech === 'Html5') {
-      currentAdStr = '<h3>Current Ad:</h3>';
-      currentAdStr += [
-        '<span class="adMsg">Ad System:</span> ' + player.ima3.currentAd.getAdSystem(),
+  } else if (adTech === 'Html5') {
+    currentAdStr = '<h3>Current Ad:</h3>';
+    currentAdStr += [
+      '<span class="adMsg">Ad System:</span> ' + player.ima3.currentAd.getAdSystem(),
             // '<span class="adMsg">Media Url:</span> ' + player.ima3.currentAd.getMediaUrl(),
-        '<span class="adMsg">Ad Title:</span> ' + player.ima3.currentAd.getTitle(),
-        '<span class="adMsg">Description:</span> ' + player.ima3.currentAd.getDescription(),
-        '<span class="adMsg">Content type:</span> ' + player.ima3.currentAd.getContentType(),
-        '<span class="adMsg">Duration:</span> ' + player.ima3.currentAd.getDuration(),
-        '<span class="adMsg">Ad ID:</span> ' + player.ima3.currentAd.getAdId()
+      '<span class="adMsg">Ad Title:</span> ' + player.ima3.currentAd.getTitle(),
+      '<span class="adMsg">Description:</span> ' + player.ima3.currentAd.getDescription(),
+      '<span class="adMsg">Content type:</span> ' + player.ima3.currentAd.getContentType(),
+      '<span class="adMsg">Duration:</span> ' + player.ima3.currentAd.getDuration(),
+      '<span class="adMsg">Ad ID:</span> ' + player.ima3.currentAd.getAdId()
+    ].join('<br>');
+    currentAdPodInfo = player.ima3.currentAd.getAdPodInfo();
+    if (currentAdPodInfo !== undefined) {
+      currentAdStr += '<h3>Ad Pod Information:</h3>';
+      currentAdStr += [
+        '<span class="adMsg">Position:</span>' + currentAdPodInfo.getAdPosition(),
+        '<span class="adMsg">Max Duration:</span>' + currentAdPodInfo.getMaxDuration(),
+        '<span class="adMsg">Pod Index:</span>' + currentAdPodInfo.getPodIndex(),
+        '<span class="adMsg">Time offset:</span>' + currentAdPodInfo.getTimeOffset(),
+        '<span class="adMsg">Total Ads:</span>' + currentAdPodInfo.getTotalAds()
       ].join('<br>');
-      currentAdPodInfo = player.ima3.currentAd.getAdPodInfo();
-      if (currentAdPodInfo != undefined) {
-        currentAdStr += '<h3>Ad Pod Information:</h3>';
-        currentAdStr += [
-          '<span class="adMsg">Position:</span>' + currentAdPodInfo.getAdPosition(),
-          '<span class="adMsg">Max Duration:</span>' + currentAdPodInfo.getMaxDuration(),
-          '<span class="adMsg">Pod Index:</span>' + currentAdPodInfo.getPodIndex(),
-          '<span class="adMsg">Time offset:</span>' + currentAdPodInfo.getTimeOffset(),
-          '<span class="adMsg">Total Ads:</span>' + currentAdPodInfo.getTotalAds()
-        ].join('<br>');
-      }
     }
   }
   return currentAdStr;
 };
 
-export let showAdInfo = (player) => {
-  let adSettingsStr = '', currentAdStr = '', contentStr;
+export const showAdInfo = (player) => {
+  let adSettingsStr = '';
+  let currentAdStr = '';
+  let contentStr;
+
   if (player.ima3.settings) {
     adSettingsStr = getAdSettingsStr(player);
   }
@@ -226,16 +235,18 @@ export let showAdInfo = (player) => {
   adSettingsPane.content(contentStr);
 };
 
-export let listenForAdEvents = (player) => {
-  console.log('player.techName_:' + player.techName_);
+export const listenForAdEvents = (player) => {
+  // console.log('player.techName_:' + player.techName_);
   if (player.techName_ === 'Html5') {
-    let msgStr = '', levelStr;
+    let msgStr = '';
+
     for (let i = 0; i < ima3Html5AdEvents.length; i++) {
       player.on(ima3Html5AdEvents[i], function(e) {
         switch (e.type) {
         case 'ima3-ready': {
           adReadyTime = new Date();
-          let {elapsedTime} = getElapsedTime(adTimer, adReadyTime);
+          const {elapsedTime} = getElapsedTime(adTimer, adReadyTime);
+
           msgStr = [
             'IMA3 Plugin Version: ' + this.ima3.version,
             'sdkurl: ' + this.ima3.settings.sdkurl,
@@ -256,7 +267,8 @@ export let listenForAdEvents = (player) => {
         }
           break;
         case 'ima3-loaded': {
-          let {elapsedTime} = getElapsedTime(adRequestTime, new Date());
+          const {elapsedTime} = getElapsedTime(adRequestTime, new Date());
+
           msgStr = 'Time to ima3-loaded: ' + elapsedTime;
         }
           break;
@@ -281,7 +293,6 @@ export let listenForAdEvents = (player) => {
           break;
         default:
           msgStr = e.type;
-          levelStr = 'debug';
         }
         classesList.refreshPlayerClasses(player);
         if (_options.verbose) {
@@ -292,12 +303,12 @@ export let listenForAdEvents = (player) => {
         priorAdEvents.push('event:' + e.type);
         priorAdEvents.push('state:' + player.ads.state);
         showAdInfo(player);
-        if (e.type == 'IMA3-AD-ERROR') {
+        if (e.type === 'IMA3-AD-ERROR') {
           db.logDebug('error', 'adMsg', e.type, e);
         }
       });
     }
-  } else if (player.techName_ == 'Hls' || player.techName_ == 'Flash') {
+  } else if (player.techName_ === 'Hls' || player.techName_ === 'Flash') {
     for (let i = 0; i < ima3FlashAdEvents.length; i++) {
       player.on(ima3FlashAdEvents[i], function(e) {
         switch (e.type) {
@@ -338,12 +349,16 @@ export let listenForAdEvents = (player) => {
 
   for (let i = 0; i < adEvents.length; i++) {
     let msgStr = '';
+
     player.on(adEvents[i], function(e) {
       switch (e.type) {
       case 'readyforpreroll': {
         readyForPrerollTime = new Date();
-        if (adRequestTime === undefined) { adRequestTime = new Date();}
-        let {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+        if (adRequestTime === undefined) {
+          adRequestTime = new Date();
+        }
+        const {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+
         msgStr = 'Time to readyforpreroll: ' + elapsedTime;
       }
         break;
@@ -354,7 +369,8 @@ export let listenForAdEvents = (player) => {
       case 'adstart': {
         adStartTime = new Date();
         showAdInfo(player);
-        let {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+        const {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+
         msgStr = 'Time to ad start: ' + elapsedTime;
       }
         classesList.refreshPlayerClasses(player);
@@ -375,11 +391,11 @@ export let listenForAdEvents = (player) => {
   }
 };
 
-export let buildAdSettingsPane = (player, opt) => {
+export const buildAdSettingsPane = (player, opt) => {
 
-  let options = {
-    'id': IDs.adSettings,
-    'name': 'Ad Settings'
+  const options = {
+    id: IDs.adSettings,
+    name: 'Ad Settings'
   };
 
   _options = opt;
