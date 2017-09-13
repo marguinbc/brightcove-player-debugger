@@ -26,7 +26,7 @@ class SliderToggle extends ButtonBarButton {
    * @method handleClick
    */
   handleClick() {
-    let slider;
+    const slider = document.getElementById(IDs.slider);
 
     this.el_.classList.toggle('active');
     slider.classList.toggle('closed');
