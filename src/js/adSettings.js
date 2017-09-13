@@ -236,7 +236,6 @@ export const listenForAdEvents = (player) => {
   //  console.log('player.techName_:' + player.techName_);
   if (player.techName_ === 'Html5') {
     let msgStr = '';
-    let levelStr;
 
     for (let i = 0; i < ima3Html5AdEvents.length; i++) {
       player.on(ima3Html5AdEvents[i], function(e) {
@@ -291,7 +290,6 @@ export const listenForAdEvents = (player) => {
           break;
         default:
           msgStr = e.type;
-          levelStr = 'debug';
         }
         classesList.refreshPlayerClasses(player);
         if (_options.verbose) {
@@ -309,6 +307,8 @@ export const listenForAdEvents = (player) => {
     }
   } else if (player.techName_ === 'Hls' || player.techName_ === 'Flash') {
     for (let i = 0; i < ima3FlashAdEvents.length; i++) {
+      let msgStr;
+
       player.on(ima3FlashAdEvents[i], function(e) {
         switch (e.type) {
         case 'ima3-ready':
@@ -331,7 +331,6 @@ export const listenForAdEvents = (player) => {
           break;
         default:
           msgStr = '';
-          levelStr = 'debug';
         }
         if (_options.verbose) {
           db.logDebug('debug', 'adMsg', e.type, 'IMA3_FLASH_AD_EVENT:' + msgStr);

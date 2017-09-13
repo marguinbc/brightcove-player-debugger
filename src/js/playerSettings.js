@@ -1,14 +1,15 @@
-import * as db from './debugLog.js';
-import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import { IDs } from './componentIDs.js';
 
 let playerSettingsPane;
 
-let getPlayerInfo = (player) => {
-  let playerStr, configUrl, plyrUrl;
-  let plyrID = player.el_.getAttribute('data-player');
-  let acct = player.el_.getAttribute('data-account');
+const getPlayerInfo = (player) => {
+  let playerStr;
+  let configUrl;
+  let plyrUrl;
+  const plyrID = player.el_.getAttribute('data-player');
+  const acct = player.el_.getAttribute('data-account');
+
   playerStr = '<h3>Player Information:</h3>';
   if (plyrID !== null) {
     playerStr += '<span class="playerMsg">Player ID:</span> ' + plyrID + '<br>';
@@ -38,9 +39,29 @@ let getPlayerInfo = (player) => {
   return {playerStr, configUrl, plyrUrl};
 };
 
-let getMediaInfoStr = (player, mInfo) => {
+const getSourcesStr = (mSrcArray) => {
+  let sourcesStr = '';
+
+  for (let i = 0; i < mSrcArray.length; i++) {
+    const httpSrc = mSrcArray[i].src;
+
+    if (httpSrc !== undefined) {
+      sourcesStr += '[' + i + '] ' + httpSrc + '<br>';
+    } else {
+      const rtmpSrc = mSrcArray[i].app_name + mSrcArray[i].stream_name;
+
+      if (rtmpSrc !== undefined) {
+        sourcesStr += '[' + i + '] ' + rtmpSrc + '<br>';
+      }
+    }
+  }
+  return sourcesStr;
+};
+
+const getMediaInfoStr = (player, mInfo) => {
   let mStr = '';
-  if (mInfo != undefined) {
+
+  if (mInfo !== undefined) {
     mStr = '<h3>Mediainfo</h3>';
     mStr += [
       '<span class="playerMsg">Account ID:</span> ' + mInfo.account_id,
@@ -53,7 +74,8 @@ let getMediaInfoStr = (player, mInfo) => {
       '<span class="playerMsg">Thumbnail:</span> ' + mInfo.thumbnail
     ].join('<br>');
     if (mInfo.sources) {
-      let sourcesStr = getSourcesStr(mInfo.sources);
+      const sourcesStr = getSourcesStr(mInfo.sources);
+
       mStr += '<br><span class="playerMsg">Current Source:</span> ' + player.currentSrc();
       if (player.tech_.hls) {
         mStr += '<br><span class="playerMsg">Master:</span>' + player.tech_.hls.source_.src;
@@ -66,36 +88,21 @@ let getMediaInfoStr = (player, mInfo) => {
   return mStr;
 };
 
-let getSourcesStr = (mSrcArray) => {
-  let sourcesStr = '';
-  for (let i = 0; i < mSrcArray.length; i++) {
-    let httpSrc = mSrcArray[i].src;
-    if (httpSrc != undefined) {
-      sourcesStr += '[' + i + '] ' + httpSrc + '<br>';
-    } else {
-      let rtmpSrc = mSrcArray[i].app_name + mSrcArray[i].stream_name;
-      if (rtmpSrc != undefined) {
-        sourcesStr += '[' + i + '] ' + rtmpSrc + '<br>';
-      }
-    }
-  }
-  return sourcesStr;
-};
+export const buildPlayerSettingsPane = (player) => {
 
-export let buildPlayerSettingsPane = (player) => {
-
-  let mediaInfo = '', mediaStr = '';
+  let mediaInfo = '';
+  let mediaStr = '';
 
    // Get information about the player to use in main content
-  let {playerStr} = getPlayerInfo(player);
+  const {playerStr} = getPlayerInfo(player);
 
   mediaInfo = player.mediainfo;
   mediaStr = getMediaInfoStr(player, mediaInfo);
 
-  let _options = {
-    'id': IDs.playerSettings,
-    'name': 'Brightcove Player Settings',
-    'content': playerStr + mediaStr || ''
+  const _options = {
+    id: IDs.playerSettings,
+    name: 'Brightcove Player Settings',
+    content: playerStr + mediaStr || ''
   };
 
   playerSettingsPane = new DebuggerPane(player, _options);
@@ -103,16 +110,16 @@ export let buildPlayerSettingsPane = (player) => {
   return playerSettingsPane;
 };
 
-export let showPlayerSettings = (player) => {
-  let mediaInfo, mediaStr, adStr, srcArray, contentStr;
+export const showPlayerSettings = (player) => {
+  let contentStr;
 
       // Get information about the player to use in main content
-  let {playerStr} = getPlayerInfo(player);
+  const {playerStr} = getPlayerInfo(player);
 
   contentStr = playerStr;
 
-  mediaInfo = player.mediainfo;
-  mediaStr = getMediaInfoStr(player, mediaInfo);
+  const mediaInfo = player.mediainfo;
+  const mediaStr = getMediaInfoStr(player, mediaInfo);
 
   contentStr += mediaStr;
 

@@ -8,14 +8,14 @@ import * as playerSettings from './js/playerSettings.js';
 import * as playbackInfo from './js/playbackInfo.js';
 // import * as debuggerSettings from './js/debuggerSettings.js';
 import * as db from './js/debugLog.js';
-import ButtonBarButton from './js/button-bar/buttonBar-button.js';
 import SliderToggle from './js/button-bar/slider-toggle.js';
 import ClassListToggle from './js/button-bar/classList-toggle.js';
 import PlayerSettingsToggle from './js/button-bar/playerSettings-toggle.js';
 import PlaybackInfoToggle from './js/button-bar/playbackInfo-toggle.js';
 import AdSettingsToggle from './js/button-bar/adSettings-toggle.js';
 import DebugLogToggle from './js/button-bar/log-toggle.js';
-
+import window from 'global/window';
+import document from 'global/document';
 import {IDs} from './js/componentIDs.js';
 
 // Default options for the plugin.
@@ -37,71 +37,91 @@ const defaults = {
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
 const dom = videojs.dom || videojs;
 
-let slider,
-  buttonBar,
-  btnToggleLog,
-  btnToggleSlider,
-  adSettings,
-  adSettingsPane,
-  classesListPane,
-  initialDuration = 0,
-  previousDuration = 0,
-  initialSource = '',
-  previousSource = '',
-  initialMedia = '',
-  previousMedia = '',
-  currentDuration,
-  currentSource,
-  currentMedia,
-  player,
-  playerTech = '',
-  playbackInfoPane,
-  playerSettingsPane,
-  btnToggleClassList,
-  btnTogglePlaybackInfo,
-  btnToggleAdSettings,
-  btnTogglePlayerSettings,
-  logPane,
-  logTypes = {
-    array: 'array',
-    table: 'table',
-    list: 'list',
-    json: 'json'
-  };
+let slider;
+let buttonBar;
+let btnToggleLog;
+let btnToggleSlider;
+let adSettings;
+let adSettingsPane;
+let classesListPane;
+let initialDuration = 0;
+let previousDuration = 0;
+let initialSource = '';
+let previousSource = '';
+let previousMedia = '';
+let currentDuration;
+let currentSource;
+let currentMedia;
+// let player;
+const playerTech = '';
+let playbackInfoPane;
+let playerSettingsPane;
+let btnToggleClassList;
+let btnTogglePlaybackInfo;
+let btnToggleAdSettings;
+let btnTogglePlayerSettings;
+let logPane;
+
 // Array of events I came up with by watching debugger window and using documentation
-let playerEvents = [
-  'ready', // vidojs_component
-  'durationchange', // videojs_player, videojs_swf, videojs_contrib_hls
-  'ended', // videojs_contrib_ads, videojs_player, videojs_swf, videojs_qos
-  'error', // videojs_player
-  'firstplay', // videojs_player
-  'fullscreenchange', // videojs_qos, videojs_player
+const playerEvents = [
+  // vidojs_component
+  'ready',
+  // videojs_player, videojs_swf, videojs_contrib_hls
+  'durationchange',
+  // videojs_contrib_ads, videojs_player, videojs_swf, videojs_qos
+  'ended',
+  // videojs_player
+  'error',
+  // videojs_player
+  'firstplay',
+  // videojs_qos, videojs_player
+  'fullscreenchange',
   'loadedalldata',
-  'loadeddata', // videojs_player, videojs_swf
-  'loadedmetadata', // videojs_qos, videojs_player, videojs_contrib_hls, videojs_swf
-  'loadstart', // videojs_qos, videojs_player, videojs_swf
-  'pause', // videojs_qos, videojs_player, videojs_swf
-  'play', // videojs_qos, videojs_player, videojs_swf
-  'player_load', // videojs_bc_analytics
-  'contentupdate', // videojs_contrib_ads
-  'seeking', // videojs_player, videojs_swf
-  'seeked', // videojs_player, videojs_swf
-  'progress', // videojs_contrib_hls, videojs_player (videojs_swf?)
-  'catalog_request', // videojs_catalog
-  'catalog_response', // videojs_catalog
-  'playing', // videojs_qos, videojs_player, videojs_swf
-  'waiting', // videojs_player, videojs_swf
-  'video_view', // videojs_bc_analytics
-  'video_impression', // videojs_bc_analytics
-  'video_engagement', // videojs_bc_analytics
-  'play_request', // videojs_bc_analytics
-  'canplay', // videojs_player, videojs_swf
-  'canplaythrough', // videojs_player, videojs_swf
+  // videojs_player, videojs_swf
+  'loadeddata',
+  // videojs_qos, videojs_player, videojs_contrib_hls, videojs_swf
+  'loadedmetadata',
+  // videojs_qos, videojs_player, videojs_swf
+  'loadstart',
+  // videojs_qos, videojs_player, videojs_swf
+  'pause',
+  // videojs_qos, videojs_player, videojs_swf
+  'play',
+  // videojs_bc_analytics
+  'player_load',
+  // videojs_contrib_ads
+  'contentupdate',
+  // videojs_player, videojs_swf
+  'seeking',
+  // videojs_player, videojs_swf
+  'seeked',
+   // videojs_contrib_hls, videojs_player (videojs_swf?)
+  'progress',
+  // videojs_catalog
+  'catalog_request',
+  // videojs_catalog
+  'catalog_response',
+   // videojs_qos, videojs_player, videojs_swf
+  'playing',
+  // videojs_player, videojs_swf
+  'waiting',
+  // videojs_bc_analytics
+  'video_view',
+  // videojs_bc_analytics
+  'video_impression',
+  // videojs_bc_analytics
+  'video_engagement',
+  // videojs_bc_analytics
+  'play_request',
+  // videojs_player, videojs_swf
+  'canplay',
+  // videojs_player, videojs_swf
+  'canplaythrough',
   'timeupdate'
 ];
-let clear = () => {};
+// let clear = () => {};
 
-let toggleSlider = () => {
+const toggleSlider = (options) => {
   slider.classList.toggle('closed');
   btnToggleSlider.classList.toggle('active');
 
@@ -109,7 +129,7 @@ let toggleSlider = () => {
   btnTogglePlaybackInfo.classList.toggle('hide');
   btnToggleClassList.classList.toggle('hide');
   btnTogglePlayerSettings.classList.toggle('hide');
-  if (_options.debugAds === true) {
+  if (options.debugAds === true) {
     btnToggleAdSettings.classList.toggle('hide');
   }
   if (slider.classList.contains('closed')) {
@@ -119,107 +139,109 @@ let toggleSlider = () => {
   }
 };
 
-let getPlayerEvents = () => {
-  allPlayerEventsJSON = videojs.getData(player.el_).handlers;
+// const getPlayerEvents = () => {
+//   allPlayerEventsJSON = videojs.getData(player.el_).handlers;
+//
+//   for (prop in allPlayerEventsJSON) {
+//     allPlayerEvents.push(prop);
+//   }
+//
+//   allPlayerEvents.sort();
+//
+//   for (i = 1; i < allPlayerEvents.length; i++) {
+//     console.log(allPlayerEvents[i]);
+//   }
+// };
 
-  for (prop in allPlayerEventsJSON) {
-    allPlayerEvents.push(prop);
-  }
+// const getClassesStr = (obj) => {
+//   if (typeof obj == 'object') {
+//     let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
+//     return {logClassesStr};
+//   }
+// };
+//
+// let showPosterStyles = (evt) => {
+//   if (_options.showPosterStyles) {
+//     let vPoster = document.getElementsByClassName('vjs-poster')[0];
+//     let posterOpacity = '';
+//     let cs = window.getComputedStyle(vPoster, null).opacity;
+//     let playerClasses = '';
+//     let posterClasses = '';
+//
+//     if (firstpass) {
+//       posterStyles.innerHTML = '<h2>BC Poster Opacity</h2>';
+//       firstpass = false;
+//     }
+//     if (lastEvent != currentEvent) {
+//       lastEvent = currentEvent;
+//       vPosterStyles = 'Opacity: ' + cs + ' lastEvent:' + lastEvent;
+//       posterStyles.innerHTML += '<span style="color:blue;">' + vPosterStyles + '</span><br/>';
+//       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
+//       if (currentClasses != lastClasses) {
+//         lastClasses = currentClasses;
+//         posterStyles.innerHTML += '<span style="color:green;">Player Classes: ' + currentClasses + '</span><br/>';
+//       }
+//       posterClasses = Array.prototype.slice.apply(vPoster.classList).join(' ');
+//       posterStyles.innerHTML += '<span style="color:orange;">Poster Classes: ' + posterClasses + '</span><br/>';
+//
+//     }
+//   }
+// };
 
-  allPlayerEvents.sort();
+// let showBigPlayButtonStyles = (evt) => {
+//   if (_options.showBigPlayButtonStyles) {
+//     let vBPB = document.getElementsByClassName('vjs-big-play-button')[0];
+//     let bpbOpacity = '';
+//     let bpbStyles = [];
+//     let cs = window.getComputedStyle(vBPB, null);
+//     let bpbClasses = '';
+//
+//     if (firstpass) {
+//       bigPlayButtonStyles.innerHTML = '<h2>Big Play Button Styles</h2>';
+//       bigPlayButtonStyles.innerHTML += 'User-Agent: ' + navigator.userAgent + '<br>';
+//       firstpass = false;
+//     }
+//     if (lastEvent != currentEvent) {
+//       lastEvent = currentEvent;
+//       if (cs.length !== 0) {
+//         for (let i = 0; i < cs.length; i++) {
+//           bpbStyles.push([
+//             cs.item(i) + ':',
+//             cs.getPropertyValue(cs.item(i))
+//           ] + '<br>');
+//         }
+//         vBPBStyles = 'CurrentStyles: ' + bpbStyles + '<br>';
+//         bigPlayButtonStyles.innerHTML += '<span style="color:blue;">' + vBPBStyles + '</span><br/>';
+//       }
+//       currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
+//       if (currentClasses != lastClasses) {
+//         lastClasses = currentClasses;
+//         bigPlayButtonStyles.innerHTML += '<span style="color:green;">Big Play Button Classes: ' + currentClasses + '</span><br/>';
+//       }
+//     }
+//   }
+// };
 
-  for (i = 1; i < allPlayerEvents.length; i++) {
-    console.log(allPlayerEvents[i]);
-  }
-};
-
-let getClassesStr = (obj) => {
-  if (typeof obj == 'object') {
-    let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
-    return {logClassesStr};
-  }
-};
-
-let showPosterStyles = (evt) => {
-  if (_options.showPosterStyles) {
-    let vPoster = document.getElementsByClassName('vjs-poster')[0];
-    let posterOpacity = '';
-    let cs = window.getComputedStyle(vPoster, null).opacity;
-    let playerClasses = '';
-    let posterClasses = '';
-
-    if (firstpass) {
-      posterStyles.innerHTML = '<h2>BC Poster Opacity</h2>';
-      firstpass = false;
-    }
-    if (lastEvent != currentEvent) {
-      lastEvent = currentEvent;
-      vPosterStyles = 'Opacity: ' + cs + ' lastEvent:' + lastEvent;
-      posterStyles.innerHTML += '<span style="color:blue;">' + vPosterStyles + '</span><br/>';
-      currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
-      if (currentClasses != lastClasses) {
-        lastClasses = currentClasses;
-        posterStyles.innerHTML += '<span style="color:green;">Player Classes: ' + currentClasses + '</span><br/>';
-      }
-      posterClasses = Array.prototype.slice.apply(vPoster.classList).join(' ');
-      posterStyles.innerHTML += '<span style="color:orange;">Poster Classes: ' + posterClasses + '</span><br/>';
-
-    }
-  }
-};
-
-let showBigPlayButtonStyles = (evt) => {
-  if (_options.showBigPlayButtonStyles) {
-    let vBPB = document.getElementsByClassName('vjs-big-play-button')[0];
-    let bpbOpacity = '';
-    let bpbStyles = [];
-    let cs = window.getComputedStyle(vBPB, null);
-    let bpbClasses = '';
-
-    if (firstpass) {
-      bigPlayButtonStyles.innerHTML = '<h2>Big Play Button Styles</h2>';
-      bigPlayButtonStyles.innerHTML += 'User-Agent: ' + navigator.userAgent + '<br>';
-      firstpass = false;
-    }
-    if (lastEvent != currentEvent) {
-      lastEvent = currentEvent;
-      if (cs.length !== 0) {
-        for (let i = 0; i < cs.length; i++) {
-          bpbStyles.push([
-            cs.item(i) + ':',
-            cs.getPropertyValue(cs.item(i))
-          ] + '<br>');
-        }
-        vBPBStyles = 'CurrentStyles: ' + bpbStyles + '<br>';
-        bigPlayButtonStyles.innerHTML += '<span style="color:blue;">' + vBPBStyles + '</span><br/>';
-      }
-      currentClasses = Array.prototype.slice.apply(player.el_.classList).join(' ');
-      if (currentClasses != lastClasses) {
-        lastClasses = currentClasses;
-        bigPlayButtonStyles.innerHTML += '<span style="color:green;">Big Play Button Classes: ' + currentClasses + '</span><br/>';
-      }
-    }
-  }
-};
-
-let listenForPlayerEvents = (player, options) => {
+const listenForPlayerEvents = (player, options) => {
 
   player.one('durationchange', function(e) {
     currentDuration = player.duration();
-    let msgStr = 'currentDuration: ' + currentDuration + '<br>previousDuration: ' + previousDuration;
+    const msgStr = 'currentDuration: ' + currentDuration + '<br>previousDuration: ' + previousDuration;
+
     db.logDebug('media', 'playerMsg', 'one: ' + e.type, msgStr);
   });
 
   let playCounter = 0;
-  let msgStr,
-    currentTime,
-    previousTime,
-    levelStr = 'debug';
+  let msgStr;
+  let currentTime;
+  let previousTime;
+  let levelStr = 'debug';
+
   for (let i = 0; i < playerEvents.length; i++) {
     player.on(playerEvents[i], function(e) {
       switch (e.type) {
       case 'error':
-        msgStr = [player.error().type, '-', player.error().message, console.trace()].join(' ');
+        msgStr = [player.error().type, '-', player.error().message, window.console.trace()].join(' ');
         break;
       case 'firstplay':
         initialDuration = player.duration();
@@ -242,9 +264,9 @@ let listenForPlayerEvents = (player, options) => {
         break;
       case 'loadedmetadata':
         if (options.showMediaInfo) {
-          let mInfo = '';
-          mInfo = player.mediainfo;
-          if (mInfo != undefined) {
+          const mInfo = player.mediainfo;
+
+          if (mInfo !== undefined) {
             msgStr = [
               'Account ID: ' + mInfo.account_id,
               'Video ID: ' + mInfo.id,
@@ -300,9 +322,9 @@ let listenForPlayerEvents = (player, options) => {
         break;
       case 'durationchange':
         {
-          let srcStr,
-            mediaStr,
-            assetid;
+          let srcStr;
+          let mediaStr;
+
           currentDuration = player.duration();
           currentSource = player.currentSrc();
 
@@ -312,9 +334,9 @@ let listenForPlayerEvents = (player, options) => {
           } else {
             msgStr = 'Duration remained the same - currentDuration: ' + currentDuration;
           }
-          if (playerTech == 'Hls') {
+          if (playerTech === 'Hls') {
             currentMedia = player.hls.playlists.media_.uri;
-            assetid = currentMedia.substring(currentMedia.search('assetId=') + 8, 92);
+            // assetid = currentMedia.substring(currentMedia.search('assetId=') + 8, 92);
             if (currentSource !== previousSource) {
               srcStr = '<br>Source changed: currentSource: ' + currentSource + ', <br>previousSource: ' + previousSource;
               previousSource = currentSource;
@@ -338,7 +360,7 @@ let listenForPlayerEvents = (player, options) => {
         msgStr = '';
         levelStr = 'debug';
       }
-      if ((e.type != 'progress' && !options.showProgress) && e.type != 'timeupdate') {
+      if ((e.type !== 'progress' && !options.showProgress) && e.type !== 'timeupdate') {
 
         if (options.verbose) {
           db.logDebug(levelStr, 'playerMsg', e.type, msgStr);
@@ -358,10 +380,9 @@ let listenForPlayerEvents = (player, options) => {
 };
 
 // event management (thanks John Resig)
-let addEvent = (obj1, type, fn) => {
-  let obj = (obj1.constructor === String)
-    ? document.getElementById(obj1)
-    : obj1;
+const addEvent = (obj1, type, fn) => {
+  const obj = (obj1.constructor === String) ? document.getElementById(obj1) : obj1;
+
   if (obj.attachEvent) {
     obj['e' + type + fn] = fn;
     obj[type + fn] = function() {
@@ -373,20 +394,106 @@ let addEvent = (obj1, type, fn) => {
   }
 };
 
-let removeEvent = (obj1, type, fn) => {
-  let obj = (obj1.constructor === String)
-    ? document.getElementById(obj1)
-    : obj1;
-  if (obj.detachEvent) {
-    obj.detachEvent('on' + type, obj[type + fn]);
-    obj[type + fn] = null;
+// const removeEvent = (obj1, type, fn) => {
+//   let obj = (obj1.constructor === String)
+//     ? document.getElementById(obj1)
+//     : obj1;
+//   if (obj.detachEvent) {
+//     obj.detachEvent('on' + type, obj[type + fn]);
+//     obj[type + fn] = null;
+//   } else {
+//     obj.removeEventListener(type, fn, false);
+//   }
+// };
+
+const buildButtonBar = (slider1, player, options) => {
+
+  buttonBar = dom.createEl('div', {id: IDs.buttonBar});
+
+  slider1.appendChild(buttonBar);
+
+  let _options = {
+    id: IDs.btnToggleSlider,
+    className: 'myButton active',
+    content: 'Hide Debugger'
+  };
+
+  btnToggleSlider = new SliderToggle(player, _options);
+
+  _options = {
+    id: IDs.btnToggleLog,
+    className: 'myButton active',
+    content: 'Log'
+  };
+
+  btnToggleLog = new DebugLogToggle(player, _options);
+
+  _options = {
+    id: IDs.btnTogglePlaybackInfo,
+    className: 'myButton',
+    content: 'Playback Info'
+  };
+
+  btnTogglePlaybackInfo = new PlaybackInfoToggle(player, _options);
+
+  _options = {
+    id: IDs.btnToggleClassList,
+    className: 'myButton',
+    content: 'Classes'
+  };
+
+  btnToggleClassList = new ClassListToggle(player, _options);
+  if (options.debugAds === true) {
+    _options = {
+      id: IDs.btnTogglePlayerSettings,
+      className: 'myButton',
+      content: 'Player Settings',
+      debugAds: true
+    };
   } else {
-    obj.removeEventListener(type, fn, false);
+    _options = {
+      id: IDs.btnTogglePlayerSettings,
+      className: 'myButton',
+      content: 'Player Settings'
+    };
   }
+
+  btnTogglePlayerSettings = new PlayerSettingsToggle(player, _options);
+
+  if (options.debugAds === true) {
+    _options = {
+      id: IDs.btnToggleAdSettings,
+      className: 'myButton',
+      content: 'Ad Settings'
+    };
+
+    btnToggleAdSettings = new AdSettingsToggle(player, _options);
+  }
+
+  /* options = {
+    "id": IDs.btnToggleDebuggerSettings,
+    "className" : "myButton",
+    "content" : "Debugger Settings"
+  };
+
+  btnToggleDebuggerSettings = new DebuggerSettingsToggle(player, options);
+*/
+
+  buttonBar.appendChild(btnToggleSlider.el_);
+  buttonBar.appendChild(btnToggleLog.el_);
+  buttonBar.appendChild(btnTogglePlaybackInfo.el_);
+  buttonBar.appendChild(btnToggleClassList.el_);
+  buttonBar.appendChild(btnTogglePlayerSettings.el_);
+  if (options.debugAds === true) {
+    buttonBar.appendChild(btnToggleAdSettings.el_);
+  }
+  //    buttonBar.appendChild(btnToggleDebuggerSettings.el_);
+
+  return buttonBar;
 };
 
-let buildDebugger = (player, options) => {
-  slider = dom.createEl('div', {'id': IDs.slider});
+const buildDebugger = (player, options) => {
+  slider = dom.createEl('div', {id: IDs.slider});
   document.body.appendChild(slider);
 
   buttonBar = buildButtonBar(slider, player, options);
@@ -415,107 +522,18 @@ let buildDebugger = (player, options) => {
   playerSettingsPane = playerSettings.buildPlayerSettingsPane(player);
   slider.insertBefore(playerSettingsPane.el_, logPane.el_);
 
-  if (options.debugAds == true) {
+  if (options.debugAds === true) {
     if (player.ima3) {
-      console.log('Using IMA3 Ad Plugin');
       adSettings = imaAdSettings;
     } else if (player.FreeWheelPlugin) {
-      console.log('Using Freewheel Ad Plugin');
       adSettings = fwAdSettings;
     } else if (player.onceux) {
-      console.log('Using OnceUX Ad Plugin');
       adSettings = ssaiAdSettings;
     }
     adSettingsPane = adSettings.buildAdSettingsPane(player, options);
     slider.insertBefore(adSettingsPane.el_, playerSettingsPane.el_);
   }
 
-};
-
-let buildButtonBar = (slider, player, options) => {
-
-  buttonBar = dom.createEl('div', {'id': IDs.buttonBar});
-
-  slider.appendChild(buttonBar);
-
-  let _options = {
-    'id': IDs.btnToggleSlider,
-    'className': 'myButton active',
-    'content': 'Hide Debugger'
-  };
-
-  btnToggleSlider = new SliderToggle(player, _options);
-
-  _options = {
-    'id': IDs.btnToggleLog,
-    'className': 'myButton active',
-    'content': 'Log'
-  };
-
-  btnToggleLog = new DebugLogToggle(player, _options);
-
-  _options = {
-    'id': IDs.btnTogglePlaybackInfo,
-    'className': 'myButton',
-    'content': 'Playback Info'
-  };
-
-  btnTogglePlaybackInfo = new PlaybackInfoToggle(player, _options);
-
-  _options = {
-    'id': IDs.btnToggleClassList,
-    'className': 'myButton',
-    'content': 'Classes'
-  };
-
-  btnToggleClassList = new ClassListToggle(player, _options);
-  if (options.debugAds === true) {
-    _options = {
-      'id': IDs.btnTogglePlayerSettings,
-      'className': 'myButton',
-      'content': 'Player Settings',
-      'debugAds': true
-    };
-  } else {
-    _options = {
-      'id': IDs.btnTogglePlayerSettings,
-      'className': 'myButton',
-      'content': 'Player Settings'
-    };
-  }
-
-  btnTogglePlayerSettings = new PlayerSettingsToggle(player, _options);
-
-  if (options.debugAds == true) {
-    _options = {
-      'id': IDs.btnToggleAdSettings,
-      'className': 'myButton',
-      'content': 'Ad Settings'
-    };
-
-    btnToggleAdSettings = new AdSettingsToggle(player, _options);
-  }
-
-  /* options = {
-    "id": IDs.btnToggleDebuggerSettings,
-    "className" : "myButton",
-    "content" : "Debugger Settings"
-  };
-
-  btnToggleDebuggerSettings = new DebuggerSettingsToggle(player, options);
-*/
-
-  buttonBar.appendChild(btnToggleSlider.el_);
-  buttonBar.appendChild(btnToggleLog.el_);
-  buttonBar.appendChild(btnTogglePlaybackInfo.el_);
-  buttonBar.appendChild(btnToggleClassList.el_);
-  buttonBar.appendChild(btnTogglePlayerSettings.el_);
-  if (options.debugAds === true) {
-    buttonBar.appendChild(btnToggleAdSettings.el_);
-  }
-  //    buttonBar.appendChild(btnToggleDebuggerSettings.el_);
-
-  return buttonBar;
 };
 
 /**
@@ -534,9 +552,10 @@ let buildButtonBar = (slider, player, options) => {
  */
 const onPlayerReady = (player, options) => {
   player.addClass('vjs-player-debugger');
-  console.log('Brightcove Player Debugger loaded');
+  window.console.log('Brightcove Player Debugger loaded');
 
-  let fontawesome = document.createElement('link');
+  const fontawesome = document.createElement('link');
+
   fontawesome.rel = 'stylesheet';
   fontawesome.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css';
   document.body.appendChild(fontawesome);
@@ -544,19 +563,21 @@ const onPlayerReady = (player, options) => {
     options.debugAds = true;
   }
   if (options.showBigPlayButtonStyles === true) {
-    let bigPlayButtonStyles = document.createElement('div');
+    const bigPlayButtonStyles = document.createElement('div');
+
     bigPlayButtonStyles.setAttribute('id', IDs.bigPlayButtonStyles);
     logPane.appendChild(bigPlayButtonStyles);
   }
 
   if (options.showPosterStyles === true) {
-    let posterStyles = document.createElement('div');
+    const posterStyles = document.createElement('div');
+
     posterStyles.setAttribute('id', IDs.posterStyles);
     logPane.appendChild(posterStyles);
   }
 
   if (options.startMinimized) {
-    toggleSlider();
+    toggleSlider(options);
   }
   buildDebugger(player, options);
   listenForPlayerEvents(player, options);

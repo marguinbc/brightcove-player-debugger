@@ -1,5 +1,7 @@
 import {IDs} from './componentIDs.js';
 import DebuggerPane from './debugger-pane.js';
+import window from 'global/window';
+import document from 'global/document';
 
 let _options;
 const logEvents = [];
@@ -27,17 +29,14 @@ const timeString = () => {
 };
 
 export const clickSendEmail = (evt) => {
-  let el;
-
   if (!evt) {
     evt = window.event;
   }
-  el = (evt.target) ? evt.target : evt.srcElement;
   window.open('mailto:email@example.com?subject=Brightcove Player Debugger Log&body=' + encodeURIComponent(emailArray.join('\n')));
 };
-export let clickCopyLog = (e) => {
+export const clickCopyLog = (e) => {
   // find target element
-  let a = document.createElement('input');
+  const a = document.createElement('input');
 
   a.value = document.getElementsByClassName('main')[0].innerHTML;
   a.value += document.getElementsByClassName('main')[1].innerHTML;
@@ -57,9 +56,9 @@ export let clickCopyLog = (e) => {
     try {
       // copy text
       document.execCommand('copy');
-      inp.blur();
+      // inp.blur();
     } catch (err) {
-      alert('please press Ctrl/Cmd+C to copy');
+      window.alert('please press Ctrl/Cmd+C to copy');
     }
     a.remove();
 
@@ -83,7 +82,6 @@ const scrollToBottom = () => {
 export const clickFilter = (evt) => {
   // show/hide a specific message type
   let entry;
-  let span;
   let type;
   let filters;
   let active;
@@ -95,7 +93,7 @@ export const clickFilter = (evt) => {
   if (!evt) {
     evt = window.event;
   }
-  span = (evt.target) ? evt.target : evt.srcElement;
+  const span = (evt.target) ? evt.target : evt.srcElement;
 
   if (span && span.tagName === 'SPAN') {
 
@@ -137,64 +135,9 @@ export const clickFilter = (evt) => {
   }
 };
 
-export const myConsole = () => {
-
-  const console = window.console;
-  let messagestr = '';
-
-  if (!console) {
-    return;
-  }
-
-  function intercept(method) {
-    const original = console[method];
-
-    console[method] = function() {
-
-      let logHTML;
-      let timestr = timeString();
-
-      // capture console messages to log div on page
-      if (original.apply) {
-
-        // if the message is an object, concatenate
-        if (typeof arguments == 'object') {
-          let message = Array.prototype.slice.apply(arguments).join(' ');
-          messagestr = '';
-          for (let q = 0; q < arguments.length; q++) {
-            if (typeof arguments[q] == 'string') {
-              messagestr += arguments[q] + ' ';
-            }
-          }
-          const currentEvent = messagestr;
-
-        } else {
-          // else just log out the string to the div
-          messagestr = message;
-        }
-        myAddMessage('debug', timestr, 'console', messagestr, '', '');
-        // log object to console.log as intended
-        original.apply(console, arguments);
-      } else {
-        // needed for IE since apply does not work there
-        let message = Array.prototype.slice.apply(arguments).join(' ');
-        original(message);
-        myAddMessage('debug', timestr, 'console', message, '', '');
-      }
-    };
-  }
-  let methods = ['log', 'warn', 'error', 'VIDEOJS:'];
-  for (let i = 0; i < methods.length; i++) {
-    intercept(methods[i]);
-  }
-};
-
-export let myAddMessage = (level, timeStr, type, eventType, content, playerclasses) => {
+export const myAddMessage = (level, timeStr, type, eventType, content, playerclasses) => {
   // adds a message to the output list
-  let innerContent;
-  let allContent;
-  let newMsg;
-  let fragment = document.createDocumentFragment();
+  const fragment = document.createDocumentFragment();
 
   // push new event array onto log array
   logEvents.push([level, timeStr, type, content]);
@@ -203,60 +146,59 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
 
   switch (_options.logType) {
   case 'table':
-    let row;
-    let col1;
-    let col2;
-    let col3;
-    let col4;
-    let col5;
-    let col6;
+    const row = document.createElement('tr');
 
-    row = document.createElement('tr');
     row.setAttribute('class', type);
     fragment.appendChild(row);
 
-    col1 = document.createElement('td');
+    const col1 = document.createElement('td');
+
       /* col1.setAttribute('class', 'fa ' +  level);*/
     col1.setAttribute('title', level);
     col1.innerText = level;
     row.appendChild(col1);
 
-    col2 = document.createElement('td');
+    const col2 = document.createElement('td');
+
     col2.setAttribute('class', 'timestamp');
     col2.innerText = timeStr;
     row.appendChild(col2);
 
-    col3 = document.createElement('td');
+    const col3 = document.createElement('td');
+
     col3.setAttribute('class', 'messageType');
     col3.innerText = type;
     row.appendChild(col3);
 
-    col4 = document.createElement('td');
+    const col4 = document.createElement('td');
+
     col4.setAttribute('class', 'eventType');
     col4.innerText = eventType;
     row.appendChild(col4);
 
-    col5 = document.createElement('td');
+    const col5 = document.createElement('td');
+
     col5.setAttribute('class', 'message');
     col5.innerHTML = content;
     row.appendChild(col5);
 
     if (_options.logClasses) {
-      col6 = document.createElement('td');
+      const col6 = document.createElement('td');
+
       col6.setAttribute('class', 'playerclasses');
       col6.innerText = playerclasses;
       row.appendChild(col6);
     }
     break;
   case 'list':
-    let listItem = document.createElement('li');
+    const listItem = document.createElement('li');
     let innerContent;
-    let span;
 
     listItem.setAttribute('class', type);
     fragment.appendChild(listItem);
 
-    span = document.createElement('span');
+    const span = document.createElement('span');
+
     span.setAttribute('class', 'fa ' + type);
     span.setAttribute('title', level);
     listItem.appendChild(span);
@@ -273,7 +215,7 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
     break;
   }
 
-  allContent = fragment.innerHTML;
+  const allContent = fragment.innerHTML;
 
   if (outputList) {
     outputList.appendChild(fragment);
@@ -284,10 +226,59 @@ export let myAddMessage = (level, timeStr, type, eventType, content, playerclass
   emailArray.push([timeStr, ' ', type, ': ', content].join(''));
 };
 
-let getHeaderStr = (player) => {
+export const myConsole = () => {
+
+  const console = window.console;
+  let messagestr = '';
+
+  if (!console) {
+    return;
+  }
+
+  function intercept(method) {
+    const original = window.console[method];
+
+    window.console[method] = function() {
+
+      const timestr = timeString();
+
+      // capture console messages to log div on page
+      if (original.apply) {
+
+        // if the message is an object, concatenate
+        if (typeof arguments === 'object') {
+          messagestr = '';
+          for (let q = 0; q < arguments.length; q++) {
+            if (typeof arguments[q] === 'string') {
+              messagestr += arguments[q] + ' ';
+            }
+          }
+        } else {
+          // else just log out the string to the div
+          messagestr = Array.prototype.slice.apply(arguments).join(' ');
+        }
+        myAddMessage('debug', timestr, 'console', messagestr, '', '');
+        // log object to console.log as intended
+        original.apply(console, arguments);
+      } else {
+        // needed for IE since apply does not work there
+        const message = Array.prototype.slice.apply(arguments).join(' ');
+
+        original(message);
+        myAddMessage('debug', timestr, 'console', message, '', '');
+      }
+    };
+  }
+  const methods = ['log', 'warn', 'error', 'VIDEOJS:'];
+
+  for (let i = 0; i < methods.length; i++) {
+    intercept(methods[i]);
+  }
+};
+
+const getHeaderStr = (player) => {
   let type;
-  let spans = [];
-  let headerStr;
+  const spans = [];
 
   for (type in messageTypes) {
     spans.push([
@@ -301,7 +292,7 @@ let getHeaderStr = (player) => {
     ].join(''));
   }
 
-  headerStr = [
+  const headerStr = [
     '<div class="left">',
     '<div id="',
     IDs.filters,
@@ -332,12 +323,10 @@ let getHeaderStr = (player) => {
   return headerStr;
 };
 
-let myGenerateMarkup = (obj) => {
+const myGenerateMarkup = (obj) => {
 
   // build markup
-  let type,
-    rows = [],
-    strInnerHTML = '';
+  let strInnerHTML = '';
 
   switch (obj) {
   case 'table':
@@ -378,16 +367,15 @@ let myGenerateMarkup = (obj) => {
 
 const getClassesStr = (obj) => {
   if (typeof obj === 'object') {
-    let logClassesStr = Array.prototype.slice.apply(obj).join(' ');
+    const logClassesStr = Array.prototype.slice.apply(obj).join(' ');
+
     return logClassesStr;
   }
 };
 
-export let logDebug = (logLevel, logClass, logEvent, logStr) => {
+export const logDebug = (logLevel, logClass, logEvent, logStr) => {
   let logHTML = '';
-  let logSpan;
-  let logJSONObj;
-  let timestr = timeString();
+  const timestr = timeString();
   let entryType;
 
   switch (logClass) {
@@ -409,8 +397,8 @@ export let logDebug = (logLevel, logClass, logEvent, logStr) => {
     entryType = 'other';
   }
 
-  logJSONObj = '{' +
-    'level:' + logLevel + ', timestamp:' + timestr + ', type:' + entryType + ', message:' + logStr + '}';
+  // const logJSONObj = '{' +
+  //   'level:' + logLevel + ', timestamp:' + timestr + ', type:' + entryType + ', message:' + logStr + '}';
 
   if (logStr) {
     logHTML += logStr;
@@ -419,7 +407,8 @@ export let logDebug = (logLevel, logClass, logEvent, logStr) => {
   if ((!_options.logClasses) || (entryType === 'console')) {
     myAddMessage(logLevel, timestr, entryType, logEvent, logStr, '');
   } else {
-    let logClassesStr = getClassesStr(_player.el_.classList);
+    const logClassesStr = getClassesStr(_player.el_.classList);
+
     myAddMessage(logLevel, timestr, entryType, logEvent, logStr, logClassesStr);
   }
 
@@ -429,7 +418,7 @@ export let logDebug = (logLevel, logClass, logEvent, logStr) => {
   // showBigPlayButtonStyles();
 };
 
-let clear = () => {
+const clear = () => {
   // clear list output
   // outputList.innerHTML = '';
   // let strContent = myGenerateMarkup(options.logType);
@@ -437,13 +426,11 @@ let clear = () => {
   document.getElementById(IDs.logList).innerHTML = '';
 };
 
-export let clickControl = (evt) => {
-  let el;
-
+export const clickControl = (evt) => {
   if (!evt) {
     evt = window.event;
   }
-  el = (evt.target) ? evt.target : evt.srcElement;
+  const el = (evt.target) ? evt.target : evt.srcElement;
 
   if (el.tagName === 'SPAN') {
     switch (el.getAttributeNode('op').nodeValue) {
@@ -457,18 +444,18 @@ export let clickControl = (evt) => {
   }
 };
 
-export let updateLogPane = (player) => {
-  let strContent = myGenerateMarkup(_options.logType);
+export const updateLogPane = (player) => {
+  const strContent = myGenerateMarkup(_options.logType);
 
   log.content(strContent);
 };
 
-export let buildLogPane = (player, opt) => {
+export const buildLogPane = (player, opt) => {
 
   _player = player;
   _options = opt;
 
-  let paneOptions = {
+  const paneOptions = {
     id: IDs.log
   };
 

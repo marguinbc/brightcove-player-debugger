@@ -4,7 +4,7 @@
 
 import videojs from 'video.js';
 import ButtonBarButton from './buttonBar-button.js';
-
+import document from 'global/document';
 /**
  * Button to toggle the debugger's player settings pane open / closed
  *

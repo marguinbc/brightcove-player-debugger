@@ -3,16 +3,14 @@ import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import {IDs} from './componentIDs.js';
 
-let priorAdEvents = [],
-  adTimer = new Date(),
-  adReadyTime,
-  readyForPrerollTime,
-  adRequestTime,
-  adStartTime,
-  adSettingsPane,
-  _options;
+const priorAdEvents = [];
+let readyForPrerollTime;
+let adRequestTime;
+let adStartTime;
+let adSettingsPane;
+let _options;
 
-let ssaiAdEvents = [
+const ssaiAdEvents = [
   'onceux-linearad-start',
   'onceux-linearad-impression',
   'onceux-linearad-firstQuartile',
@@ -30,7 +28,7 @@ let ssaiAdEvents = [
   'onceux-companionad-creativeView'
 ];
 
-let adEvents = [
+const adEvents = [
   'readyforpreroll',
   'adcanplay',
   'addurationchange',
@@ -66,10 +64,12 @@ let adEvents = [
   'ads-pod-started'
 ];
 
-let ppJSON = (json) => {
+const ppJSON = (json) => {
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
   return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-    var cls = 'number';
+    let cls = 'number';
+
     if (/^"/.test(match)) {
       if (/:$/.test(match)) {
         cls = 'key';
@@ -85,18 +85,20 @@ let ppJSON = (json) => {
   });
 };
 
-let getElapsedTime = (startTime, endTime) => {
-  let startMsec = startTime.getTime();
-  let endMsec = endTime.getTime();
-  let elapsedTime = (endMsec - startMsec) / 1000;
+const getElapsedTime = (startTime, endTime) => {
+  const startMsec = startTime.getTime();
+  const endMsec = endTime.getTime();
+  const elapsedTime = (endMsec - startMsec) / 1000;
+
   return {startTime, endTime, elapsedTime};
 };
 
-let getAdSettingsStr = (player) => {
+const getAdSettingsStr = (player) => {
 
-  let previousStateStr = '',
-    adStr,
-    contentStr = '';
+  let previousStateStr = '';
+  let adStr;
+  let contentStr = '';
+
   if (player.onceux.timeline) {
     adStr = [
       '<h3>Once UX Settings</h3>', '<span>Timeline</span>', '<span class="adMsg">contenturi:</span> ' + player.onceux.timeline.contenturi,
@@ -114,10 +116,10 @@ let getAdSettingsStr = (player) => {
   return contentStr;
 };
 
-let getCurrentAdStr = (player) => {
-  let currentAdStr,
-    currentAdPodInfo,
-    path;
+const getCurrentAdStr = (player) => {
+  let currentAdStr;
+  let path;
+
   if (player.onceux.currentTime() !== undefined && player.onceux.timeline) {
     path = player.onceux.timeline.pathAtAbsoluteTime(player.onceux.currentTime());
   } if (path) {
@@ -159,23 +161,24 @@ let getCurrentAdStr = (player) => {
   return currentAdStr;
 };
 
-export let showAdInfo = (player) => {
-  let adSettingsStr = '',
-    currentAdStr = '',
-    contentStr;
+export const showAdInfo = (player) => {
+  let adSettingsStr = '';
+  let currentAdStr = '';
+
   if (player.onceux) {
     adSettingsStr = getAdSettingsStr(player);
     currentAdStr = getCurrentAdStr(player);
 
   }
-  contentStr = adSettingsStr + currentAdStr;
+  const contentStr = adSettingsStr + currentAdStr;
+
   adSettingsPane.content(contentStr);
 };
 
-export let listenForAdEvents = (player) => {
-  console.log('player.techName_:' + player.techName_);
-  let msgStr = '',
-    levelStr;
+export const listenForAdEvents = (player) => {
+  // console.log('player.techName_:' + player.techName_);
+  let msgStr = '';
+
   for (let i = 0; i < ssaiAdEvents.length; i++) {
     player.on(ssaiAdEvents[i], function(e) {
       switch (e.type) {
@@ -217,7 +220,6 @@ export let listenForAdEvents = (player) => {
         break;
       default:
         msgStr = e.type;
-        levelStr = 'debug';
       }
       classesList.refreshPlayerClasses(player);
       if (_options.verbose) {
@@ -232,7 +234,6 @@ export let listenForAdEvents = (player) => {
     });
   }
   for (let i = 0; i < adEvents.length; i++) {
-    let msgStr = '';
     player.on(adEvents[i], function(e) {
       switch (e.type) {
       case 'readyforpreroll':
@@ -241,7 +242,8 @@ export let listenForAdEvents = (player) => {
           if (adRequestTime === undefined) {
             adRequestTime = new Date();
           }
-          let {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+          const {elapsedTime} = getElapsedTime(adRequestTime, readyForPrerollTime);
+
           msgStr = 'Time to readyforpreroll: ' + elapsedTime;
         }
         break;
@@ -254,7 +256,8 @@ export let listenForAdEvents = (player) => {
         {
           adStartTime = new Date();
           showAdInfo(player);
-          let {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+          const {elapsedTime} = getElapsedTime(adRequestTime, adStartTime);
+
           msgStr = 'Time to ad start: ' + elapsedTime;
         }
         classesList.refreshPlayerClasses(player);
@@ -275,11 +278,11 @@ export let listenForAdEvents = (player) => {
   }
 };
 
-export let buildAdSettingsPane = (player, opt) => {
+export const buildAdSettingsPane = (player, opt) => {
 
-  let options = {
-    'id': IDs.adSettings,
-    'name': 'Ad Settings'
+  const options = {
+    id: IDs.adSettings,
+    name: 'Ad Settings'
   };
 
   _options = opt;

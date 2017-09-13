@@ -5,7 +5,7 @@
 import videojs from 'video.js';
 import { IDs } from '../componentIDs.js';
 import ButtonBarButton from './buttonBar-button.js';
-
+import document from 'global/document';
 /**
  * Button to toggle slider open / closed
  *
@@ -26,6 +26,7 @@ class SliderToggle extends ButtonBarButton {
    * @method handleClick
    */
   handleClick() {
+    let slider;
 
     this.el_.classList.toggle('active');
     slider.classList.toggle('closed');
@@ -40,7 +41,7 @@ class SliderToggle extends ButtonBarButton {
     const btnToggleClassList = document.getElementById(IDs.btnToggleClassList);
     const btnToggleAdSettings = document.getElementById(IDs.btnToggleAdSettings);
     const btnTogglePlayerSettings = document.getElementById(IDs.btnTogglePlayerSettings);
-    const btnTogglePlayerInfo = document.getElementById(IDs.btnTogglePlaybackInfo);
+    const btnTogglePlaybackInfo = document.getElementById(IDs.btnTogglePlaybackInfo);
 
     btnToggleLog.classList.toggle('hide');
     btnTogglePlaybackInfo.classList.toggle('hide');

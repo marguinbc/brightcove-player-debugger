@@ -1,5 +1,4 @@
 import * as db from './debugLog.js';
-import * as classesList from './classesList.js';
 import DebuggerPane from './debugger-pane.js';
 import { IDs } from './componentIDs.js';
 
@@ -16,16 +15,18 @@ let previousSegment = null;
 let previousSegmentEnd = null;
 let previousSegmentDuration = null;
 
-let timeRangesToString = function timeRangesToString(tr) {
-  var arr = [];
+const timeRangesToString = function timeRangesToString(tr) {
+  const arr = [];
+
   for (let i = 0; i < tr.length; i++) {
     arr.push('[' + tr.start(i).toFixed(2) + ', ' + tr.end(i).toFixed(2) + ']');
   }
   return arr;
 };
 
-let calcVideoBitrate = function calcVideoBitrate(pl) {
-  var vbr = 0;
+const calcVideoBitrate = function calcVideoBitrate(pl) {
+  let vbr = 0;
+
   if (pl && pl.attributes && pl.attributes.BANDWIDTH) {
     vbr = (pl.attributes.BANDWIDTH / 1024).toFixed(3);
     if (parseFloat(vbr) >= highestVideoBitrate || highestVideoBitrate === 0) {
@@ -38,8 +39,9 @@ let calcVideoBitrate = function calcVideoBitrate(pl) {
   }
 };
 
-let calcMeasuredBitrate = function calcMeasuredBitrate(hls) {
-  var mbr;
+const calcMeasuredBitrate = function calcMeasuredBitrate(hls) {
+  let mbr;
+
   if (hls.bandwidth) {
     mbr = (hls.bandwidth / 1024).toFixed(3);
     if (parseFloat(mbr) >= highestMeasuredBitrate || highestMeasuredBitrate === 0) {
@@ -52,14 +54,16 @@ let calcMeasuredBitrate = function calcMeasuredBitrate(hls) {
   }
 };
 
-let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
-  var currentSegmentStr;
+const getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
+  let currentSegmentStr;
+
   if (pl.segments.length > 0) {
-    var currTime = player_.currentTime();
-    var segments = pl.segments;
-    var lower;
-    var upper;
-    for (var i = 0; i < segments.length - 1; i++) {
+    const currTime = player_.currentTime();
+    const segments = pl.segments;
+    let lower;
+    let upper;
+
+    for (let i = 0; i < segments.length - 1; i++) {
       if (segments[i].end !== undefined) {
         lower = segments[i].end - segments[i].duration;
       } else {
@@ -81,7 +85,7 @@ let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
           currentSegmentEnd = segments[i].end;
           currentSegmentDuration = segments[i].duration;
 
-          var debugMsg = 'Previous segment: ' + previousSegment +
+          let debugMsg = 'Previous segment: ' + previousSegment +
             '<br>Previous segment start: ' + (previousSegmentEnd - previousSegmentDuration) +
             ' Previous segment end: ' + previousSegmentEnd +
             ' Previous segment duration: ' + previousSegmentDuration;
@@ -107,21 +111,20 @@ let getCurrentSegmentInfo = function getCurrentSegmentInfo(pl) {
   }
 };
 
-let loadedSegments = function loadedSegments(m_) {
-  var segArr = [];
+const loadedSegments = function loadedSegments(m_) {
+  const segArr = [];
+
   if (m_.segments.length > 0) {
-    for (var i = 0; i < m_.segments.length; i++) {
+    for (let i = 0; i < m_.segments.length; i++) {
       segArr.push('[' + i + '] ' + m_.segments[i].uri + ' end: ' + m_.segments[i].end + '<br>');
     }
     return segArr;
   }
 };
 
-let getPlaybackInfo = (player) => {
+const getPlaybackInfo = (player) => {
   let playbackInfoStr;
   let playlist;
-  let plyrID = player.el_.getAttribute('data-player');
-  let acct = player.el_.getAttribute('data-account');
 
   if (player.tech_.hls) {
     playlist = player.tech_.hls.playlists.media_;
@@ -138,15 +141,19 @@ let getPlaybackInfo = (player) => {
   }
   playbackInfoStr += '<br><span class="playerMsg">duration: </span>' + player.duration();
   playbackInfoStr += '<br><span class="playerMsg">currentTime: </span>' + player.currentTime().toFixed(2);
-  var bufferedRange = player.buffered();
+  const bufferedRange = player.buffered();
+
   if (bufferedRange.length > 0) {
-    var bufferedStr = timeRangesToString(bufferedRange);
+    const bufferedStr = timeRangesToString(bufferedRange);
+
     playbackInfoStr += '<br><span class="playerMsg">buffered: </span>' + bufferedStr;
   }
   playbackInfoStr += '<br><span class="playerMsg">bufferedEnd: </span>' + player.bufferedEnd();
-  var seekableRange = player.seekable();
+  const seekableRange = player.seekable();
+
   if (seekableRange.length > 0) {
-    var seekableStr = timeRangesToString(seekableRange);
+    const seekableStr = timeRangesToString(seekableRange);
+
     playbackInfoStr += '<br><span class="playerMsg">seekable: </span>' + seekableStr;
   }
   playbackInfoStr += '<br><span class="playerMsg">playbackRate: </span>' + player.playbackRate();
@@ -213,21 +220,21 @@ let getPlaybackInfo = (player) => {
 }
 */
 
-export let buildPlaybackInfoPane = (player) => {
+export const buildPlaybackInfoPane = (player) => {
 
   // let mediaInfo='', mediaStr='';
   player_ = player;
 
    // Get information about the player to use in main content
-  let playbackInfoStr = getPlaybackInfo(player);
+  const playbackInfoStr = getPlaybackInfo(player);
 
   // mediaInfo = player.mediainfo;
   // mediaStr = getMediaInfoStr(player, mediaInfo);
 
-  let options = {
-    'id': IDs.playbackInfo,
-    'name': 'Playback Information',
-    'content': playbackInfoStr
+  const options = {
+    id: IDs.playbackInfo,
+    name: 'Playback Information',
+    content: playbackInfoStr
   };
 
   playbackInfoPane = new DebuggerPane(player, options);
@@ -235,11 +242,9 @@ export let buildPlaybackInfoPane = (player) => {
   return playbackInfoPane;
 };
 
-export let showPlaybackInfo = (player) => {
-  let mediaInfo, mediaStr, adStr, srcArray, contentStr;
-
+export const showPlaybackInfo = (player) => {
       // Get information about the player to use in main content
-  let playbackInfoStr = getPlaybackInfo(player);
+  const playbackInfoStr = getPlaybackInfo(player);
 
      // contentStr = playerStr;
 

@@ -223,7 +223,6 @@ const getCurrentAdStr = (player) => {
 export const showAdInfo = (player) => {
   let adSettingsStr = '';
   let currentAdStr = '';
-  let contentStr;
 
   if (player.ima3.settings) {
     adSettingsStr = getAdSettingsStr(player);
@@ -231,7 +230,8 @@ export const showAdInfo = (player) => {
   if (player.ima3.currentAd !== undefined) {
     currentAdStr = getCurrentAdStr(player);
   }
-  contentStr = adSettingsStr + currentAdStr;
+  const contentStr = adSettingsStr + currentAdStr;
+
   adSettingsPane.content(contentStr);
 };
 
@@ -310,6 +310,8 @@ export const listenForAdEvents = (player) => {
     }
   } else if (player.techName_ === 'Hls' || player.techName_ === 'Flash') {
     for (let i = 0; i < ima3FlashAdEvents.length; i++) {
+      let msgStr = '';
+
       player.on(ima3FlashAdEvents[i], function(e) {
         switch (e.type) {
         case 'ima3-ready':
@@ -332,7 +334,6 @@ export const listenForAdEvents = (player) => {
           break;
         default:
           msgStr = '';
-          levelStr = 'debug';
         }
         if (_options.verbose) {
           db.logDebug('debug', 'adMsg', e.type, 'IMA3_FLASH_AD_EVENT:' + msgStr);

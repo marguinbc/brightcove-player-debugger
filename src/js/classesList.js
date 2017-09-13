@@ -1,5 +1,7 @@
 import { IDs } from './componentIDs.js';
-/* classesListPane */
+import document from 'global/document';
+import videojs from 'video.js';
+
 const dom = videojs.dom || videojs;
 
 let allClassesList;
@@ -90,18 +92,15 @@ export const refreshPlayerClasses = (player) => {
 };
 
 export const buildClassesListPane = (player) => {
-  let classesListPane;
-  let classesListHeader;
-  let classesListFooter;
-
   thisPlayer = player;
-  classesListPane = dom.createEl('div',
+  const classesListPane = dom.createEl('div',
       {id: IDs.classesList}
     );
 
-  classesListHeader = dom.createEl('div', {
+  const classesListHeader = dom.createEl('div', {
     className: 'classListHeader'
   });
+
   classesListHeader.innerHTML = '<h2>Player Classes</h2><span class="active">active</span><span class="inactive">inactive</span>';
   classesListPane.appendChild(classesListHeader);
 
@@ -114,7 +113,8 @@ export const buildClassesListPane = (player) => {
 
   classesListPane.appendChild(document.createElement('br'));
 
-  classesListFooter = document.createElement('span');
+  const classesListFooter = document.createElement('span');
+
   classesListFooter.innerHTML = 'Click on a class to toggle its state';
   classesListPane.appendChild(classesListFooter);
 
